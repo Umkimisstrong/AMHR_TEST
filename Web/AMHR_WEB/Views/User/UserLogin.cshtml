@@ -1,0 +1,206 @@
+﻿
+@{
+    ViewBag.Title = "UserLogin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main >
+    
+    <div class="row" style="justify-content:center; margin-top:100px;">
+        <div class="card  mb-12" style="max-width: 30rem; box-shadow: 0 4px 16px rgba(17, 17, 26, .05), 0 8px 32px rgba(17, 17, 26, .05); border-color:white;" >
+            <div class="card-header bg-white" style="text-align:center;">
+                <p style="font-size:40px; font-weight:bold;">Welcome !</p>
+                <p style="font-size: 18px;  color: #797979;">Sign in AMHR.</p>
+            </div>
+            <div class="card-body">
+                <div>
+                    <label for="exampleInputId1" class="form-label mt-4" style="font-size:15px; font-weight:bold; color:dimgrey;">Id</label>
+                    <div style="display:flex;">
+                        <input type="text" class="form-control" id="exampleInputId1" placeholder="Enter Id" style="max-width:600px;">
+                    </div>
+                </div>
+                <div>
+                    <label for="exampleInputPassword1" class="form-label mt-4" style="font-size:15px; font-weight:bold; color:dimgrey;">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" autocomplete="off" style="max-width:600px;">
+                </div>
+                <div style="margin-top:35px;">
+                    <button type="button" class="btn btn-primary" onclick="requestSignUp()" style="max-width:600px; width:100%;">Login</button>
+                    <div style="justify-content:space-between; align-items:center; display:flex; margin-top:25px;">
+                        <a href="#">Forgot ID?</a>
+                        <a href="#">Forgot PW?</a>
+                    </div>
+                </div>
+                <hr />
+                <div style="text-align:center;">
+                    <p style="font-size: 18px; color: #797979;">
+                        Don't have an account?  @Html.ActionLink("Sign Up", "UserSignup", "User", null, new { @class=""})
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</main>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        var ID_CHECK_FLAG = false;
+
+        /*
+            requestCheckID : ID 중복여부 체크
+        */
+        function requestCheckID()
+        {
+            var useriD = $("#exampleInputId1").val();
+
+            $.ajax
+                ({
+                    url: "/User/CheckUserID"
+                    , type: "get"
+                    , data: { 'userID': useriD }
+                    , success: function (data) {
+                        //console.log(data);
+                        var result = data.RESULT;
+                        if (result == "OK") {
+                            ID_CHECK_FLAG = true;
+                            alert("사용 가능한 ID 입니다.", $("#exampleInputPassword1").focus());
+
+                        }
+                        else if (result == "EMPTY")
+                        {
+                            alert("ID를 입력하세요.", $("#exampleInputId1").focus());
+                        }
+                        else if (result == "NO")
+                        {
+                            alert("중복된 ID 입니다.", $("#exampleInputId1").focus());
+                        }
+                    },
+                    error: function (err) {
+                        alert("시스템에 문제가 있습니다. 잠시 후 다시 시도해주세요");
+                    }
+
+                });
+
+        }
+
+        /*
+            requestSignUp : 회원가입
+        */
+        function requestSignUp()
+        {
+            if (validateData())
+            {
+                if (confirm("저장하시겠습니까?"))
+                {
+                    saveData();
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                return;
+            }
+
+        }
+
+        /*
+            validateData : 유효성 검사
+        */
+        function validateData()
+        {
+            var useriD = $("#exampleInputId1").val();
+            if (useriD.trim() == "") {
+                alert("ID를 입력하세요.");
+                return false;
+            }
+            if (!ID_CHECK_FLAG) {
+                alert("ID 중복여부를 확인해주세요.");
+                return false;
+            }
+
+            var userPassword1 = $("#exampleInputPassword1").val();
+            var userPassword2 = $("#exampleInputPassword2").val();
+            if (userPassword1.trim() == "")
+            {
+                alert("비밀번호를 입력하세요.");
+                return false;
+            }
+            if (userPassword2.trim() == "") {
+                alert("비밀번호 확인 입력하세요.");
+                return false;
+            }
+            if (userPassword1 != userPassword2)
+            {
+                alert("비밀번호와 비밀번호 확인 값이 다릅니다. 동일하게 입력하세요.");
+                return false;
+            }
+
+            var userDescription = $("#exampleTextarea").val();
+            if (userDescription.trim() == "")
+            {
+                alert("설명을 입력하세요.");
+                return false;
+            }
+
+            var userName = $("#exampleInputName1").val();
+            if (userName.trim() == "")
+            {
+                alert("이름을 입력하세요.");
+                return false;
+            }
+
+            var userEmail = $("#exampleInputEmail1").val();
+            if (userEmail.trim() == "")
+            {
+                alert("이메일을 입력하세요.");
+                return false;
+            }
+            return true;
+        }
+
+        /*
+            saveData : 사용자 Data 저장
+        */
+        function saveData()
+        {
+            var obj = {
+                UserEntity: {}
+            };
+
+            obj.UserEntity.USER_ID = $("#exampleInputId1").val();
+            obj.UserEntity.USER_NM = $("#exampleInputName1").val();
+            obj.UserEntity.USER_PWD = $("#exampleInputPassword1").val();
+            obj.UserEntity.USER_TYPE = $("#exampleSelect1").val();
+            obj.UserEntity.USER_EMAIL = $("#exampleInputEmail1").val();
+            obj.UserEntity.USER_DESCRIPTION = $("#exampleTextarea").val();
+            obj.UserEntity.USE_YN = $("input[name='optionsRadios']:checked").val();
+            obj.UserEntity.DEL_YN = $("input[name='optionsRadios2']:checked").val();
+            obj.UserEntity.CREATE_ID = $("#exampleInputId1").val();
+            obj.UserEntity.UPDATE_ID = $("#exampleInputId1").val();
+
+            $.ajax({
+                url: "/User/CreateUser"
+                , data: {contract: obj }
+                , type: "post"
+                , success: function (data)
+                {
+                    alert(data);
+                }
+                , error: function (data)
+                {
+                    alert(data);
+                }
+            });
+
+        }
+    </script>
+}
+
+
