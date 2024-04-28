@@ -8,13 +8,18 @@ using System.Web.Mvc;
 
 namespace AMHR_WEB.App_Filters
 {
+
+    /// <summary>
+    /// 권한 필터
+    /// </summary>
+    /// <param name="filterContext"></param>
     public class AuthorizeAttribute : System.Web.Mvc.AuthorizeAttribute
     {
         public string ClaimType { get; set; }
         public string ClaimValue { get; set;}
 
         /// <summary>
-        /// Authorize Filter Attribute
+        /// 특정 Action에 Annotation으로 선언 가능
         /// </summary>
         /// <param name="filterContext"></param>
         public override void OnAuthorization(AuthorizationContext filterContext)

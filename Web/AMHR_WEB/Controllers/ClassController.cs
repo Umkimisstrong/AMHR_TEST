@@ -10,7 +10,7 @@ using Repository;
 
 namespace AMHR_WEB.Controllers
 {
-    public class ClassController : Controller
+    public class ClassController : BaseController
     {
         public const string CONTROLLER_NAME = "Class";
 

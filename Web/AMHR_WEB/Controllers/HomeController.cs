@@ -9,7 +9,7 @@ using Repository;
 
 namespace AMHR_WEB.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public const string CONTROLLER_NAME = "Home";
         public ActionResult Index()

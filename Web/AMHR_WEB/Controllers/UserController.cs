@@ -15,7 +15,7 @@ namespace AMHR_WEB.Controllers
     /// <summary>
     /// UserController : User 관련 Buisness Logic 담당
     /// </summary>
-    public class UserController : Controller
+    public class BaseUserController : Controller
     {
 
         public const string CONTROLLER_NAME = "User";
