@@ -10,22 +10,22 @@ namespace AMHR_WEB.App_Filters
 {
 
     /// <summary>
-    /// 권한 필터
+    /// AuthorizeAttribute : 권한 필터
     /// </summary>
     public class AuthorizeAttribute : System.Web.Mvc.AuthorizeAttribute
     {
         /// <summary>
-        /// 권한 검증 타입 
+        /// ClaimType : 권한 검증 타입 
         /// </summary>
         public string ClaimType { get; set; }
 
         /// <summary>
-        /// 검증할 값 (값 , 값...)
+        /// ClaimValue : 검증할 값 (값 , 값...)
         /// </summary>
         public string ClaimValue { get; set;}
 
         /// <summary>
-        /// 특정 Action에 Annotation으로 선언 가능
+        /// OnAuthorization : 특정 Action에 Annotation으로 선언 가능
         /// [Authorize(ClaimType=Role, ClaimType=Value +","+Value..)]
         /// </summary>
         /// <param name="filterContext"></param>

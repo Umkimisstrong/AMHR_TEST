@@ -12,6 +12,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
+using static System.Net.WebRequestMethods;
 
 namespace AMHR_WEB.Controllers
 {
@@ -20,6 +21,25 @@ namespace AMHR_WEB.Controllers
     /// </summary>
     public class KakaoController : Controller
     {
+        public KakaoController()
+        {
+            GlobalKakao.SetGlobalKakao();
+        }
+        public ActionResult KakaoLogin()
+        {
+            string url = GlobalKakao.CODE_URI + "?"
+                         + "client_id=" + GlobalKakao.CLIENT_ID
+                         + "&redirect_uri=" + GlobalKakao.LOGIN_CALL_BACK_URI
+                         + "&response_type=code";
+
+            return Redirect(url);
+        }
+
+        /// <summary>
+        /// KakaoLoginCallBack : 카카오 로그인 이후 콜백 액션
+        /// </summary>
+        /// <param name="code">생성되는 코드</param>
+        /// <returns></returns>
         public ActionResult KakaoLoginCallBack(string code)
         {
             string accessToken = "";
@@ -74,6 +94,12 @@ namespace AMHR_WEB.Controllers
             return Json(resultOBJ, JsonRequestBehavior.AllowGet);
         }
 
+
+        /// <summary>
+        /// GetUserInfo : 엑세스토큰으로 사용자 정보 가져오는 메서드
+        /// </summary>
+        /// <param name="accessToken">엑세스토큰</param>
+        /// <returns></returns>
         public Dictionary<string, object> GetUserInfo(string accessToken)
         {
             Dictionary<string, object> userInfo = new Dictionary<string, object>();

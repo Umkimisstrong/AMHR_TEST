@@ -19,8 +19,9 @@ namespace AMHR_WEB.GlobalAttribute
         public static void SetGlobalKakao()
         {
             xmlDoc = new XmlDocument();
-            xmlDoc.Load("D:\\AMHR\\Settings\\applicationSettings.xml");
+            xmlDoc.Load("D:\\AMHR_TEST\\Settings\\applicationSettings.xml");
             XmlNode xmlUriNode = xmlDoc.SelectSingleNode("AppSettings/KakaoConfig/Uri");
+            CODE_URI = xmlUriNode.SelectSingleNode("CodeUri").Attributes["id"].Value;
             TOKEN_URI = xmlUriNode.SelectSingleNode("TokenUri").Attributes["id"].Value;
             LOGIN_CALL_BACK_URI = xmlUriNode.SelectSingleNode("LoginCallBack").Attributes["id"].Value;
 

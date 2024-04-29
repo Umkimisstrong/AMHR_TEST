@@ -17,12 +17,12 @@ namespace AMHR_WEB.Controllers
     {
         
         /// <summary>
-        /// Global 인스턴스 UserSessionModel
+        /// UserSessionModel : Global 인스턴스 UserSessionModel
         /// </summary>
         protected internal UserSessionModel UserSessionModel { get; private set; }
 
         /// <summary>
-        /// 상속받는 컨트롤러에서 사용하는 Initailize 메소드 
+        /// Initialize : 상속받는 컨트롤러에서 사용하는 Initailize 메소드 
         /// </summary>
         /// <param name="requestContext">요청 Context</param>
         protected override void Initialize(RequestContext requestContext)

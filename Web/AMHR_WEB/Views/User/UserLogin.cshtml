@@ -25,6 +25,8 @@
                 </div>
                 <div style="margin-top:35px;">
                     <button type="button" class="btn btn-primary" onclick="requestSignIn()" style="max-width:600px; width:100%;">Login</button>
+                    <button type="button" class="btn"  onclick="requestKakaoSignIn()" style="margin-top:15px; max-width:600px; width:100%; height:65px; background-size:cover; background-image:url(/StaticContents/images/kakao_login_large_wide.png)"></button>
+
                     <div style="justify-content:space-between; align-items:center; display:flex; margin-top:25px;">
                         <a href="#">Forgot ID?</a>
                         <a href="#">Forgot PW?</a>
@@ -48,6 +50,10 @@
 {
     <script type="text/javascript">
 
+        function requestKakaoSignIn()
+        {
+            location.href = "/Kakao/KakaoLogin";
+        }
 
         /*
             requestSignIn : 로그인

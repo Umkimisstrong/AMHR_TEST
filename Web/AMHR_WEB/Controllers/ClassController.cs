@@ -20,12 +20,12 @@ namespace AMHR_WEB.Controllers
     public class ClassController : BaseController
     {
         /// <summary>
-        /// 전역변수 Controller Name
+        /// CONTROLLER_NAME : 전역변수 Controller Name
         /// </summary>
         public const string CONTROLLER_NAME = "Class";
 
         /// <summary>
-        /// Class 메인화면 
+        /// ClassView : Class 메인 뷰 담당 
         /// </summary>
         /// <returns></returns>
         [Authorize(ClaimType = ClaimTypes.Role, ClaimValue = Constants.UserRoles.Admin + "," + Constants.UserRoles.General)]

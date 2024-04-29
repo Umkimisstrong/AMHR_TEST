@@ -197,6 +197,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="StaticContents\images\kakao_login_large_wide.png" />
+    <Content Include="StaticContents\images\kakao_login_medium_wide.png" />
     <Content Include="StaticContents\images\main_banner.png" />
     <Content Include="StaticContents\images\main_class.png" />
     <Content Include="StaticContents\images\main_shop.png" />
