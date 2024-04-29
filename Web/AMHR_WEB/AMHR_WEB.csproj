@@ -202,6 +202,7 @@
     <Content Include="StaticContents\images\main_banner.png" />
     <Content Include="StaticContents\images\main_class.png" />
     <Content Include="StaticContents\images\main_shop.png" />
+    <Content Include="StaticContents\scripts\amhr_cmm.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
