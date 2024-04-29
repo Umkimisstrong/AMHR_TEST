@@ -1,4 +1,5 @@
-﻿using Microsoft.Ajax.Utilities;
+﻿using AMHR_WEB.Models;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,11 @@ namespace AMHR_WEB.GlobalAttribute
             return JsonConvert.DeserializeObject<T>(data);
         }
 
-       
+        public static T stringToObject<T>(string data)
+        {
+            return JsonConvert.DeserializeObject<T>(data);
+        }
+
+
     }
 }

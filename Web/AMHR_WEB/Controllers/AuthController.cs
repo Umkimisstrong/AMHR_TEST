@@ -111,7 +111,12 @@ namespace AMHR_WEB.Controllers
         /// <returns></returns>
         private UserSessionModel Authenticate(SignInViewModel vm)
         {
+            string USER_ID = string.Empty;
+            string USER_NM = string.Empty;
+            string USER_EMAIL = string.Empty;
+            string USER_TYPE = string.Empty;
             string DisplayNM = string.Empty;
+
             if (vm != null)
             {
                 UserRepository repository = new UserRepository();
@@ -119,7 +124,12 @@ namespace AMHR_WEB.Controllers
                 UserEntity entity = repository.LoginCheckUser(vm.User_ID, GlobalAttribute.GlobalCrypto.EncryptSHA512(vm.Password, encoding));
                 if (entity != null && !string.IsNullOrEmpty(entity.USER_ID))
                 {
+                    USER_ID = entity.USER_ID;
+                    USER_NM = entity.USER_NM;
+                    USER_EMAIL = entity.USER_EMAIL;
+                    USER_TYPE = entity.USER_TYPE;
                     DisplayNM = entity.USER_NM;
+
                 }
                 else
                 {
@@ -128,10 +138,17 @@ namespace AMHR_WEB.Controllers
                 }
             }
 
+
             return new UserSessionModel
             {
                 UserId = Guid.NewGuid(),
-                DisplayName = DisplayNM
+                DisplayName = DisplayNM,
+
+                USER_ID = USER_ID,
+                USER_NM = USER_NM,
+                USER_EMAIL = USER_EMAIL,
+                USER_TYPE = USER_TYPE,
+                
             };
 
         }

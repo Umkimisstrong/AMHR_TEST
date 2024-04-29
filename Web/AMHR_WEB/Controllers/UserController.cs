@@ -96,5 +96,17 @@ namespace AMHR_WEB.Controllers
             //bool result = repository.LoginCheckUser(contract.UserEntity.USER_ID, GlobalAttribute.GlobalCrypto.EncryptSHA512(contract.UserEntity.USER_PWD, encoding));
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult LogoutUser() 
+        {
+            AuthController authController = new AuthController();
+
+            HttpContextBase context = this.HttpContext;
+
+            authController.Signout(context);
+
+            return Redirect("/Home/Index");
+
+        }
     }
 }

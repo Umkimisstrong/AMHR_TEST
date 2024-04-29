@@ -9,6 +9,21 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    @{ 
+        var user = User as System.Security.Claims.ClaimsPrincipal;
+        var userInfo = new AMHR_WEB.Models.UserSessionModel();
+        if (user != null)
+        {
+            var claims = user.Claims.ToList();
+            var sessionClaim = claims.FirstOrDefault(o => o.Type == AMHR_WEB.Models.Constants.UserSession);
+            if (sessionClaim != null)
+            {
+
+
+                userInfo = AMHR_WEB.GlobalAttribute.GlobalHelper.stringToObject<AMHR_WEB.Models.UserSessionModel>(sessionClaim.Value);
+            }
+        }
+    }
     @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
             <div class="container">
                 @Html.ActionLink("애플리케이션 이름", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
@@ -78,10 +93,22 @@
                     <div>
                         <ul class="navbar-nav me-auto" style="width: 100%;
                        justify-content: center;">
-                            <li class="nav-item" style="margin-left:20px;">
-                                @Html.ActionLink("Login", "UserLogin", "User", null, new { @class = "nav-link" })
-                            </li>
+                            @{
+                                if (userInfo != null && !string.IsNullOrEmpty(userInfo.USER_ID))
+                                {
+                                    <li class="nav-item" style="margin-left:20px;">
+                                        @Html.ActionLink("Logout", "LogoutUser", "User", null, new { @class = "nav-link" })
+                                    </li>
 
+                                }
+                                else
+                                {
+                                    <li class="nav-item" style="margin-left:20px;">
+                                        @Html.ActionLink("Login", "UserLogin", "User", null, new { @class = "nav-link" })
+                                    </li>
+
+                                }
+                            }
                         </ul>
                     </div>
                 </div>

@@ -5,14 +5,14 @@ using System.Web;
 
 namespace AMHR_WEB.Models
 {
-    internal class Constants
+    public class Constants
     {
-        internal const string UserSession = "UserSession";
-        internal const string Issuer = "https://local.amhr.kr";
-        internal static class UserRoles
+        public const string UserSession = "UserSession";
+        public const string Issuer = "https://local.amhr.kr";
+        public static class UserRoles
         {
-            internal const string Admin = "ADM";
-            internal const string General = "GNL";
+            public const string Admin = "ADM";
+            public const string General = "GNL";
         }
     }
 }

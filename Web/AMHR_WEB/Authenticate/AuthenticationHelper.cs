@@ -9,12 +9,12 @@ using AMHR_WEB.GlobalAttribute;
 namespace AMHR_WEB.Authenticate
 {
     /// <summary>
-    /// AuthenticationHelper : 권한 검증 관련 Hepler 클래스
+    /// 권한 검증 관련 Hepler 클래스
     /// </summary>
     internal class AuthenticationHelper
     {
         /// <summary>
-        /// CreateClaim : Claim 생성 List<Cliam> (ID / Name / Session / Role)
+        /// Claim 생성 List<Cliam> (ID / Name / Session / Role)
         /// </summary>
         /// <param name="userSessionModel">UserSessionModel 인스턴스</param>
         /// <param name="roles">string [] 의 role 값</param>
