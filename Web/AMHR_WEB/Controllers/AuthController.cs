@@ -13,6 +13,10 @@ using System.Web;
 using System.Web.Mvc;
 using AuthenticationException = AMHR_WEB.Authenticate.AuthenticationException;
 using Microsoft.Owin.Host.SystemWeb;
+using Repository;
+using System.Diagnostics.Contracts;
+using System.Text;
+using Entity;
 
 namespace AMHR_WEB.Controllers
 {
@@ -31,13 +35,14 @@ namespace AMHR_WEB.Controllers
 
         }
 
-        public ActionResult SignIn(SignInViewModel vm, string returnUrl = default(string))
+        public string SignIn(SignInViewModel vm, HttpContextBase context, string returnUrl = default(string))
         {
+            string result = string.Empty;
             try
             {
                 var userSession = Authenticate(vm);
 
-                if (userSession!= null)
+                if (userSession != null)
                 {
                     var identity = new ClaimsIdentity(
                                                             AuthenticationHelper.CreateClaim
@@ -48,57 +53,74 @@ namespace AMHR_WEB.Controllers
                                                             ),
                                                             DefaultAuthenticationTypes.ApplicationCookie
                         );
-                    AuthenticationManager.SignIn (new AuthenticationProperties()
-                    { 
+                    AuthenticationManager(context).SignIn(new AuthenticationProperties()
+                    {
                         AllowRefresh = true,
                         IsPersistent = true,
                         ExpiresUtc = DateTime.UtcNow.AddHours(1),
                     }
                     , identity);
 
-                    if(!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
-
-                    return RedirectToAction("Index", "Home");
+                    //if(!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    //{
+                    //    return Redirect(returnUrl);
+                    //}
+                    result = "OK";
+                    return result;
+                }
+                else
+                {
+                    result = "NO";
+                    return result;
                 }
             }
             catch (AuthenticationException e)
-            { 
-                vm.ErrorMessage = e.Message;
+            {
+                return e.Message;
+                //vm.ErrorMessage = e.Message;
             }
 
-            return View();
+
+            
         }
 
         private UserSessionModel Authenticate(SignInViewModel vm)
         {
-            // DB Connection (ID / PW)
-            if (vm.ErrorMessage != "ckacl0233@naver.com" || vm.Password != "")
+            string DisplayNM = string.Empty;
+            if (vm != null)
             {
-                throw new AuthenticationException("Login Failed. Incorrect email address or password");
+                UserRepository repository = new UserRepository();
+                Encoding encoding = Encoding.UTF8;
+                UserEntity entity = repository.LoginCheckUser(vm.User_ID, GlobalAttribute.GlobalCrypto.EncryptSHA512(vm.Password, encoding));
+                if (entity != null && !string.IsNullOrEmpty(entity.USER_ID))
+                {
+                    DisplayNM = entity.USER_NM;
+                }
+                else
+                {
+                    return null;
+                    //throw new AuthenticationException("Login Failed. Incorrect email address or password");
+                }
             }
 
             return new UserSessionModel
             {
                 UserId = Guid.NewGuid(),
-                DisplayName = ""
+                DisplayName = DisplayNM
             };
+
         }
 
-        public ActionResult Signout()
+        public void Signout(HttpContextBase context)
         {
-            AuthenticationManager.SignOut (DefaultAuthenticationTypes.ApplicationCookie, DefaultAuthenticationTypes.ExternalCookie);
-            return Redirect("/Home/Index");
+            AuthenticationManager(context).SignOut (DefaultAuthenticationTypes.ApplicationCookie, DefaultAuthenticationTypes.ExternalCookie);
+            //return Redirect("/Home/Index");
         }
 
-        private IAuthenticationManager AuthenticationManager
+        private IAuthenticationManager AuthenticationManager(HttpContextBase context)
         {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
+             return context.GetOwinContext().Authentication;
         }
+
     }
 }

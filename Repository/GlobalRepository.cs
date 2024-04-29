@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using MySql.Data;
 //using MySql.Data.MySqlClient;
 using MySqlConnector;
+using System.Reflection;
 
 namespace Repository
 {
@@ -49,6 +50,8 @@ namespace Repository
             conn.ConnectionString = AMHR;
             return conn;
         }
+
+        
 
     }
 }

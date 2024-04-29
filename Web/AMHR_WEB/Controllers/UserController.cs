@@ -1,4 +1,5 @@
-﻿using Contract;
+﻿using AMHR_WEB.Models;
+using Contract;
 using Repository;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace AMHR_WEB.Controllers
     /// <summary>
     /// UserController : User 관련 Buisness Logic 담당
     /// </summary>
-    public class BaseUserController : Controller
+    public class UserController : BaseController
     {
 
         public const string CONTROLLER_NAME = "User";
@@ -51,6 +52,7 @@ namespace AMHR_WEB.Controllers
             UserRepository repository = new UserRepository();
             Encoding encoding = Encoding.UTF8;
             contract.UserEntity.USER_PWD = GlobalAttribute.GlobalCrypto.EncryptSHA512(contract.UserEntity.USER_PWD, encoding);
+            contract.UserEntity.USER_CREATE_TYPE = "HOME";
             bool result = repository.CreateUser(contract);
 
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
@@ -79,11 +81,19 @@ namespace AMHR_WEB.Controllers
         /// </summary>
         /// <param name="contract">User 모델</param>
         /// <returns></returns>
-        public JsonResult LoginCheckUser(UserContract contract)
+        public JsonResult LoginCheckUser(UserContract contract, string returnUrl = "")
         {
             UserRepository repository = new UserRepository();
             Encoding encoding = Encoding.UTF8;
-            bool result = repository.LoginCheckUser(contract.UserEntity.USER_ID, GlobalAttribute.GlobalCrypto.EncryptSHA512(contract.UserEntity.USER_PWD, encoding));
+
+            // 01. AuthController - SignIn
+            AuthController authController = new AuthController();
+            SignInViewModel vm = new SignInViewModel();
+            vm.User_ID = contract.UserEntity.USER_ID;
+            vm.Password = contract.UserEntity.USER_PWD;
+            HttpContextBase context = this.HttpContext;
+            string result  = authController.SignIn(vm, context, returnUrl);
+            //bool result = repository.LoginCheckUser(contract.UserEntity.USER_ID, GlobalAttribute.GlobalCrypto.EncryptSHA512(contract.UserEntity.USER_PWD, encoding));
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
     }

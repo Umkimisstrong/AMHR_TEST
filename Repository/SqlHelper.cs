@@ -8,6 +8,7 @@ using MySql.Data;
 using System.Data.SqlClient;
 //using MySql.Data.MySqlClient;
 using MySqlConnector;
+using System.Reflection;
 
 namespace Repository
 {
@@ -134,5 +135,7 @@ namespace Repository
             return mySqlParams;                
         }
 
+
+        
     }
 }

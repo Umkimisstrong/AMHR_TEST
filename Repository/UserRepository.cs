@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Contract;
 using Entity;
+using Repository;
 
 namespace Repository
 {
@@ -33,7 +34,8 @@ namespace Repository
         	keyValuePairs.Add("I_USER_DESCRIPTION", contract.UserEntity.USER_DESCRIPTION);
         	keyValuePairs.Add("I_USE_YN          ", contract.UserEntity.USE_YN);
         	keyValuePairs.Add("I_DEL_YN          ", contract.UserEntity.DEL_YN);
-        	keyValuePairs.Add("I_CREATE_ID       ", contract.UserEntity.CREATE_ID);
+            keyValuePairs.Add("I_USER_CREATE_TYPE", contract.UserEntity.USER_CREATE_TYPE);
+            keyValuePairs.Add("I_CREATE_ID       ", contract.UserEntity.CREATE_ID);
             keyValuePairs.Add("I_UPDATE_ID       ", contract.UserEntity.UPDATE_ID);
 
             int iResult = SqlHelper.GetNonQuery("SP_CMM_USER_C", keyValuePairs);
@@ -72,9 +74,9 @@ namespace Repository
         /// <param name="userID">사용자 ID</param>
         /// <param name="userPWD">사용자 PWD</param>
         /// <returns></returns>
-        public bool LoginCheckUser(string userID, string userPWD)
+        public UserEntity LoginCheckUser(string userID, string userPWD)
         {
-            bool result = false;
+            UserEntity entity = null;
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
             keyValuePairs.Add("I_USER_ID", userID);
             keyValuePairs.Add("I_USER_PWD", userPWD);
@@ -82,10 +84,10 @@ namespace Repository
             DataSet ds = SqlHelper.GetDataSet("SP_CMM_USER_LOGIN_S", keyValuePairs);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                result = true;
+                entity = UtilRepository.ConvertToEntity<UserEntity>(ds.Tables[0].Rows[0]);
             }
 
-            return result;
+            return entity;
         }
     }
 }

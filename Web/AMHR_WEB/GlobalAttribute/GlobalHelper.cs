@@ -2,7 +2,9 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 
 namespace AMHR_WEB.GlobalAttribute
@@ -18,5 +20,7 @@ namespace AMHR_WEB.GlobalAttribute
         {
             return JsonConvert.DeserializeObject<T>(data);
         }
+
+       
     }
 }

@@ -12,7 +12,6 @@ namespace AMHR_WEB.App_Filters
     /// <summary>
     /// 권한 필터
     /// </summary>
-    /// <param name="filterContext"></param>
     public class AuthorizeAttribute : System.Web.Mvc.AuthorizeAttribute
     {
         public string ClaimType { get; set; }
@@ -33,7 +32,7 @@ namespace AMHR_WEB.App_Filters
             // 로그인 시킨다.
             if(!principal.Identity.IsAuthenticated) 
             {
-                filterContext.Result = new RedirectResult("~/auth/signin");
+                filterContext.Result = new RedirectResult("/User/UserLogin");
                 return;
             }
 
@@ -47,7 +46,7 @@ namespace AMHR_WEB.App_Filters
                   )
                )
             {
-                filterContext.Result = new RedirectResult("~/Unauthorize.html");
+                filterContext.Result = new RedirectResult("/User/UserSignup");
             }
 
         }

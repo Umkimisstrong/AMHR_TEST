@@ -11,12 +11,12 @@ namespace AMHR_WEB
 {
     public class Startup
     {
-        public void Configuration(IAppBuilder app)
+        public static void Configuration(IAppBuilder app)
         {
             ConfigureAuthentication(app);
         }
 
-        private void ConfigureAuthentication(IAppBuilder app)
+        private static void ConfigureAuthentication(IAppBuilder app)
         {
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
