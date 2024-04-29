@@ -20,8 +20,15 @@ using Entity;
 
 namespace AMHR_WEB.Controllers
 {
+    /// <summary>
+    /// AuthController : 권한 검증 컨트롤러
+    /// </summary>
     public class AuthController : BaseController
     {
+        /// <summary>
+        /// SignIn : 안쓰이는 액션
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult SignIn()
         { 
@@ -35,15 +42,28 @@ namespace AMHR_WEB.Controllers
 
         }
 
+        /// <summary>
+        /// SignIn : 사용자 로그인 시 검증및 Cookie 생성, UserSessionModel 을 생성하기 위한 메소드
+        /// </summary>
+        /// <param name="vm">SignInViewModel 인스턴스</param>
+        /// <param name="context">Login 시 HttpContextBase 인스턴스</param>
+        /// <param name="returnUrl">returnURL</param>
+        /// <returns></returns>
         public string SignIn(SignInViewModel vm, HttpContextBase context, string returnUrl = default(string))
         {
+            // 01. 반환할 문자열 선언
             string result = string.Empty;
+
+            // 02. try ~ Catch
             try
             {
+                // 03. 검증 후 UserSession 객체 반환
                 var userSession = Authenticate(vm);
 
+                // 04. 존재한다면(로그인 성공, UserSession 객체 생성 시에)
                 if (userSession != null)
                 {
+                    // 05. Claim 생성
                     var identity = new ClaimsIdentity(
                                                             AuthenticationHelper.CreateClaim
                                                             (
@@ -53,6 +73,8 @@ namespace AMHR_WEB.Controllers
                                                             ),
                                                             DefaultAuthenticationTypes.ApplicationCookie
                         );
+
+                    // 06. 현재 HttpContext 에 SignIn(생성한 Claim Identity 를 입력)
                     AuthenticationManager(context).SignIn(new AuthenticationProperties()
                     {
                         AllowRefresh = true,
@@ -61,29 +83,32 @@ namespace AMHR_WEB.Controllers
                     }
                     , identity);
 
-                    //if(!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                    //{
-                    //    return Redirect(returnUrl);
-                    //}
+                    // 07. 로그인 성공 문자열 OK 반환
                     result = "OK";
                     return result;
                 }
                 else
                 {
+                    // 08. 로그인 실패 문자열 NO 반환
                     result = "NO";
                     return result;
                 }
             }
             catch (AuthenticationException e)
             {
+                // 09. 예외 시 오류문자열 반환
                 return e.Message;
-                //vm.ErrorMessage = e.Message;
             }
 
 
             
         }
 
+        /// <summary>
+        /// Authenticate : 내부 DB 연계하여 로그인 검증
+        /// </summary>
+        /// <param name="vm"></param>
+        /// <returns></returns>
         private UserSessionModel Authenticate(SignInViewModel vm)
         {
             string DisplayNM = string.Empty;
@@ -111,12 +136,21 @@ namespace AMHR_WEB.Controllers
 
         }
 
+        /// <summary>
+        /// Signout : 로그아웃 구현
+        /// </summary>
+        /// <param name="context"></param>
         public void Signout(HttpContextBase context)
         {
             AuthenticationManager(context).SignOut (DefaultAuthenticationTypes.ApplicationCookie, DefaultAuthenticationTypes.ExternalCookie);
             //return Redirect("/Home/Index");
         }
 
+        /// <summary>
+        /// AuthenticationManager : 현재 OwinContext의 인스턴스 반환
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         private IAuthenticationManager AuthenticationManager(HttpContextBase context)
         {
              return context.GetOwinContext().Authentication;

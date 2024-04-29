@@ -10,10 +10,21 @@ using AMHR_WEB.GlobalAttribute;
 
 namespace AMHR_WEB.Controllers
 {
+    /// <summary>
+    /// BaseController : 모든 컨트롤러에서 상속받는 최상위 컨트롤러
+    /// </summary>
     public class BaseController : Controller
     {
+        
+        /// <summary>
+        /// Global 인스턴스 UserSessionModel
+        /// </summary>
         protected internal UserSessionModel UserSessionModel { get; private set; }
 
+        /// <summary>
+        /// 상속받는 컨트롤러에서 사용하는 Initailize 메소드 
+        /// </summary>
+        /// <param name="requestContext">요청 Context</param>
         protected override void Initialize(RequestContext requestContext)
         {
             base.Initialize(requestContext);

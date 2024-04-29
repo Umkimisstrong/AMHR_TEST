@@ -9,6 +9,9 @@ using Repository;
 
 namespace AMHR_WEB.Controllers
 {
+    /// <summary>
+    /// HomeController : Home 관련 Buisness Logic 담당
+    /// </summary>
     public class HomeController : BaseController
     {
         public const string CONTROLLER_NAME = "Home";

@@ -14,11 +14,19 @@ namespace AMHR_WEB.App_Filters
     /// </summary>
     public class AuthorizeAttribute : System.Web.Mvc.AuthorizeAttribute
     {
+        /// <summary>
+        /// 권한 검증 타입 
+        /// </summary>
         public string ClaimType { get; set; }
+
+        /// <summary>
+        /// 검증할 값 (값 , 값...)
+        /// </summary>
         public string ClaimValue { get; set;}
 
         /// <summary>
         /// 특정 Action에 Annotation으로 선언 가능
+        /// [Authorize(ClaimType=Role, ClaimType=Value +","+Value..)]
         /// </summary>
         /// <param name="filterContext"></param>
         public override void OnAuthorization(AuthorizationContext filterContext)

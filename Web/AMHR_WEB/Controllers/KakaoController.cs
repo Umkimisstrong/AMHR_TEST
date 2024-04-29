@@ -15,6 +15,9 @@ using System.Xml;
 
 namespace AMHR_WEB.Controllers
 {
+    /// <summary>
+    /// KakaoController : Kakao API 관련 Buisness Logic 담당
+    /// </summary>
     public class KakaoController : Controller
     {
         public ActionResult KakaoLoginCallBack(string code)
