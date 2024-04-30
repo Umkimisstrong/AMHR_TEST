@@ -1,0 +1,10 @@
+﻿/*
+    - amhr_cmm.css
+    - 공통 css
+*/
+
+
+
+    /* error modal 요소 */
+    div .amhr_error_div > table > tbody > tr > td > code { display : grid; background-color : white; }
+    div .amhr_error_div > table > tbody > tr > td { background-color: white; display: grid; }

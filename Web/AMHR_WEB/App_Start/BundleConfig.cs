@@ -29,6 +29,9 @@ namespace AMHR_WEB
                       "~/Content/bootstrap.css",
                       "~/Content/bootstrap.min.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/bundles/amhrCss").Include(
+                     "~/StaticContents/css/amhr_*"));
         }
     }
 }

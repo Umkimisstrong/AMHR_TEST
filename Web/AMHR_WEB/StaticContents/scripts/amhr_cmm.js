@@ -2,6 +2,16 @@
     amhr_cmm.js
     - javascript 공통 모듈
 */
+
+    /**
+     * - modal_status
+     * - Javascript로 관리하는 modal_status 
+     * - inform     - 남색
+     * - warning    - 노란색
+     * - danger     - 주황색
+     * - confirm    - 초록색
+     * - alert      - 분홍색(기본)
+     */
     var modal_status = {
           status_inform      : "inform"
         , status_warning     : "warning"
@@ -10,8 +20,39 @@
         , status_alert       : "alert"
     };
 
+    /** 
+     * - MsgBox
+     * - Alert ~ Confirm Modal Layer Popup
+     * - 기본 로직
+     *   > Confirm 의 경우 : btn_confirm 을 보여주고 btn_alert 영역을 숨긴다.
+     *                     : YES / NO 에 따라 Return받는 flag 가 true / false 로 달라진다.
+     * 
+     *   > 나머지 의 경우 : btn_confirm 을 숨기고 btn_alert 영역을 보여준다.
+     *                    : okhandler - 필요시 custom 함수를 호출할 수 있다.
+     * 
+     *   > 공통 : setModalDesign(메시지, 상태분류) 함수로 모달 디자인을 바꾸면서 띄운다.
+      
+         > ex) ==================================================================================
+            var confirmFlag = false;
+            MsgBox.Confirm("로그인 하시겠습니까??", function resultFlag(flag)
+            {
+                confirmFlag = flag;
+                if (confirmFlag)
+                {
+                    if (validateData())
+                    {
+                        loginData();
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                
+            }); 
+         > ex) ==================================================================================
+     */
     var MsgBox = {
-
         Alert: function (msg, okhandler) {
                 $("#btn_confirm").hide();
                 $("#btn_alert").show();
@@ -134,6 +175,11 @@
         }
     }
 
+    /**
+     * - setModalDesign
+     * @param {any} message - 팝업 내부에 작성할 메시지
+     * @param {any} status  - 팝업 디자인을 제공하기 위한 기준 상태분류
+     */
     function setModalDesign(message, status)
     {
         var modal_title = "";
@@ -183,8 +229,50 @@
                 break;
         }
 
+        // Text Fill
         $("#amhr_modal_title").html(modal_title);
-        $("#amhr_modal_header").attr("class", "modal-header " + bgColorDesign + " " + fontColorDesign);
         $("#amhr_modal_body_text").html(modal_message);
+
+        // Design class Change
+        $("#amhr_modal_header").attr("class", "modal-header " + bgColorDesign + " " + fontColorDesign);
         $("button[name='amhr_btn_ok']").attr("class", "btn " + btnBgColorDesign);
+    }
+
+    function setErrCustomContents(data)
+    {
+        var msg = "";
+
+        if (data != null)
+        {
+            if (data.status != null)
+            {
+                msg += "<div class='amhr_error_div'>";
+                msg += "<p>";
+                msg += "Error status : " + data.status;
+                msg += "</p>";
+            }
+
+            if (data.statusText != null)
+            {
+                msg += "<p>";
+                msg += "Error status : " + data.statusText;
+                msg += "</p>";
+            }
+
+            if (data.responseText != null)
+            {
+                msg += "<p>";
+                msg += "Error Detail : " + "</br>";
+                msg += $($(data.responseText).find("table")[0]).prop("outerHTML");
+                msg += "</p>";
+
+                msg += "<p>";
+                msg += $($(data.responseText).find("table")[1]).prop("outerHTML");
+                msg += "</p>";
+            }
+            msg += "</div>";
+        }
+        
+
+        return msg;
     }

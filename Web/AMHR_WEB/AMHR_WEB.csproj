@@ -145,6 +145,7 @@
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClassController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KakaoController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="GlobalAttribute\GlobalHelper.cs" />
     <Compile Include="GlobalAttribute\GlobalKakao.cs" />
     <Compile Include="Models\Constants.cs" />
+    <Compile Include="Models\CustomErrorModel.cs" />
     <Compile Include="Models\SignInViewModel.cs" />
     <Compile Include="Models\UserSessionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -197,6 +199,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="StaticContents\css\amhr_cmm.css" />
     <Content Include="StaticContents\images\kakao_login_large_wide.png" />
     <Content Include="StaticContents\images\kakao_login_medium_wide.png" />
     <Content Include="StaticContents\images\main_banner.png" />
@@ -220,6 +223,7 @@
     <Content Include="Views\Class\ClassView.cshtml" />
     <Content Include="Views\User\UserSignUp.cshtml" />
     <Content Include="Views\User\UserLogin.cshtml" />
+    <Content Include="Views\Error\ErrorView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

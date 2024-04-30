@@ -1,0 +1,72 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    Layout = null;
+}
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/amhr")
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Error</title>
+</head>
+<body>
+    <div style="width:100%; height:100%;">
+        <div class="container body-content">
+            <main>
+
+
+                <div class="row" style="justify-content:center; margin-top:100px;">
+                    <div class="card  mb-12" style="max-width: 30rem; box-shadow: 0 4px 16px rgba(17, 17, 26, .05), 0 8px 32px rgba(17, 17, 26, .05); border-color:white;">
+                        <div class="card-header bg-white" style="text-align:center;">
+                            <p style="font-size:40px; font-weight:bold;">Internal Server Error</p>
+                            <p style="font-size: 18px;  color: #797979;">Status : @ViewBag.ERROR_STATUS</p>
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <p>
+                                    Exception Details : @ViewBag.ERROR_STATUS_TEXT <br />
+                                </p>
+                                <p id="response_text">
+                                    @{
+                                        string ERROR_RESPONSE_TEXT = ViewBag.ERROR_RESPONSE_TEXT;
+                                    }
+                                </p>
+                            </div>
+
+
+
+
+
+                            <div style="text-align:center;">
+                                <p style="font-size: 18px; color: #797979;">
+                                    Go Back To  @Html.ActionLink("AMHR", "Index", "Home", null, new { @class = "" })
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+        </div>
+        <hr />
+    </div>
+    <script type="text/javascript">
+        $(function () {
+
+            set_error_response_text();
+
+        });
+        function set_error_response_text()
+        {
+            var responseText = '@ERROR_RESPONSE_TEXT';
+            $("#response_text").html(responseText);
+
+        }
+    </script>
+</body>
+
+
+</html>

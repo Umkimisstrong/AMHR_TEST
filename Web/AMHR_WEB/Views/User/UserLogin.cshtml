@@ -66,27 +66,14 @@
         */
         function requestSignIn()
         {
-            var confirmFlag = false;
-            MsgBox.Confirm("로그인 하시겠습니까??", function resultFlag(flag)
+            if (validateData())
             {
-                confirmFlag = flag;
-                if (confirmFlag)
-                {
-                    if (validateData())
-                    {
-                        loginData();
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-                
-            });
-
-
-            
-
+                loginData();
+            }
+            else
+            {
+                return;
+            }
         }
 
 
@@ -97,14 +84,16 @@
         {
             var useriD = $("#exampleInputId1").val();
             if (useriD.trim() == "") {
-                alert("ID를 입력하세요.");
+                //alert("ID를 입력하세요.");
+                MsgBox.Alert("ID를 입력하세요.");
                 return false;
             }
 
             var userPassword1 = $("#exampleInputPassword1").val();
             if (userPassword1.trim() == "")
             {
-                alert("비밀번호를 입력하세요.");
+                //alert("비밀번호를 입력하세요.");
+                MsgBox.Alert("비밀번호를 입력하세요.");
                 return false;
             }
 
@@ -136,16 +125,19 @@
                     }
                     else if (data.RESULT == "NO")
                     {
-                        alert("아이디 또는 비밀번호가 잘못되었습니다.");
+                        //alert("아이디 또는 비밀번호가 잘못되었습니다.");
+                        MsgBox.Warning("아이디 또는 비밀번호가 잘못되었습니다.")
                     }
                     else
                     {
-                        alert(data.RESULT);
+                        MsgBox.Danger(data.RESULT);
                     }
                 }
                 , error: function (data)
                 {
-                    //alert(data);
+                    MsgBox.Danger(
+                                     setErrCustomContents(data)
+                                  );
                 }
             });
 
