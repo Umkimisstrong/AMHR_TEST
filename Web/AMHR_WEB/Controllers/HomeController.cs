@@ -41,10 +41,9 @@ namespace AMHR_WEB.Controllers
         /// <returns></returns>
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
             ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
             ViewBag.SECOND_BREADCRUMB_NAME = "About";
-            return View("Index");
+            return View();
         }
 
         /// <summary>

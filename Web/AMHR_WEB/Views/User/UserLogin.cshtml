@@ -66,16 +66,29 @@
         */
         function requestSignIn()
         {
-            if (validateData())
+            var confirmFlag = false;
+            MsgBox.Confirm("로그인 하시겠습니까??", function resultFlag(flag)
             {
-                loginData();
-            }
-            else
-            {
-                return;
-            }
+                confirmFlag = flag;
+                if (confirmFlag)
+                {
+                    if (validateData())
+                    {
+                        loginData();
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                
+            });
+
+
+            
 
         }
+
 
         /*
             validateData : 유효성 검사

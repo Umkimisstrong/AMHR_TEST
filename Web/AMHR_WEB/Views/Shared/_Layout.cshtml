@@ -9,7 +9,7 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    @{ 
+    @{
         var user = User as System.Security.Claims.ClaimsPrincipal;
         var userInfo = new AMHR_WEB.Models.UserSessionModel();
         if (user != null)
@@ -18,8 +18,6 @@
             var sessionClaim = claims.FirstOrDefault(o => o.Type == AMHR_WEB.Models.Constants.UserSession);
             if (sessionClaim != null)
             {
-
-
                 userInfo = AMHR_WEB.GlobalAttribute.GlobalHelper.stringToObject<AMHR_WEB.Models.UserSessionModel>(sessionClaim.Value);
             }
         }
@@ -48,7 +46,13 @@
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-
+                    <div>
+                        <ul class="navbar-nav me-auto" style="width: 100%;   justify-content: center;">
+                            <li class="nav-item" style="margin-left:20px;">
+                                @Html.ActionLink("AMHR", "Index", "Home", null, new { @class = "nav-link" })
+                            </li>
+                        </ul>
+                    </div>
                     <div class="collapse navbar-collapse" id="navbarColor01">
                         <ul class="navbar-nav me-auto"
                             style="width: 100%;
@@ -74,20 +78,20 @@
                                 <a class="nav-link" href="#">Contact</a>
                             </li>
                             @*<li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Separated link</a>
-                            </div>
-                        </li>*@
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">Separated link</a>
+                                    </div>
+                                </li>*@
                         </ul>
                         @*<form class="d-flex">
-                        <input class="form-control me-sm-2" type="search" placeholder="Search">
-                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                    </form>*@
+                                <input class="form-control me-sm-2" type="search" placeholder="Search">
+                                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                            </form>*@
                     </div>
 
                     <div>
@@ -141,8 +145,8 @@
             </div>
             <hr />
 
-            
-            <div style="width: 100%; bottom: 0; left: 0; height: 60px;" >
+
+            <div style="width: 100%; bottom: 0; left: 0; height: 60px;">
                 <footer style="justify-content:center;  align-items:center; display:flex; margin-left:30px;">
                     <span>&copy; AMONGHAR</span>
                     <span>&copy; AMONGHAR</span>
@@ -151,10 +155,52 @@
             </div>
         </article>
     </div>
-    
+    <!--<div class="modal" id="msg_popup" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">-->
+    <!-- MSG Space-->
+    <!--</div>
+                <div class="modal-footer" id="btn_confirm">
+                    <button type="button" id="confirm_yes" class="btn btn-primary" data-dismiss="modal">YES</button>
+                    <button type="button" id="confirm_no" class="btn btn-secondary" data-dismiss="modal">NO</button>
+                </div>
+                <div class="modal-footer" id="btn_alert">
+                    <button type="button" id="alert_ok" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    @* Modal Layer *@
+    <div class="modal" id="msg_popup">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="amhr_modal_header">
+                    <h5 class="modal-title" id="amhr_modal_title">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body" id="amhr_modal_body_text">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer" id="btn_confirm">
+                    <button type="button" class="btn" name="amhr_btn_ok" id="confirm_yes" data-bs-dismiss="modal">YES</button>
+                    <button type="button" class="btn btn-secondary" name="amhr_btn_no" id="confirm_no" data-bs-dismiss="modal">NO</button>
+                </div>
+                <div class="modal-footer" id="btn_alert">
+                    <button type="button" class="btn btn-primary" name="amhr_btn_ok" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* Modal Layer *@
+
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/amhr")
     @RenderSection("scripts", required: false)
+
 </body>
 </html>
