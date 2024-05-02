@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using Contract;
+using Contract.ENUM;
 using Entity;
 
 namespace Repository
@@ -13,39 +14,73 @@ namespace Repository
     
     public class CodeRepository
     {
-        public CodeContract SelectCode(string SYS_CD, string DIV_CD)
+        public CodeEntity SelectCodeEntity(string SYS_CODE_ID, string DIV_CODE_ID, string CODE_ID)
         { 
-            CodeContract Contract = new CodeContract();
 
-            List<CodeEntity> CodeList = new List<CodeEntity>();
+            CodeEntity entity = new CodeEntity();
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("I_SYS_CD", SYS_CD);
-            keyValuePairs.Add("I_DIV_CD", DIV_CD);
+            keyValuePairs.Add("I_SYS_CODE_ID", SYS_CODE_ID);
+            keyValuePairs.Add("I_DIV_CODE_ID", DIV_CODE_ID);
+            keyValuePairs.Add("I_CODE_ID", CODE_ID);
 
-            DataSet ds = SqlHelper.GetDataSet("PR_CMM_SELECT_CODE", keyValuePairs);
+            DataSet ds = SqlHelper.GetDataSet("SP_CMM_CODE_S", keyValuePairs);
 
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
-            { 
-                foreach(DataRow item in ds.Tables[0].Rows )
-                {
-                    CodeEntity Entity = new CodeEntity();
-                    Entity.CODE_ID = item["CODE_ID"].ToString();
-                    Entity.CODE_NM = item["CODE_NM"].ToString();
-                    Entity.SYS_CD = item["SYS_CD"].ToString();
-                    Entity.DIV_CD = item["DIV_CD"].ToString();
-                    Entity.CREATE_DT = DateTime.Parse(item["CREATE_DT"].ToString());
-
-                    CodeList.Add(Entity);
-                }
-
-                
+            {
+                entity = UtilRepository.ConvertToEntity<CodeEntity>(ds.Tables[0].Rows[0]);
             }
 
-            Contract.CodeList = CodeList;
+            return entity;
+        }
 
-            return Contract;
+        public List<CodeEntity> SelectCodeEntityList(string SYS_CODE_ID, string DIV_CODE_ID)
+        {
+
+            List<CodeEntity> entityList = new List<CodeEntity>();
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_SYS_CODE_ID", SYS_CODE_ID);
+            keyValuePairs.Add("I_DIV_CODE_ID", DIV_CODE_ID);
+
+            DataSet ds = SqlHelper.GetDataSet("SP_CMM_CODE_L", keyValuePairs);
+
+
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                entityList = UtilRepository.ConverToEntityList<CodeEntity>(ds.Tables[0]);
+            }
+
+            return entityList;
+        }
+
+        public string SaveCodeEntity(CodeEntity entity, EnumProperties.GeneralFlag generalFlag)
+        { 
+            string result = "N";
+
+            if (generalFlag.Equals(EnumProperties.GeneralFlag.CREATE))
+            {
+                // Insert
+                result = "IY";
+            }
+            else if(generalFlag.Equals (EnumProperties.GeneralFlag.UPDATE)) 
+            {
+                // Update
+                result = "UY";
+            }
+            else if(generalFlag.Equals(EnumProperties.GeneralFlag.DELETE))
+            {
+                // Delete
+                result = "DY";
+            }
+            else
+            {
+                // 
+                result = "NOTHING";
+            }
+
+            return result;
         }
 
     }

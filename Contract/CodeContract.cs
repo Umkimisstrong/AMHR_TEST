@@ -11,9 +11,9 @@ namespace Contract
 
         public string CODE_NM { get; set; }
 
-        public string SYS_CD { get; set; }
+        public string SYS_CD_ID { get; set; }
 
-        public string DIV_CD { get; set; }
+        public string DIV_CD_ID { get; set; }
 
 
         public CodeEntity CodeEntity { get; set; }

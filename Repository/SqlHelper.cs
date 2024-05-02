@@ -76,7 +76,7 @@ namespace Repository
 
                     adapter.Fill(ds);
                 }
-                mySqlConnection.Clone();
+                mySqlConnection.Close();
 
             }
             
@@ -106,7 +106,7 @@ namespace Repository
 
                     iResult = mySqlCommand.ExecuteNonQuery();
                 }
-                mySqlConnection.Clone();
+                mySqlConnection.Close();
             }
 
             return iResult;
