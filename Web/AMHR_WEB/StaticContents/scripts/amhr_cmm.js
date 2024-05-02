@@ -54,83 +54,87 @@
      */
     var MsgBox = {
         Alert: function (msg, okhandler) {
+            new Promise((resolve, reject) => {
                 $("#btn_confirm").hide();
                 $("#btn_alert").show();
-
                 $("#msg_popup #alert_ok").unbind();
-                //$("#msg_popup .modal-body").html(msg);
-                setModalDesign(msg, "alert");
-                $("#msg_popup").modal('show');
 
+                setModalDesign(msg, "alert");
+
+                $("#msg_popup").modal('show');
                 $("#msg_popup #alert_ok").click(function () {
                     $("#msg_popup").modal("hide");
                 });
 
                 $("#msg_popup").on("hidden.bs.modal", function (e) {
                     e.stopPropagation();
-                    if (okhandler != null) { }
+                    if (okhandler != null) { resolve(); }
                     else { }
                 });
+            }).then(okhandler).catch(function () { });
         },
 
         Warning: function (msg, okhandler) {
-            $("#btn_confirm").hide();
-            $("#btn_alert").show();
+            new Promise((resolve, reject) => {
+                $("#btn_confirm").hide();
+                $("#btn_alert").show();
+                $("#msg_popup #alert_ok").unbind();
 
-            $("#msg_popup #alert_ok").unbind();
-            //$("#msg_popup .modal-body").html(msg);
-            setModalDesign(msg, "warning");
-            $("#msg_popup").modal('show');
+                setModalDesign(msg, "warning");
 
-            $("#msg_popup #alert_ok").click(function () {
-                $("#msg_popup").modal("hide");
-            });
+                $("#msg_popup").modal('show');
+                $("#msg_popup #alert_ok").click(function () {
+                    $("#msg_popup").modal("hide");
+                });
 
-            $("#msg_popup").on("hidden.bs.modal", function (e) {
-                e.stopPropagation();
-                if (okhandler != null) { }
-                else { }
-            });
+                $("#msg_popup").on("hidden.bs.modal", function (e) {
+                    e.stopPropagation();
+                    if (okhandler != null) { resolve(); }
+                    else { }
+                });
+            }).then(okhandler).catch(function () { });
         },
 
         Danger: function (msg, okhandler) {
-            $("#btn_confirm").hide();
-            $("#btn_alert").show();
+            new Promise((resolve, reject) => {
+                $("#btn_confirm").hide();
+                $("#btn_alert").show();
+                $("#msg_popup #alert_ok").unbind();
 
-            $("#msg_popup #alert_ok").unbind();
-            //$("#msg_popup .modal-body").html(msg);
-            setModalDesign(msg, "danger");
-            $("#msg_popup").modal('show');
+                setModalDesign(msg, "danger");
 
-            $("#msg_popup #alert_ok").click(function () {
-                $("#msg_popup").modal("hide");
-            });
+                $("#msg_popup").modal('show');
+                $("#msg_popup #alert_ok").click(function () {
+                    $("#msg_popup").modal("hide");
+                });
 
-            $("#msg_popup").on("hidden.bs.modal", function (e) {
-                e.stopPropagation();
-                if (okhandler != null) { }
-                else { }
-            });
+                $("#msg_popup").on("hidden.bs.modal", function (e) {
+                    e.stopPropagation();
+                    if (okhandler != null) { resolve(); }
+                    else { }
+                });
+            }).then(okhandler).catch(function () { });
         },
 
         Inform: function (msg, okhandler) {
-            $("#btn_confirm").hide();
-            $("#btn_alert").show();
+            new Promise((resolve, reject) => {
+                $("#btn_confirm").hide();
+                $("#btn_alert").show();
+                $("#msg_popup #alert_ok").unbind();
 
-            $("#msg_popup #alert_ok").unbind();
-            //$("#msg_popup .modal-body").html(msg);
-            setModalDesign(msg, "inform");
-            $("#msg_popup").modal('show');
+                setModalDesign(msg, "inform");
 
-            $("#msg_popup #alert_ok").click(function () {
-                $("#msg_popup").modal("hide");
-            });
+                $("#msg_popup").modal('show');
+                $("#msg_popup #alert_ok").click(function () {
+                    $("#msg_popup").modal("hide");
+                });
 
-            $("#msg_popup").on("hidden.bs.modal", function (e) {
-                e.stopPropagation();
-                if (okhandler != null) { }
-                else { }
-            });
+                $("#msg_popup").on("hidden.bs.modal", function (e) {
+                    e.stopPropagation();
+                    if (okhandler != null) { resolve(); }
+                    else { }
+                });
+            }).then(okhandler).catch(function () { });
         },
 
         Confirm: function (msg, resultFlag) {
