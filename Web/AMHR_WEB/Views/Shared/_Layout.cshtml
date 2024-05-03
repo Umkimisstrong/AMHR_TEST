@@ -88,14 +88,26 @@
                                 @{
                                     if (userInfo != null && !string.IsNullOrEmpty(userInfo.USER_ID))
                                     {
-                                        <li class="nav-item" style="margin-left:20px;">
-                                            @Html.ActionLink("Logout", "LogoutUser", "User", null, new { @class = "nav-link" })
+                                        @*<li class="nav-item" style="margin-left:20px;">
+                                                @Html.ActionLink("Logout", "LogoutUser", "User", null, new { @class = "nav-link" })
+                                            </li>*@
+                                        <li class="nav-item dropdown" id="amhr-nav-bar-li">
+                                            <a id="amhr-nav-bar-toggle" class="nav-link dropdown-toggle" data-bs-toggle="" href="#" role="button" aria-haspopup="true" aria-expanded="false" onclick="javascript: Nav_Bar_DropDownToggle();">@userInfo.USER_NM 님</a>
+                                            <div class="dropdown-menu bg-primary" data-bs-popper="static" id="amhr-nav-bar-dropdown">
+                                                @Html.ActionLink("Logout", "LogoutUser", "User", null, new { @class = "dropdown-item amhr_nav_dropdown" })
+                                                @Html.ActionLink("MyPage", "MyPage", "User", null, new { @class = "dropdown-item amhr_nav_dropdown" })
+                                                @if (userInfo.USER_TYPE.Equals("ADM"))
+                                                {
+                                                    <div class="dropdown-divider"></div>
+                                                    @Html.ActionLink("Admin", "SetSystem", "Admin", null, new { @class = "dropdown-item amhr_nav_dropdown" })
+                                                }
+
+                                            </div>
                                         </li>
                                         if (userInfo.USER_TYPE.Equals("ADM"))
                                         {
-                                            <li class="nav-item" style="margin-left:20px;">
-                                                @Html.ActionLink("Admin", "SetSystem", "Admin", null, new { @class = "nav-link" })
-                                            </li>
+                                            @*<li class="nav-item" style="margin-left:20px;">
+                                                </li>*@
                                         }
                                     }
                                     else
@@ -152,7 +164,7 @@
             </div>
         </article>
     </div>
-    
+
     @* Modal Layer Area *@
     @Html.Partial("Amhr_Modal")
 
@@ -161,6 +173,22 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/amhr")
 
+    <script type="text/javascript">
+        $(function () {
+            $('html').on("click", function (e) {
+                if (
+                    !$(e.target).is('#amhr-nav-bar-dropdown')
+                    &&
+                    !$(e.target).is('#amhr-nav-bar-toggle')
+                    &&
+                    !$(e.target).is('#amhr-nav-bar-li')
+                    ) {
+                    Nav_Bar_DropDownClose();
+                }
+            });
+
+        });
+    </script>
     @RenderSection("scripts", required: false)
 
 </body>

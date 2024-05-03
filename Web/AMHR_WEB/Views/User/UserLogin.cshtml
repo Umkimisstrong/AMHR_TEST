@@ -114,7 +114,10 @@
 
             $.ajax({
                 url: "/User/LoginCheckUser"
-                , data: {contract: obj }
+                , data: {
+                    contract: obj
+                    , returnUrl : ""
+                }
                 , type: "post"
                 , success: function (data)
                 {

@@ -68,6 +68,22 @@ namespace Repository
             return result;
         }
 
+        public string CheckUserCreateType(string userEmail, string userCreateType) 
+        {
+            string result = "";
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_USER_EMAIL", userEmail);
+            keyValuePairs.Add("I_USER_CREATE_TYPE", userCreateType);
+
+            DataSet ds = SqlHelper.GetDataSet("SP_CMM_USER_CREATE_TYPE_CHECK", keyValuePairs);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                result = ds.Tables[0].Rows[0][0].ToString().Trim();
+            }
+            return result;
+        }
+
         /// <summary>
         /// LoginCheckUser : ID, PWD 로 Login Check
         /// </summary>

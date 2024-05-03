@@ -8,3 +8,5 @@
     /* error modal 요소 */
     div .amhr_error_div > table > tbody > tr > td > code { display : grid; background-color : white; }
     div .amhr_error_div > table > tbody > tr > td { background-color: white; display: grid; }
+
+div #amhr-nav-bar-dropdown { --bs-dropdown-link-hover-bg: #ba4d46; --bs-dropdown-min-width: 6.0rem;}

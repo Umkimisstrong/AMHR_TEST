@@ -97,6 +97,28 @@ namespace AMHR_WEB.Controllers
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// LoginCheckUser : ID, PWD 로 Login Check
+        /// </summary>
+        /// <param name="contract">User 모델</param>
+        /// <returns></returns>
+        public string SNSLoginCheckUser(string userID, string userPWD, HttpContextBase context)
+        {
+            UserRepository repository = new UserRepository();
+            Encoding encoding = Encoding.UTF8;
+
+            // 01. AuthController - SignIn
+            AuthController authController = new AuthController();
+            SignInViewModel vm = new SignInViewModel();
+            vm.User_ID = userID;
+            vm.Password = userPWD;
+            string result = authController.SignIn(vm, context, "");
+            return result;
+            //return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
         public ActionResult LogoutUser() 
         {
             AuthController authController = new AuthController();

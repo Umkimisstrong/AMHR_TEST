@@ -2,6 +2,7 @@
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Repository;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +14,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using static System.Net.WebRequestMethods;
+using Contract;
+using Contract.ENUM;
+using Entity;
+using System.Security.Cryptography;
 
 namespace AMHR_WEB.Controllers
 {
@@ -91,7 +96,75 @@ namespace AMHR_WEB.Controllers
 
             Dictionary<string, object> resultOBJ = GetUserInfo(accessToken);
 
-            return Json(resultOBJ, JsonRequestBehavior.AllowGet);
+            bool checkUserID = false;
+            if (resultOBJ != null && resultOBJ.Count > 0 && resultOBJ["USER_ID"] != null && !string.IsNullOrEmpty(resultOBJ["USER_ID"].ToString()))
+            {
+                checkUserID = CheckUserID(resultOBJ["USER_ID"].ToString());
+            }
+
+            bool checkUserEmail = false;
+            if (resultOBJ != null && resultOBJ.Count > 0 && resultOBJ["USER_EMAIL"] != null && !string.IsNullOrEmpty(resultOBJ["USER_EMAIL"].ToString()))
+            {
+                checkUserEmail = 
+                    EnumProperties.UserCreateTypeFlag.KAKAO.ToString().Equals
+                    (
+                            CheckUserCreateType
+                            (
+                                    resultOBJ["USER_EMAIL"].ToString()
+                                ,   EnumProperties.UserCreateTypeFlag.KAKAO.ToString()
+                            )
+                    )
+                   ?  false
+                   :  true;
+            }
+
+            if (checkUserID && checkUserEmail)
+            {
+                UserEntity entity = new UserEntity();
+                entity.USER_ID = resultOBJ["USER_ID"].ToString();
+                entity.USER_NM = resultOBJ["USER_NM"].ToString();
+                entity.USER_PWD = GlobalCrypto.EncryptSHA512(GlobalKakao.CONST_PWD, Encoding.UTF8).ToString();
+                entity.USER_TYPE = EnumProperties.UserTypeFlag.GNL.ToString();
+                entity.USER_EMAIL = resultOBJ["USER_EMAIL"].ToString();
+                entity.USER_DESCRIPTION = "카카오 로그인";
+                entity.USE_YN = "Y";
+                entity.DEL_YN = "N";
+                entity.USER_CREATE_TYPE = EnumProperties.UserCreateTypeFlag.KAKAO.ToString();
+                entity.CREATE_ID = resultOBJ["USER_ID"].ToString();
+                entity.UPDATE_ID = resultOBJ["USER_ID"].ToString();
+
+                if (SaveKakaoUser(entity))
+                {
+                    UserController userController = new UserController();
+
+                    string loginResult = userController.SNSLoginCheckUser(entity.USER_ID, GlobalKakao.CONST_PWD, this.HttpContext);
+                    if (loginResult.Equals("OK"))
+                    {
+                        return Redirect("/Home/Index");
+                    }
+                    else
+                    {
+                        return Redirect("/User/UserLogin");
+                    }
+                }
+                else
+                {
+                    return Redirect("/User/UserLogin");
+                }
+            }
+            else
+            {
+                UserController userController = new UserController();
+                string loginResult = userController.SNSLoginCheckUser(resultOBJ["USER_ID"].ToString(), GlobalKakao.CONST_PWD, this.HttpContext);
+                if (loginResult.Equals("OK"))
+                {
+                    return Redirect("/Home/Index");
+                }
+                else
+                {
+                    return Redirect("/User/UserLogin");
+                }
+            }
         }
 
 
@@ -123,11 +196,23 @@ namespace AMHR_WEB.Controllers
                         JObject properties = (JObject)jsonResponse["properties"];
                         JObject kakaoAccount = (JObject)jsonResponse["kakao_account"];
 
-                        string nickname = properties["nickname"].ToString();
-                        string email = kakaoAccount["email"].ToString();
+                        string USER_ID = jsonResponse["id"].ToString();
+                        string USER_NM = properties["nickname"].ToString();
+                        string USER_EMAIL = string.Empty;
+                        if (
+                            (bool)kakaoAccount["has_email"] == true
+                            &&
+                            (bool)kakaoAccount["is_email_valid"] == true
+                            &&
+                            (bool)kakaoAccount["is_email_verified"] == true
+                            )
+                        { 
+                            USER_EMAIL = kakaoAccount["email"].ToString();
+                        }
 
-                        userInfo.Add("nickname", nickname);
-                        userInfo.Add("email", email);
+                        userInfo.Add("USER_ID", USER_ID);
+                        userInfo.Add("USER_NM", USER_NM);
+                        userInfo.Add("USER_EMAIL", USER_EMAIL);
                     }
                 }
             }
@@ -137,6 +222,28 @@ namespace AMHR_WEB.Controllers
             }
 
             return userInfo;
+        }
+
+        private bool CheckUserID(string userID)
+        {
+
+            UserRepository repository = new UserRepository();
+            return repository.CheckUserID(userID);
+        }
+
+        private string CheckUserCreateType(string userEmail, string userCreateType)
+        {
+            UserRepository repository = new UserRepository();
+            return repository.CheckUserCreateType(userEmail, userCreateType);
+        }
+
+        private bool SaveKakaoUser(UserEntity entity)
+        { 
+            UserRepository repository = new UserRepository();
+            UserContract contract = new UserContract();
+            contract.UserEntity = entity;
+            return repository.CreateUser(contract);
+
         }
 
     }

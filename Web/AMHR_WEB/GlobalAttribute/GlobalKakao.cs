@@ -13,6 +13,7 @@ namespace AMHR_WEB.GlobalAttribute
         public static string LOGIN_CALL_BACK_URI { get; set; }
         public static string CODE_URI { get; set; }
         public static string TOKEN_URI { get; set; }
+        public static string CONST_PWD { get; set; }
 
         private static XmlDocument xmlDoc = null;
 
@@ -28,6 +29,10 @@ namespace AMHR_WEB.GlobalAttribute
             XmlNode xmlKeyNode = xmlDoc.SelectSingleNode("AppSettings/KakaoConfig/Registry_KEY");
             CLIENT_ID = xmlKeyNode.SelectSingleNode("Client_ID").Attributes["id"].Value;
             CLIENT_SECRET = xmlKeyNode.SelectSingleNode("Client_Secret").Attributes["id"].Value;
+
+            XmlNode xmlPwdNode = xmlDoc.SelectSingleNode("AppSettings/KakaoConfig/CONST_PWD");
+            CONST_PWD = xmlPwdNode.SelectSingleNode("Client_PWD").Attributes["id"].Value;
+            
         }
 
     }
