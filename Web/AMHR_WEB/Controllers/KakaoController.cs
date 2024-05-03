@@ -26,10 +26,18 @@ namespace AMHR_WEB.Controllers
     /// </summary>
     public class KakaoController : Controller
     {
+        /// <summary>
+        /// 생성자 - Kakao 관련 Global 변수를 Set 한다..
+        /// </summary>
         public KakaoController()
         {
             GlobalKakao.SetGlobalKakao();
         }
+
+        /// <summary>
+        /// KakaoLogin : 카카오 로그인을 위한 최초 진입 뷰 담당
+        /// </summary>
+        /// <returns></returns>
         public ActionResult KakaoLogin()
         {
             string url = GlobalKakao.CODE_URI + "?"
@@ -50,12 +58,17 @@ namespace AMHR_WEB.Controllers
             string accessToken = "";
             string refreshToken = "";
 
+            // 01. Global 변수 세팅
             GlobalKakao.SetGlobalKakao();
+
+            
             try
             {
+                // 02. WebRequest 인스턴스 생성
                 WebRequest request = WebRequest.Create(GlobalKakao.TOKEN_URI);
-                request.Method = "POST";
 
+                // 03. 필요 값 입력
+                request.Method = "POST";
                 string postData = "grant_type=authorization_code" +
                                   "&client_id=" + GlobalKakao.CLIENT_ID + 
                                   "&redirect_uri=" + GlobalKakao.LOGIN_CALL_BACK_URI + 
@@ -66,36 +79,45 @@ namespace AMHR_WEB.Controllers
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.ContentLength = byteArray.Length;
 
+                // 04. Stream > Write 요청을 내보낸다.
                 using (Stream dataStream = request.GetRequestStream())
                 {
                     dataStream.Write(byteArray, 0, byteArray.Length);
                 }
 
+                // 05. WebRequest 인스턴스로 WebResponse 인스턴스를 받아낸다.
                 WebResponse response = request.GetResponse();
-                Console.WriteLine("responseCode : " + ((HttpWebResponse)response).StatusCode);
+                Console.WriteLine("responseCode : " + ((HttpWebResponse)response).StatusCode);  // Test 시 확인
 
+                // 06. Stream 으로 WebResponse 인스턴스의 Stream 을 읽어들인다.
                 using (Stream responseStream = response.GetResponseStream())
                 {
                     StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
                     string responseFromServer = reader.ReadToEnd();
-                    Console.WriteLine("response body : " + responseFromServer);
+                    Console.WriteLine("response body : " + responseFromServer); // Test 시 확인
 
-                    // Parse JSON response
+                    // 07. Parse JSON response - 엑세스 토큰과 리프레시 토큰을 얻는다.
+                    //     - 엑세스 토큰은 카카오 유저 정보를 얻기 위한 정보로 활용
                     dynamic jsonObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseFromServer);
                     accessToken = jsonObject.access_token;
                     refreshToken = jsonObject.refresh_token;
 
-                    Console.WriteLine("accessToken : " + accessToken);
-                    Console.WriteLine("refreshToken : " + refreshToken);
+                    Console.WriteLine("accessToken : " + accessToken);  // Test 시 확인
+                    Console.WriteLine("refreshToken : " + refreshToken);    // Test 시 확인
                 }
             }
             catch (WebException e)
             {
-                Console.WriteLine("WebException: " + e.Message);
+                Console.WriteLine("WebException: " + e.Message);    // Test 시 확인
             }
 
+            // 08. 엑세스 토큰으로 카카오 유저 정보를 얻어온다.
             Dictionary<string, object> resultOBJ = GetUserInfo(accessToken);
 
+            // 09. 해당 카카오 유저가 AMHR 의 DataBase 에 존재하는 지 확인한다.
+            //     - USER_ID
+            //     - USER_EMAIL && USER_CREATE_TYPE
+            //       의 무결성 점검
             bool checkUserID = false;
             if (resultOBJ != null && resultOBJ.Count > 0 && resultOBJ["USER_ID"] != null && !string.IsNullOrEmpty(resultOBJ["USER_ID"].ToString()))
             {
@@ -118,6 +140,8 @@ namespace AMHR_WEB.Controllers
                    :  true;
             }
 
+            // 10. 전부 TRUE 인 경우 - AMHR 에 카카오 유저 정보로 가입된 Data 가 없다는 의미
+            //     카카오 유저 정보를 바탕으로 회원가입 한다.
             if (checkUserID && checkUserEmail)
             {
                 UserEntity entity = new UserEntity();
@@ -133,10 +157,11 @@ namespace AMHR_WEB.Controllers
                 entity.CREATE_ID = resultOBJ["USER_ID"].ToString();
                 entity.UPDATE_ID = resultOBJ["USER_ID"].ToString();
 
+                // 11. 회원가입 완료 시 
                 if (SaveKakaoUser(entity))
                 {
                     UserController userController = new UserController();
-
+                    // 12. 가입정보(인증정보)를 바탕으로 AMHR 에 인증 토큰을 발급, 로그인 한다.
                     string loginResult = userController.SNSLoginCheckUser(entity.USER_ID, GlobalKakao.CONST_PWD, this.HttpContext);
                     if (loginResult.Equals("OK"))
                     {
@@ -144,14 +169,18 @@ namespace AMHR_WEB.Controllers
                     }
                     else
                     {
-                        return Redirect("/User/UserLogin");
+                        TempData.Add("MESSAGE", "로그인에 실패하였습니다. 관리자에게 문의하십시오.");
+                        return RedirectToAction("UserLogin", "User");
                     }
                 }
                 else
                 {
-                    return Redirect("/User/UserLogin");
+                    TempData.Add("MESSAGE", "로그인에 실패하였습니다. 관리자에게 문의하십시오.");
+                    return RedirectToAction("UserLogin", "User"); 
                 }
             }
+            // 13. 하나라도 FALSE 인 경우 - AMHR 에 등록된 Data 가 이미 있다는 의미
+            //     사전에 가입된정보(인증된정보)를 바탕으로 AMHR에 인증 토큰을 발급, 로그인한다.
             else
             {
                 UserController userController = new UserController();
@@ -162,7 +191,8 @@ namespace AMHR_WEB.Controllers
                 }
                 else
                 {
-                    return Redirect("/User/UserLogin");
+                    TempData.Add("MESSAGE", "로그인에 실패하였습니다. 관리자에게 문의하십시오.");
+                    return RedirectToAction("UserLogin", "User");
                 }
             }
         }
@@ -224,6 +254,11 @@ namespace AMHR_WEB.Controllers
             return userInfo;
         }
 
+        /// <summary>
+        /// CheckUserID : 사용자 ID 중복확인 메소드
+        /// </summary>
+        /// <param name="userID">사용자 ID</param>
+        /// <returns></returns>
         private bool CheckUserID(string userID)
         {
 
@@ -231,12 +266,23 @@ namespace AMHR_WEB.Controllers
             return repository.CheckUserID(userID);
         }
 
+        /// <summary>
+        /// CheckUserCreateType : 사용자 EMAIL, CREATE_TYPE 중복확인 메소드
+        /// </summary>
+        /// <param name="userEmail">사용자 EMAIL</param>
+        /// <param name="userCreateType">사용자 CREATE TYPE</param>
+        /// <returns></returns>
         private string CheckUserCreateType(string userEmail, string userCreateType)
         {
             UserRepository repository = new UserRepository();
             return repository.CheckUserCreateType(userEmail, userCreateType);
         }
 
+        /// <summary>
+        /// SaveKakaoUser : 사용자 정보 등록 메소드
+        /// </summary>
+        /// <param name="entity">UserEntity 인스턴스</param>
+        /// <returns></returns>
         private bool SaveKakaoUser(UserEntity entity)
         { 
             UserRepository repository = new UserRepository();

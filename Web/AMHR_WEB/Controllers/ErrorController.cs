@@ -7,8 +7,16 @@ using System.Web.Mvc;
 
 namespace AMHR_WEB.Controllers
 {
+    /// <summary>
+    /// ErrorController : 에러 컨트롤러, 에러 발생 시 호출되는 컨트롤러 담당
+    /// </summary>
     public class ErrorController : Controller
     {
+        /// <summary>
+        /// ErrorView : 에러 발생 시 호출되는 뷰 담당
+        /// </summary>
+        /// <param name="contract">CustormErrorModel 인스턴스</param>
+        /// <returns></returns>
         public ActionResult ErrorView(CustomErrorModel contract)
         {
             ViewBag.ERROR_STATUS = string.IsNullOrEmpty(contract.status) ? "500" : contract.status;

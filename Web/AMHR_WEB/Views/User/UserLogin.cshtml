@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "UserLogin";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string MESSAGE = ViewBag.MESSAGE.ToString();
 }
 
 <main >
@@ -55,7 +57,28 @@
 @section scripts
 {
     <script type="text/javascript">
+        /*
+            DOM 준비
+        */
+        $(function () {
+            informMessage();
+        });
 
+        /*
+            informMessage : 로그인 페이지 진입 시 알려야할 메시지가 있다면 안내한다.
+        */
+        function informMessage()
+        {
+            var message = '@MESSAGE';
+            if (message != "")
+            {
+                MsgBox.Inform(message);
+            }
+        }
+
+        /*
+            requestKakaoSignIn : 카카오 로그인 버튼 클릭 시 이동한다.
+        */
         function requestKakaoSignIn()
         {
             location.href = "/Kakao/KakaoLogin";
@@ -84,7 +107,6 @@
         {
             var useriD = $("#exampleInputId1").val();
             if (useriD.trim() == "") {
-                //alert("ID를 입력하세요.");
                 MsgBox.Alert("ID를 입력하세요.");
                 return false;
             }
@@ -92,7 +114,6 @@
             var userPassword1 = $("#exampleInputPassword1").val();
             if (userPassword1.trim() == "")
             {
-                //alert("비밀번호를 입력하세요.");
                 MsgBox.Alert("비밀번호를 입력하세요.");
                 return false;
             }

@@ -21,7 +21,7 @@ using Entity;
 namespace AMHR_WEB.Controllers
 {
     /// <summary>
-    /// AuthController : 권한 검증 컨트롤러
+    /// AuthController : 권한 검증 컨트롤러 담당
     /// </summary>
     public class AuthController : BaseController
     {
@@ -115,8 +115,9 @@ namespace AMHR_WEB.Controllers
             string USER_NM = string.Empty;
             string USER_EMAIL = string.Empty;
             string USER_TYPE = string.Empty;
+            string USER_CREATE_TYPE = string.Empty;
             string DisplayNM = string.Empty;
-
+            
             if (vm != null)
             {
                 UserRepository repository = new UserRepository();
@@ -128,6 +129,7 @@ namespace AMHR_WEB.Controllers
                     USER_NM = entity.USER_NM;
                     USER_EMAIL = entity.USER_EMAIL;
                     USER_TYPE = entity.USER_TYPE;
+                    USER_CREATE_TYPE = entity.USER_CREATE_TYPE;
                     DisplayNM = entity.USER_NM;
 
                 }
@@ -148,7 +150,8 @@ namespace AMHR_WEB.Controllers
                 USER_NM = USER_NM,
                 USER_EMAIL = USER_EMAIL,
                 USER_TYPE = USER_TYPE,
-                
+                USER_CREATE_TYPE= USER_CREATE_TYPE,
+
             };
 
         }

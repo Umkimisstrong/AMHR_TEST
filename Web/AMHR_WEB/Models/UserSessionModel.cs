@@ -16,6 +16,7 @@ namespace AMHR_WEB.Models
         public string USER_TYPE { get; set; }
         public string USER_EMAIL { get; set; }
         public string USER_DESCRIPTION { get; set; }
+        public string USER_CREATE_TYPE { get; set; }
         public string USE_YN { get; set; }
         public string DEL_YN { get; set; }
     }

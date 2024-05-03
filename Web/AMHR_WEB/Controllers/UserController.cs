@@ -35,8 +35,10 @@ namespace AMHR_WEB.Controllers
         /// UserLogin : 로그인 뷰 담당
         /// </summary>
         /// <returns></returns>
-        public ActionResult UserLogin()
+        public ActionResult UserLogin(string message = "")
         {
+            var x = TempData;
+            ViewBag.MESSAGE = x["MESSAGE"] != null ? x["MESSAGE"].ToString() : "";
             ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
             ViewBag.SECOND_BREADCRUMB_NAME = "Login";
             return View();
@@ -118,7 +120,10 @@ namespace AMHR_WEB.Controllers
         }
 
 
-
+        /// <summary>
+        /// LogoutUser : 로그아웃 액션
+        /// </summary>
+        /// <returns></returns>
         public ActionResult LogoutUser() 
         {
             AuthController authController = new AuthController();
@@ -126,8 +131,8 @@ namespace AMHR_WEB.Controllers
             HttpContextBase context = this.HttpContext;
 
             authController.Signout(context);
-
-            return Redirect("/Home/Index");
+            TempData.Add("MESSAGE", "로그아웃 되었습니다.");
+            return RedirectToAction("UserLogin", "User");
 
         }
     }

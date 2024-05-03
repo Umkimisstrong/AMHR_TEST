@@ -242,6 +242,11 @@ function setModalDesign(message, status)
     $("button[name='amhr_btn_ok']").attr("class", "btn " + btnBgColorDesign);
 }
 
+/**
+ * - setErrCustormContents
+ * @param {any} data - ajax Error Data
+ * @returns - string message(error 관련 message 조합 후 반환)
+ */
 function setErrCustomContents(data)
 {
     var msg = "";
@@ -281,7 +286,10 @@ function setErrCustomContents(data)
     return msg;
 }
 
-
+/**
+ * - Nav_Bar_DropDownToggle
+ * - 상단 로그인 이후 생기는 DropDown 클릭 시 호출되는 함수
+ */
 function Nav_Bar_DropDownToggle()
 {
     var navBarDropDownClasses = $("#amhr-nav-bar-dropdown").attr('class').split(' ');
@@ -316,6 +324,10 @@ function Nav_Bar_DropDownToggle()
     }
 }
 
+/**
+ * - Nav_Bar_DropDownClose
+ * - 상단 로그인 이후 생기는 DropDown 을 제외한 영역을 클릭했을 때 호출되는 함수
+ */
 function Nav_Bar_DropDownClose() {
     $("#amhr-nav-bar-dropdown").removeClass("show");
 }

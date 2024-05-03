@@ -222,12 +222,10 @@
         {
             var useriD = $("#exampleInputId1").val();
             if (useriD.trim() == "") {
-                //alert("ID를 입력하세요.");
                 MsgBox.Alert("ID를 입력하세요.", function () { $("#exampleInputId1").focus(); });
                 return false;
             }
             if (!ID_CHECK_FLAG) {
-                //alert("ID 중복여부를 확인해주세요.");
                 MsgBox.Alert("ID 중복여부를 확인해주세요.", function () { $("#exampleInputId1").focus(); });
                 return false;
             }
@@ -236,18 +234,15 @@
             var userPassword2 = $("#exampleInputPassword2").val();
             if (userPassword1.trim() == "")
             {
-                //alert("비밀번호를 입력하세요.");
                 MsgBox.Alert("비밀번호를 입력하세요.", function () { $("#exampleInputPassword1").focus(); });
                 return false;
             }
             if (userPassword2.trim() == "") {
-                //alert("비밀번호 확인을 입력하세요.");
                 MsgBox.Alert("비밀번호 확인을 입력하세요.", function () { $("#exampleInputPassword2").focus(); });
                 return false;
             }
             if (userPassword1 != userPassword2)
             {
-                //alert("비밀번호와 비밀번호 확인 값이 다릅니다. 동일하게 입력하세요.");
                 MsgBox.Alert("비밀번호와 비밀번호 확인 값이 다릅니다. 동일하게 입력하세요.", function () { $("#exampleInputPassword1").focus(); });
                 return false;
             }
@@ -255,7 +250,6 @@
             var userDescription = $("#exampleTextarea").val();
             if (userDescription.trim() == "")
             {
-                //alert("설명을 입력하세요.");
                 MsgBox.Alert("설명을 입력하세요.", function () { $("#exampleTextarea").focus(); });
                 return false;
             }
@@ -263,7 +257,6 @@
             var userName = $("#exampleInputName1").val();
             if (userName.trim() == "")
             {
-                //alert("이름을 입력하세요.");
                 MsgBox.Alert("이름을 입력하세요.", function () { $("#exampleInputName1").focus(); });
                 return false;
             }
@@ -271,7 +264,6 @@
             var userEmail = $("#exampleInputEmail1").val();
             if (userEmail.trim() == "")
             {
-                //alert("이메일을 입력하세요.");
                 MsgBox.Alert("이메일을 입력하세요.", function () { $("#exampleInputEmail1").focus(); });
                 return false;
             }
@@ -318,7 +310,6 @@
                         setErrCustomContents(data)
                     );
 
-                    /*alert(data);*/
                 }
             });
             

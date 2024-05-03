@@ -11,7 +11,7 @@ using AMHR_WEB.GlobalAttribute;
 namespace AMHR_WEB.Controllers
 {
     /// <summary>
-    /// BaseController : 모든 컨트롤러에서 상속받는 최상위 컨트롤러
+    /// BaseController : 모든 컨트롤러에서 상속받는 최상위 컨트롤러 담당
     /// </summary>
     public class BaseController : Controller
     {
