@@ -6,9 +6,147 @@
 
     
 <!--Main layout-->
+<main style="padding-left:50px; width:90%;">
 
-   
-    <div class="container pt-4"></div>
-    <main style="margin-top: 58px;">
-    </main>
+    <div class="row border-bottom" style="margin-top:20px;padding-bottom:20px;" id="SearchBox">
+        <div style="margin-top: 10px; margin-bottom:10px;">
+            <span class="badge bg-primary">Search</span>
+        </div>
+        <div class="col-md-3">
+            <label for="Code_ID" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">Id</label>
+            <input type="text" class="form-control" placeholder="text" id="Code_ID">
+        </div>
+        <div class="col-md-3">
+            <label for="Code_NM" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">Code_NM</label>
+            <input type="text" class="form-control" placeholder="text" id="Code_NM">
+        </div>
+        <div class="col-md-3">
+            <label for="Code_Description" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">Code_Description</label>
+            <input type="text" class="form-control" placeholder="text" id="Code_Description">
+        </div>
+        <div class="col-md-3">
+            <label for="Div_Code_ID" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">Div_Code_ID</label>
+            <input type="text" class="form-control" placeholder="text" id="Div_Code_ID">
+        </div>
+    </div>
+    <div class="row" style="text-align:right; margin-top:10px;">
+        <div style="padding-right:0;">
+            <button type="button" class="btn btn-outline-primary btn-sm">Click for Search</button>
+            <button type="button" class="btn btn-outline-primary btn-sm">Refresh Condition</button>
+        </div>
+    </div>
+
+
+
+
+    <div class="row" style="margin-top:30px;" id="SearchList">
+        <div style="margin-top: 10px; margin-bottom:10px;">
+            <span class="badge bg-primary">List</span>
+        </div>
+        <div style="overflow-x:scroll; padding-right:0;">
+            <table class="table table-hover">
+                <thead>
+                    <tr class="table-primary">
+                        <th scope="col">Type</th>
+                        <th scope="col">Column heading</th>
+                        <th scope="col">Column heading</th>
+                        <th scope="col">Column heading</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td scope="row">Default</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">Default</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">Default</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">Default</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">Default</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">Default</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">Default</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">Default</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">Default</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                    </tr>
+                    <tr>
+                        <td scope="row">Default</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                        <td>Column content</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div style="margin-top:30px;">
+            <ul class="pagination" style="align-items:center; justify-content:center;">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">&laquo;</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">4</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">5</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</main>
 <!--Main layout-->

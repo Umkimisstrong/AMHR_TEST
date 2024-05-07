@@ -15,13 +15,14 @@ namespace AMHR_WEB.Controllers
     public class AdminController : BaseController
     {
         public const string CONTROLLER_NAME = "Admin";
-
+        
 
         public ActionResult SetSystem()
         {
             ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
             ViewBag.SECOND_BREADCRUMB_NAME = "SetSystem";
 
+            ViewBag.ADMIN_VIEW = CONTROLLER_NAME;
 
             return View(); 
         }
