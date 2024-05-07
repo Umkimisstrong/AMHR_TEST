@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 
 namespace AMHR_WEB.App_Filters
 {
@@ -40,7 +41,11 @@ namespace AMHR_WEB.App_Filters
             // 로그인 시킨다.
             if(!principal.Identity.IsAuthenticated) 
             {
+                TempDataDictionary keyValuePairs = new TempDataDictionary();
+                keyValuePairs.Add("MESSAGE", "로그인 후 이용하여 주십시오.");
+                
                 filterContext.Result = new RedirectResult("/User/UserLogin");
+                filterContext.Controller.TempData = keyValuePairs;
                 return;
             }
 
@@ -54,7 +59,11 @@ namespace AMHR_WEB.App_Filters
                   )
                )
             {
-                filterContext.Result = new RedirectResult("/User/UserSignup");
+                TempDataDictionary keyValuePairs = new TempDataDictionary();
+                keyValuePairs.Add("MESSAGE", "이용 권한이 없습니다. 관리자에게 문의하십시오.");
+                filterContext.Result = new RedirectResult("/Home/Index");
+                filterContext.Controller.TempData = keyValuePairs;
+                return;
             }
 
         }

@@ -142,6 +142,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Authenticate\AuthenticationException.cs" />
     <Compile Include="Authenticate\AuthenticationHelper.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClassController.cs" />
@@ -225,6 +226,7 @@
     <Content Include="Views\User\UserLogin.cshtml" />
     <Content Include="Views\Error\ErrorView.cshtml" />
     <Content Include="Views\Shared\Amhr_Modal.cshtml" />
+    <Content Include="Views\Admin\SetSystem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

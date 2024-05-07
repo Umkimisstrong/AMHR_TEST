@@ -61,20 +61,8 @@
             DOM 준비
         */
         $(function () {
-            informMessage();
         });
 
-        /*
-            informMessage : 로그인 페이지 진입 시 알려야할 메시지가 있다면 안내한다.
-        */
-        function informMessage()
-        {
-            var message = '@MESSAGE';
-            if (message != "")
-            {
-                MsgBox.Inform(message);
-            }
-        }
 
         /*
             requestKakaoSignIn : 카카오 로그인 버튼 클릭 시 이동한다.

@@ -332,3 +332,7 @@ function Nav_Bar_DropDownClose() {
     $("#amhr-nav-bar-dropdown").removeClass("show");
 }
 
+function WarningGlobalMessage(message) {
+    MsgBox.Warning(message);
+}
+

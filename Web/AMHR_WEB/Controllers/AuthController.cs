@@ -68,8 +68,7 @@ namespace AMHR_WEB.Controllers
                                                             AuthenticationHelper.CreateClaim
                                                             (
                                                                 userSession,
-                                                                Models.Constants.UserRoles.Admin,
-                                                                Models.Constants.UserRoles.General
+                                                                userSession.USER_TYPE
                                                             ),
                                                             DefaultAuthenticationTypes.ApplicationCookie
                         );
