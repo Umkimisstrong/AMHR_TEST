@@ -1,0 +1,6 @@
+--- [Project Docs]
+
+--- Project Name : AmongHar(아몽하르) - AMHR
+--- Project Participants : Kim, Park
+--- Project Development Environment : Windows Server / IIS / C# / Html, CSS, Javascript / MySql
+--- Project First Commit : 2024. 04. 26
