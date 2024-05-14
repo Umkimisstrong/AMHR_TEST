@@ -9,7 +9,10 @@
         public string CODE_DESCRIPTION { get; set; }
         public string USE_YN { get; set; }
         public string DEL_YN { get; set; }
+        public int SORT_ORDER { get; set; }
         public string CREATE_ID { get; set; }
         public string UPDATE_ID { get; set; }
+
+        
     }
 }

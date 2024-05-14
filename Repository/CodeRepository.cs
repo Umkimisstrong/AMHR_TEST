@@ -35,14 +35,18 @@ namespace Repository
             return entity;
         }
 
-        public List<CodeEntity> SelectCodeEntityList(string SYS_CODE_ID, string DIV_CODE_ID)
+        public CodeContract SelectCodeEntityList(string SYS_CODE_ID, string DIV_CODE_ID, string CODE_ID, string CODE_NM, int START_NUMBER, int ROW_COUNT)
         {
-
+            CodeContract codeContract = new CodeContract();
             List<CodeEntity> entityList = new List<CodeEntity>();
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
             keyValuePairs.Add("I_SYS_CODE_ID", SYS_CODE_ID);
             keyValuePairs.Add("I_DIV_CODE_ID", DIV_CODE_ID);
+            keyValuePairs.Add("I_CODE_ID", CODE_ID);
+            keyValuePairs.Add("I_CODE_NM", CODE_NM);
+            keyValuePairs.Add("I_START_NUMBER", START_NUMBER);
+            keyValuePairs.Add("I_ROW_COUNT", ROW_COUNT);
 
             DataSet ds = SqlHelper.GetDataSet("SP_CMM_CODE_L", keyValuePairs);
 
@@ -52,7 +56,14 @@ namespace Repository
                 entityList = UtilRepository.ConverToEntityList<CodeEntity>(ds.Tables[0]);
             }
 
-            return entityList;
+            if (ds != null && ds.Tables[1].Rows.Count > 0)
+            {
+                codeContract.TOTAL_COUNT = int.Parse(ds.Tables[1].Rows[0]["TOTAL_COUNT"].ToString());
+            }
+
+            codeContract.CodeList = entityList;
+
+            return codeContract;
         }
 
         public string SaveCodeEntity(CodeEntity entity, EnumProperties.GeneralFlag generalFlag)

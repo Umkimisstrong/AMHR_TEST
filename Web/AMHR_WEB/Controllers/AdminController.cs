@@ -1,4 +1,6 @@
 ﻿using AMHR_WEB.Models;
+using Contract;
+using Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +17,32 @@ namespace AMHR_WEB.Controllers
     public class AdminController : BaseController
     {
         public const string CONTROLLER_NAME = "Admin";
-        
+        public const int START_NUMBER = 0;
+        public const int ROW_COUNT = 10;
 
-        public ActionResult SetSystem()
+        public ActionResult SetSystem(CodeContract contract)
         {
+            int REQUEST_PAGE_NUMBER = contract.PAGE_NUMBER == 0 ? START_NUMBER : contract.PAGE_NUMBER;
+            int PAGE_COUNT = 0;
             ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
             ViewBag.SECOND_BREADCRUMB_NAME = "SetSystem";
-
             ViewBag.ADMIN_VIEW = CONTROLLER_NAME;
 
-            return View(); 
+            CodeContract response = new CodeContract();
+            CodeRepository repository = new CodeRepository();
+            
+            response = repository.SelectCodeEntityList(contract.SYS_CODE_ID, contract.DIV_CODE_ID, contract.CODE_ID, contract.CODE_NM, START_NUMBER, ROW_COUNT);
+
+            // 5       = 55 / 10
+            PAGE_COUNT = response.TOTAL_COUNT / ROW_COUNT;
+            //         = 10 * 5 < 55 ? PAGE_COUNT+1
+            PAGE_COUNT = (ROW_COUNT * PAGE_COUNT < response.TOTAL_COUNT) ? PAGE_COUNT + 1 : PAGE_COUNT;
+            ViewBag.PAGE_COUNT = PAGE_COUNT;
+
+            // START = 0, ELSE = 1, 2, 3, ...
+            ViewBag.NOW_PAGE_NUMBER = REQUEST_PAGE_NUMBER;
+
+            return View(response); 
         }
 
 
