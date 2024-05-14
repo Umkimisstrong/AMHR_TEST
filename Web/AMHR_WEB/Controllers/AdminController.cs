@@ -40,7 +40,8 @@ namespace AMHR_WEB.Controllers
             ViewBag.PAGE_COUNT = PAGE_COUNT;
 
             // START = 0, ELSE = 1, 2, 3, ...
-            ViewBag.NOW_PAGE_NUMBER = REQUEST_PAGE_NUMBER;
+            ViewBag.NOW_PAGE_NUMBER = REQUEST_PAGE_NUMBER+1;
+            ViewBag.TOTAL_COUNT = response.TOTAL_COUNT;
 
             return View(response); 
         }

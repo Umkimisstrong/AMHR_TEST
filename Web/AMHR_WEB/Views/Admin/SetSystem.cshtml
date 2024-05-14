@@ -89,57 +89,15 @@
         <div style="margin-top:30px;">
             <ul class="pagination" style="align-items:center; justify-content:center;">
                 @{
+                    // PAGE 관련 소스 정의
                     int PAGE_COUNT = int.Parse(ViewBag.PAGE_COUNT.ToString());
                     int NOW_PAGE_NUMBER = int.Parse(ViewBag.NOW_PAGE_NUMBER.ToString());
-                    string strDisabledClass = "";
-                    string strActiveClass = "";
-                    for (int i = 0; i < PAGE_COUNT; i++)
-                    {
-                        if (i == 0 && PAGE_COUNT != 1)
-                        {
-                            <li class="page-item @{ strDisabledClass = NOW_PAGE_NUMBER == i ? "disabled" : ""; } @strDisabledClass">
-                                <a class="page-link" href="#">&laquo;</a>
-                            </li>
-                        }
-                        else if (i > 0 && i < PAGE_COUNT)
-                        {
-                            <li class="page-item @{ strActiveClass = NOW_PAGE_NUMBER == i ? "active" : ""; } @strActiveClass">
-                                <a class="page-link" href="#">@i</a>
-                            </li>
-                        }
-                        else if (i == PAGE_COUNT - 1 && PAGE_COUNT != 1)
-                        {
-                            <li class="page-item active">
-                                <a class="page-link" href="#">@i</a>
-                            </li>
-                            <li class="page-item @{ strDisabledClass = NOW_PAGE_NUMBER == i ? "disabled" : ""; } @strDisabledClass">
-                                <a class="page-link" href="#">&raquo;</a>
-                            </li>
-                        }
-
-                    }
+                    int TOTAL_COUNT = int.Parse(ViewBag.TOTAL_COUNT.ToString());
                 }
-                @*<li class="page-item disabled">
-            <a class="page-link" href="#">&laquo;</a>
-        </li>
-        <li class="page-item active">
-            <a class="page-link" href="#">1</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="#">2</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="#">3</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="#">4</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="#">5</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="#">&raquo;</a>
-        </li>*@
+                
+                @* Pagination *@
+                @AMHR_WEB.GlobalAttribute.GlobalHtmlAttributes.Pagination(Html, NOW_PAGE_NUMBER, PAGE_COUNT,  TOTAL_COUNT, "CODE_ID", "CUSTOM")
+
             </ul>
         </div>
     </div>

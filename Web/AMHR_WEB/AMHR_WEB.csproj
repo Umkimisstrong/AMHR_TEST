@@ -155,6 +155,7 @@
     </Compile>
     <Compile Include="GlobalAttribute\GlobalCrypto.cs" />
     <Compile Include="GlobalAttribute\GlobalHelper.cs" />
+    <Compile Include="GlobalAttribute\GlobalHtmlAttributes.cs" />
     <Compile Include="GlobalAttribute\GlobalKakao.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\CustomErrorModel.cs" />
