@@ -336,3 +336,8 @@ function WarningGlobalMessage(message) {
     MsgBox.Warning(message);
 }
 
+
+function ChangeConstPageNumber(pageNumber) {
+    $("#CONST_PAGE_NUMBER").val(pageNumber);
+    $("#CONST_SEARCH_FORM").submit();
+}
