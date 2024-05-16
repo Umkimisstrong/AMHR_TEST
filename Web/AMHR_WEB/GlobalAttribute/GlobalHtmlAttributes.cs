@@ -15,9 +15,14 @@ namespace AMHR_WEB.GlobalAttribute
             var builder = new StringBuilder();
             var strResults = string.Empty;
 
+
             if (totalPageCount == 1)
             {
                 strResults = "<li class='page-item active'> <a class='page-link' href='#'>1</a> </li>";
+            }
+            else if (totalPageCount == 0)
+            {
+                strResults = "";
             }
             else
             {

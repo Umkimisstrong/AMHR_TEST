@@ -7,35 +7,42 @@
 <!--Main layout-->
 <main style="padding-left:50px; width:90%;">
 
-    <div class="row border-bottom" style="margin-top:20px;padding-bottom:20px;" id="SearchBox">
-        <div style="margin-top: 10px; margin-bottom:10px;">
-            <span class="badge bg-primary">Search</span>
+    <form method="post" action="/Admin/SetSystem">
+        <div class="row border-bottom" style="margin-top:20px;padding-bottom:20px;" id="SearchBox">
+            <div style="margin-top: 10px; margin-bottom:10px;">
+                <span class="badge bg-primary">Search</span>
+            </div>
+            <div class="col-md-3">
+                <label for="Sys_Code_ID" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">시스템 코드</label>
+                @Html.TextBoxFor(m=> m.SYS_CODE_ID, new  { @class="form-control", @tyle="text", @placeholder="시스템 코드", @id="Sys_Code_ID" })
+                @*<input type="text" class="form-control" placeholder="text" id="Sys_Code_ID" name="SYS_CODE_ID">*@
+            </div>
+            <div class="col-md-3">
+                <label for="Div_Code_ID" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">분류 코드</label>
+                @Html.TextBoxFor(m => m.DIV_CODE_ID, new { @class = "form-control", @tyle = "text", @placeholder = "분류 코드", @id = "Div_Code_ID" })
+                @*<input type="text" class="form-control" placeholder="text" id="Div_Code_ID" name="DIV_CODE_ID">*@
+            </div>
+            <div class="col-md-3">
+                <label for="Code_ID" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">코드</label>
+                @Html.TextBoxFor(m => m.CODE_ID, new { @class = "form-control", @tyle = "text", @placeholder = "코드", @id = "Code_ID" })
+                @*<input type="text" class="form-control" placeholder="text" id="Code_ID" name="CODE_ID">*@
+            </div>
+            <div class="col-md-3">
+                <label for="Code_NM" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">코드명</label>
+                @Html.TextBoxFor(m => m.CODE_NM, new { @class = "form-control", @tyle = "text", @placeholder = "코드명", @id = "CODE_NM" })
+                @*<input type="text" class="form-control" placeholder="text" id="Code_NM" name="CODE_NM">*@
+            </div>
+
         </div>
-        <div class="col-md-3">
-            <label for="Sys_Code_ID" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">시스템 코드</label>
-            <input type="text" class="form-control" placeholder="text" id="Sys_Code_ID">
-        </div>
-        <div class="col-md-3">
-            <label for="Div_Code_ID" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">분류 코드</label>
-            <input type="text" class="form-control" placeholder="text" id="Div_Code_ID">
-        </div>
-        <div class="col-md-3">
-            <label for="Code_ID" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">코드</label>
-            <input type="text" class="form-control" placeholder="text" id="Code_ID">
-        </div>
-        <div class="col-md-3">
-            <label for="Code_NM" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">코드명</label>
-            <input type="text" class="form-control" placeholder="text" id="Code_NM">
+        <div class="row" style="text-align:right; margin-top:10px;">
+            <div style="padding-right:0;">
+                <button type="submit" class="btn btn-outline-primary btn-sm">Click for Search</button>
+                <button type="button" class="btn btn-outline-primary btn-sm">Refresh Condition</button>
+            </div>
         </div>
 
-    </div>
-    <div class="row" style="text-align:right; margin-top:10px;">
-        <div style="padding-right:0;">
-            <button type="button" class="btn btn-outline-primary btn-sm">Click for Search</button>
-            <button type="button" class="btn btn-outline-primary btn-sm">Refresh Condition</button>
-        </div>
-    </div>
-
+    </form>
+    
 
 
 
