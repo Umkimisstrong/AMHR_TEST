@@ -20,18 +20,35 @@ namespace AMHR_WEB.GlobalAttribute
             
             int prevFirstNumber = 0;
             int nextFirstNumber = 0;
+
             // 현재 페이지 번호를 확인한다.
             // 기본은 1 ~ 10이므로 displayPageCount(10으로 현재 페이지가 나누어 떨어지는지 확인한다.)
             // 나머지가 1인 경우 1 ~ 10 / 11 ~ 20 등 앞번호이므로 Page를 그리는 시작번호를 요청한 번호로 해준다.. (11, 21 ..)
-
-            displayPageCount = totalPageCount > displayPageCount ?
+            bool sameLevel = currentPage / 10 == totalPageCount / 10 ? true : false;
+            displayPageCount = totalPageCount > displayPageCount ? // 총 페이지 갯수가 10개 이상인가?
                                 (
-                                    (totalPageCount % 10 != 0 && totalPageCount % 10 < displayPageCount)
+                                    (
+                                        (totalPageCount % 10 != 0 && totalPageCount % 10 < displayPageCount)
+                                    && sameLevel)
+                                    // 전체 페이지 갯수가 10으로 나누어 떨어지지 않고, 나눈 나머지가 10개 미만이면
+                                    // 같은 레벨이라면 - 나눈 나머지만큼 display 한다.
                                     ? totalPageCount % 10
+                                    // 그게 아니라면 아니라면 10개로 한다.
                                     : displayPageCount
                                 )
                                 :
+                                // 애초에 전체 페이지가 10개 미만이라면  전체 페이지 만큼 출력한다.
                                 totalPageCount;
+
+            // ex) 총 페이지 갯수 14개, 현재 1페이지
+            //     1 ~ 10 까지 출력
+            //     총 페이지 갯수 14개, 현재 11페이지
+            //     11 ~ 14 까지 출력
+            //     총 페이지 갯수 7개, 현재 2페이지
+            //     1 ~ 7 까지 출력
+            //     총 페이지 갯수 31개, 현재 31페이지
+            //     31 출력
+
 
 
             // 0 ~ 9페이지
@@ -116,6 +133,7 @@ namespace AMHR_WEB.GlobalAttribute
                     }
                 }
             }
+
             builder.Append(strResults);
             return new MvcHtmlString(builder.ToString());
         }
