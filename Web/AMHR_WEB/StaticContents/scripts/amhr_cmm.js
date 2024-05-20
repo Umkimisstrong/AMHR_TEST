@@ -180,6 +180,29 @@ var MsgBox = {
 }
 
 /**
+ * - ModalBox 
+ * - 사용자 Custom Modal 호출
+ * - /Controller명/Action명, Data 를 입력하여 특정 View 를 Modal Popup 으로 호출한단.
+ */
+var ModalBox = {
+    Show: function (controllerActionUrl, requestData) {
+        $.ajax({
+            type: "POST",
+            url: controllerActionUrl,
+            data: requestData,
+            success: function (responseData)
+            {
+                $("#inner_custom_popup").html(responseData);
+                $("#custom_popup").modal({backdrop:'static', keyboard:false}); // 다른영역 클릭 시 안닫히게 하는 소스
+                $("#custom_popup").modal("show"); 
+            }
+
+        });
+    }
+
+}
+
+/**
     * - setModalDesign
     * @param {any} message - 팝업 내부에 작성할 메시지
     * @param {any} status  - 팝업 디자인을 제공하기 위한 기준 상태분류

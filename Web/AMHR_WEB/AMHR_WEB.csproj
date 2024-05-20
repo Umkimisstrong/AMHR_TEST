@@ -228,8 +228,10 @@
     <Content Include="Views\User\UserLogin.cshtml" />
     <Content Include="Views\Error\ErrorView.cshtml" />
     <Content Include="Views\Shared\Amhr_Modal.cshtml" />
-    <Content Include="Views\Admin\SetSystem.cshtml" />
+    <Content Include="Views\Admin\CodeManagement.cshtml" />
     <Content Include="Views\Shared\Amhr_Admin_SideBar.cshtml" />
+    <Content Include="Views\Shared\_LayoutModal.cshtml" />
+    <Content Include="Views\Admin\CodeSave_P.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

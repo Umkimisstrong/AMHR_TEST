@@ -20,14 +20,14 @@ namespace AMHR_WEB.Controllers
         public const int START_NUMBER = 1;
         public const int ROW_COUNT = 10;
 
-        public ActionResult SetSystem(CodeContract contract)
+        public ActionResult CodeManagement(CodeContract contract)
         {
             int REQUEST_PAGE_NUMBER = (contract.PAGE_NUMBER == 0 ? START_NUMBER - 1 : (contract.PAGE_NUMBER-1) * ROW_COUNT);
             int NOW_PAGE_NUMBER = contract.PAGE_NUMBER == 0 ? START_NUMBER : contract.PAGE_NUMBER;
 
             int PAGE_COUNT = 0;
             ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
-            ViewBag.SECOND_BREADCRUMB_NAME = "SetSystem";
+            ViewBag.SECOND_BREADCRUMB_NAME = "CodeManagement";
             ViewBag.ADMIN_VIEW = CONTROLLER_NAME;
 
             CodeContract response = new CodeContract();
@@ -48,6 +48,10 @@ namespace AMHR_WEB.Controllers
             return View(response); 
         }
 
+        public ActionResult CodeSave_P()
+        {
+            return View();
+        }
 
     }
 }

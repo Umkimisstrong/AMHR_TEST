@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @* CSS Rendered Area *@
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/bundles/amhrCss")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="modal-content" style="justify-content:center;">
+        @RenderBody()
+    </div>
+
+    @* Javascript Area *@
+    @RenderSection("scripts", required: false)
+</body>
+</html>
