@@ -11,9 +11,18 @@ using Entity;
 
 namespace Repository
 {
-    
+    /// <summary>
+    /// CodeRepository : 코드 리포지토리
+    /// </summary>
     public class CodeRepository
     {
+        /// <summary>
+        /// SelectCodeEntity : 단일 코드 조회
+        /// </summary>
+        /// <param name="SYS_CODE_ID">시스템 코드 ID</param>
+        /// <param name="DIV_CODE_ID">분류 코드 ID</param>
+        /// <param name="CODE_ID">코드 ID</param>
+        /// <returns></returns>
         public CodeEntity SelectCodeEntity(string SYS_CODE_ID, string DIV_CODE_ID, string CODE_ID)
         { 
 
@@ -35,6 +44,16 @@ namespace Repository
             return entity;
         }
 
+        /// <summary>
+        /// SelectCodeEntityList : 코드 리스트 조회
+        /// </summary>
+        /// <param name="SYS_CODE_ID">시스템 코드 ID</param>
+        /// <param name="DIV_CODE_ID">분류 코드 ID</param>
+        /// <param name="CODE_ID">코드 ID</param>
+        /// <param name="CODE_NM">코드 명칭</param>
+        /// <param name="START_NUMBER">조회시작 번호</param>
+        /// <param name="ROW_COUNT">조회 행 수</param>
+        /// <returns></returns>
         public CodeContract SelectCodeEntityList(string SYS_CODE_ID, string DIV_CODE_ID, string CODE_ID, string CODE_NM, int START_NUMBER, int ROW_COUNT)
         {
             CodeContract codeContract = new CodeContract();
@@ -66,6 +85,12 @@ namespace Repository
             return codeContract;
         }
 
+        /// <summary>
+        /// SaveCodeEntity : 코드 저장
+        /// </summary>
+        /// <param name="entity">코드 엔티티</param>
+        /// <param name="generalFlag">일반 플래그</param>
+        /// <returns></returns>
         public string SaveCodeEntity(CodeEntity entity, EnumProperties.GeneralFlag generalFlag)
         { 
             string result = "N";

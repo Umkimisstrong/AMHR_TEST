@@ -68,6 +68,12 @@ namespace Repository
             return result;
         }
 
+        /// <summary>
+        /// CheckUserCreateType : 이메일과 사용자 생성 타입으로 확인
+        /// </summary>
+        /// <param name="userEmail">사용자 이메일</param>
+        /// <param name="userCreateType">사용자 생성 타입</param>
+        /// <returns></returns>
         public string CheckUserCreateType(string userEmail, string userCreateType) 
         {
             string result = "";
