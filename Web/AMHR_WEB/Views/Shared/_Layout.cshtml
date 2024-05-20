@@ -29,6 +29,8 @@
             }
         }
 
+
+        @* TempData Area *@
         var TEMPDATA = TempData;
         string MESSAGE = TEMPDATA["MESSAGE"] != null ? TEMPDATA["MESSAGE"].ToString() : "";
     }
@@ -92,8 +94,8 @@
                                     if (userInfo != null && !string.IsNullOrEmpty(userInfo.USER_ID))
                                     {
                                         @*<li class="nav-item" style="margin-left:20px;">
-                                        @Html.ActionLink("Logout", "LogoutUser", "User", null, new { @class = "nav-link" })
-                                    </li>*@
+                                                @Html.ActionLink("Logout", "LogoutUser", "User", null, new { @class = "nav-link" })
+                                            </li>*@
                                         <li class="nav-item dropdown" id="amhr-nav-bar-li">
                                             <a id="amhr-nav-bar-toggle" class="nav-link dropdown-toggle" data-bs-toggle="" href="#" role="button" aria-haspopup="true" aria-expanded="false" onclick="javascript: Nav_Bar_DropDownToggle();">@userInfo.USER_NM 님</a>
                                             <div class="dropdown-menu bg-primary" data-bs-popper="static" id="amhr-nav-bar-dropdown">
@@ -110,7 +112,7 @@
                                         if (userInfo.USER_TYPE.Equals("ADM"))
                                         {
                                             @*<li class="nav-item" style="margin-left:20px;">
-                                        </li>*@
+                                                </li>*@
                                         }
                                     }
                                     else
@@ -150,7 +152,7 @@
                 </ol>
             </div>
 
-            @* Admin 인 경우 *@
+            @* Admin 인 경우 좌측 사이드바 메뉴 출력 *@
             @if (ViewBag.ADMIN_VIEW != null && ViewBag.ADMIN_VIEW.ToString().Equals("Admin"))
             {
                 @* Container Body Area *@
@@ -166,7 +168,7 @@
             {
                 @* Container Body Area *@
                 <div class="container body-content">
-                        @RenderBody()
+                    @RenderBody()
                 </div>
             }
 
@@ -208,6 +210,9 @@
                 }
             });
 
+            /*
+                TempData Message 가 존재한다면 알림메시지 출력
+            */
             var message = '@MESSAGE';
             if (message != "")
             {
@@ -216,6 +221,8 @@
 
         });
     </script>
+
+    @* Javascript Area *@
     @RenderSection("scripts", required: false)
 
 </body>

@@ -17,12 +17,14 @@ namespace AMHR_WEB.Controllers
     public class AdminController : BaseController
     {
         public const string CONTROLLER_NAME = "Admin";
-        public const int START_NUMBER = 0;
-        public const int ROW_COUNT = 2;
+        public const int START_NUMBER = 1;
+        public const int ROW_COUNT = 10;
 
         public ActionResult SetSystem(CodeContract contract)
         {
-            int REQUEST_PAGE_NUMBER = contract.PAGE_NUMBER == 0 ? START_NUMBER : contract.PAGE_NUMBER * 2;
+            int REQUEST_PAGE_NUMBER = (contract.PAGE_NUMBER == 0 ? START_NUMBER - 1 : (contract.PAGE_NUMBER-1) * ROW_COUNT);
+            int NOW_PAGE_NUMBER = contract.PAGE_NUMBER == 0 ? START_NUMBER : contract.PAGE_NUMBER;
+
             int PAGE_COUNT = 0;
             ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
             ViewBag.SECOND_BREADCRUMB_NAME = "SetSystem";
@@ -40,7 +42,7 @@ namespace AMHR_WEB.Controllers
             ViewBag.PAGE_COUNT = PAGE_COUNT;
 
             // START = 0, ELSE = 1, 2, 3, ...
-            ViewBag.NOW_PAGE_NUMBER = contract.PAGE_NUMBER+1;
+            ViewBag.NOW_PAGE_NUMBER = NOW_PAGE_NUMBER;
             ViewBag.TOTAL_COUNT = response.TOTAL_COUNT;
 
             return View(response); 

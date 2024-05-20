@@ -43,7 +43,7 @@
         </div>
         <div class="row" style="text-align:right; margin-top:10px;">
             <div style="padding-right:0;">
-                <button type="submit" class="btn btn-outline-primary btn-sm">Click for Search</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="SubmitForm('SEARCH')">Click for Search</button>
                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="RefreshCondition()">Refresh Condition</button>
             </div>
         </div>
@@ -56,9 +56,13 @@
 
 
     <div class="row" style="margin-top:30px;" id="SearchList">
-        <div style="margin-top: 10px; margin-bottom:10px;">
-            <span class="badge bg-primary">List</span>
-            <span class="text-secondary">Total : @TOTAL_COUNT</span>
+        <div style="margin-top: 10px; margin-bottom:10px; display:flex; justify-content:space-between;">
+            <div>
+                <span class="badge bg-primary">List</span>
+            </div>
+            <div style="text-align:right;">
+                <span class="text-secondary">Total : @TOTAL_COUNT</span>
+            </div>
         </div>
         
         <div style="padding-right:0;">
@@ -108,7 +112,6 @@
         <div style="margin-top:30px;">
             <ul class="pagination" style="align-items:center; justify-content:center;">
 
-
                 @* Pagination *@
                 @AMHR_WEB.GlobalAttribute.GlobalHtmlAttributes.Pagination(Html, NOW_PAGE_NUMBER, PAGE_COUNT, TOTAL_COUNT, "CODE_ID", "CUSTOM")
 
@@ -128,6 +131,27 @@
             $("#Code_ID").val("");
             $("#Code_NM").val("");
         }
+
+        function RefreshPagenum()
+        {
+            $("#CONST_PAGE_NUMBER").val("0");
+        }
+
+        function SubmitForm(submitFlag)
+        {
+            var flag = submitFlag;
+            if (flag == "SEARCH")
+            {
+                RefreshPagenum();
+                $("#CONST_SEARCH_FORM").submit();
+            }
+            else if (flag == "")
+            {
+                $("#CONST_SEARCH_FORM").submit();
+            }
+        }
+
+        initEnterSubmitEvent();
 
     </script>
 

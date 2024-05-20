@@ -183,7 +183,7 @@ var MsgBox = {
     * - setModalDesign
     * @param {any} message - 팝업 내부에 작성할 메시지
     * @param {any} status  - 팝업 디자인을 제공하기 위한 기준 상태분류
-    */
+*/
 function setModalDesign(message, status)
 {
     var modal_title = "";
@@ -332,12 +332,35 @@ function Nav_Bar_DropDownClose() {
     $("#amhr-nav-bar-dropdown").removeClass("show");
 }
 
+/**
+ * - WarningGlobalMessage
+ * - 전역으로 Warning 알림메시지 호출
+ * @param {any} message - 안내메시지
+ */
 function WarningGlobalMessage(message) {
     MsgBox.Warning(message);
 }
 
-
+/**
+ * - ChangeConstPageNumber
+ * - 페이징에서 번호를 클릭할 때 호출되는 전역함수
+ * @param {any} pageNumber - 페이지 번호
+ */
 function ChangeConstPageNumber(pageNumber) {
     $("#CONST_PAGE_NUMBER").val(pageNumber);
     $("#CONST_SEARCH_FORM").submit();
+}
+
+/**
+ * - initEnterSubmitEvent
+ * - 특정 페이지에서 사용되는 Input 요소에 Enter 입력 시 Form Submit 하는 이벤트
+ */
+function initEnterSubmitEvent()
+{
+    $("input[type='text']").keypress(function (e) {
+        if (e.keyCode == 13)
+        {
+            $("#CONST_SEARCH_FORM").submit();
+        }
+    });
 }
