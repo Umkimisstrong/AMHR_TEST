@@ -3,65 +3,78 @@
     ViewBag.Title = "SetSystem";
     Layout = "~/Views/Shared/_LayoutModal.cshtml";
 }
-
-    <div class="modal-header bg-primary text-white" id="amhr_modal_header">
-        <h5 class="modal-title" id="amhr_modal_title">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true"></span>
-        </button>
-    </div>
-    <div class="modal-body" id="amhr_modal_body_text">
-        <div class="row">
-            <section class="col-md-12">
-                <fieldset>
-                    <div>
-                        <label for="exampleInputId1" class="form-label mt-4">Id</label>
-                        <div style="display:flex; justify-content:center;">
-                            <input type="text" class="form-control" id="exampleInputId1" placeholder="Enter Id" style="max-width:380px;">
-                            <button type="button" class="btn btn-primary" style="margin-left:10px; max-width:600px;" onclick="requestCheckID()">check</button>
-                        </div>
-                    </div>
-                    
-                </fieldset>
-            </section>
-        </div>
-    </div>
-    <div class="modal-footer" id="btn_save">
-        <button type="button" class="btn btn-primary" name="save_yes" id="save_yes" data-bs-dismiss="modal">SAVE</button>
-        <button type="button" class="btn btn-secondary" name="save_no" id="save_no" data-bs-dismiss="modal">CANCEL</button>
-    </div>
 <!--Main layout-->
+<div class="modal-header bg-primary text-white" id="amhr_modal_header">
+    <h5 class="modal-title" id="amhr_modal_title">코드 저장</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body" id="amhr_modal_body_text">
+    <div class="row">
+        <section class="col-md-12">
+            <fieldset>
+                <div>
+                    <label for="Sys_Code_ID" class="form-label mt-4">시스템 코드</label>
+                    <div style="display:flex; justify-content:center;">
+                        <input type="text" class="form-control" id="Sys_Code_ID" placeholder="" style="max-width: 460px;">
+                    </div>
+
+                    <label for="Div_Code_ID" class="form-label mt-4">분류 코드</label>
+                    <div style="display:flex; justify-content:center;">
+                        <input type="text" class="form-control" id="Div_Code_ID" placeholder="" style="max-width: 460px;">
+                    </div>
+
+
+                    <label for="Code_ID" class="form-label mt-4">코드</label>
+                    <div style="display:flex; justify-content:center;">
+                        <input type="text" class="form-control" id="Code_ID" placeholder="" style="max-width:380px;">
+                        <button type="button" class="btn btn-primary" style="margin-left:10px; max-width:600px;" onclick="">check</button>
+                    </div>
+
+                    <label for="Code_NM" class="form-label mt-4">코드명</label>
+                    <div style="display:flex; justify-content:center;">
+                        <input type="text" class="form-control" id="Code_NM" placeholder="" style="max-width: 460px; ">
+                    </div>
+
+                    <label for="Code_Description" class="form-label mt-4">코드 설명</label>
+                    <div style="display:flex; justify-content:center;">
+                        <input type="text" class="form-control" id="Code_Description" placeholder="" style="max-width: 460px;">
+                    </div>
+
+                    <label for="Use_YN" class="form-label mt-4">사용여부</label>
+                    <div style="display:flex; justify-content:center;">
+                        <input type="text" class="form-control" id="Use_YN" placeholder="" style="max-width: 460px;">
+                    </div>
+
+                    <label for="Sort_Order" class="form-label mt-4">정렬순서</label>
+                    <div style="display:flex; justify-content:center;">
+                        <input type="text" class="form-control" id="Sort_Order" placeholder="" style="max-width: 460px;">
+                    </div>
+                </div>
+
+            </fieldset>
+        </section>
+    </div>
+</div>
+<div class="modal-footer" id="btn_save">
+    <button type="button" class="btn btn-primary" name="save_yes" id="save_yes" data-bs-dismiss="modal">SAVE</button>
+    <button type="button" class="btn btn-secondary" name="save_no" id="save_no" data-bs-dismiss="modal">CANCEL</button>
+</div>
+<!--Main layout-->
+
+
 @section scripts{
 
     <script type="text/javascript">
 
-        function RefreshCondition() {
-            $("#Sys_Code_ID").val("");
-            $("#Div_Code_ID").val("");
-            $("#Code_ID").val("");
-            $("#Code_NM").val("");
-        }
 
-        function RefreshPagenum()
-        {
-            $("#CONST_PAGE_NUMBER").val("0");
-        }
+        /*
+            DOM 준비 시
+        */
+        $(function () {
 
-        function SubmitForm(submitFlag)
-        {
-            var flag = submitFlag;
-            if (flag == "SEARCH")
-            {
-                RefreshPagenum();
-                $("#CONST_SEARCH_FORM").submit();
-            }
-            else if (flag == "")
-            {
-                $("#CONST_SEARCH_FORM").submit();
-            }
-        }
-
-        initEnterSubmitEvent();
+        });
 
     </script>
 

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using System.Web;
 using System.Web.Mvc;
 using AuthorizeAttribute = AMHR_WEB.App_Filters.AuthorizeAttribute;
@@ -51,6 +52,14 @@ namespace AMHR_WEB.Controllers
         public ActionResult CodeSave_P()
         {
             return View();
+        }
+
+
+        public JsonResult RequestSaveCode(CodeContract contract)
+        {
+            CodeRepository repository = new CodeRepository();
+            string result = repository.SaveCodeEntity(contract.CodeEntity, Contract.ENUM.EnumProperties.GeneralFlag.CREATE);
+            return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
 
     }

@@ -13,7 +13,7 @@
     * - alert      - 분홍색(기본)
     */
 var modal_status = {
-        status_inform      : "inform"
+      status_inform      : "inform"
     , status_warning     : "warning"
     , status_dagner      : "danger"
     , status_confirm     : "confirm"
@@ -378,7 +378,7 @@ function ChangeConstPageNumber(pageNumber) {
  * - initEnterSubmitEvent
  * - 특정 페이지에서 사용되는 Input 요소에 Enter 입력 시 Form Submit 하는 이벤트
  */
-function initEnterSubmitEvent()
+function InitEnterSubmitEvent()
 {
     $("input[type='text']").keypress(function (e) {
         if (e.keyCode == 13)
@@ -386,4 +386,34 @@ function initEnterSubmitEvent()
             $("#CONST_SEARCH_FORM").submit();
         }
     });
+}
+
+
+/*
+  RefreshCondition : 검색조건 초기화
+*/
+function RefreshCondition() {
+    $("input[type='text']").val('')
+}
+
+/*
+    RefreshPagenum : 페이지 번호 초기화
+*/
+function RefreshPagenum() {
+    $("#CONST_PAGE_NUMBER").val("0");
+}
+
+/*
+    SubmitForm : 폼 서브밋(검색)
+*/
+function SubmitForm(submitFlag) {
+    var flag = submitFlag;
+    if (flag == "SEARCH") {
+        RefreshPagenum();
+        $("#CONST_SEARCH_FORM").submit();
+    }
+    else (flag == "")
+    {
+        $("#CONST_SEARCH_FORM").submit();
+    }
 }

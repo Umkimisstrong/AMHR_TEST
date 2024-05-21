@@ -14,7 +14,7 @@
 <!--Main layout-->
 <main style="padding-left:50px; width:90%;">
 
-    <form method="post" action="/Admin/SetSystem" id="CONST_SEARCH_FORM">
+    <form method="post" action="/Admin/CodeManagement" id="CONST_SEARCH_FORM">
         <div class="row border-bottom" style="margin-top:20px;padding-bottom:20px;" id="SearchBox">
             <div style="margin-top: 10px; margin-bottom:10px;">
                 <span class="badge bg-primary">Search</span>
@@ -126,22 +126,28 @@
 @section scripts{
 
     <script type="text/javascript">
+        /*
+            DOM 준비 시
+        */
         $(function () {
-            initEnterSubmitEvent();
+            InitEnterSubmitEvent();
         });
-
+        /*
+            RefreshCondition : 검색조건 초기화
         function RefreshCondition() {
             $("#Sys_Code_ID").val("");
             $("#Div_Code_ID").val("");
             $("#Code_ID").val("");
             $("#Code_NM").val("");
         }
-
+        
+            RefreshPagenum : 페이지 번호 초기화
         function RefreshPagenum()
         {
             $("#CONST_PAGE_NUMBER").val("0");
         }
-
+        
+            SubmitForm : 폼 서브밋(검색)
         function SubmitForm(submitFlag)
         {
             var flag = submitFlag;
@@ -150,11 +156,12 @@
                 RefreshPagenum();
                 $("#CONST_SEARCH_FORM").submit();
             }
-            else if (flag == "")
+            else(flag == "")
             {
                 $("#CONST_SEARCH_FORM").submit();
             }
         }
+        */
 
         function RequestCodeSavePopuUp()
         {

@@ -95,29 +95,78 @@ namespace Repository
         { 
             string result = "N";
 
-            if (generalFlag.Equals(EnumProperties.GeneralFlag.CREATE))
+            switch (generalFlag)
             {
-                // Insert
-                result = "IY";
-            }
-            else if(generalFlag.Equals (EnumProperties.GeneralFlag.UPDATE)) 
-            {
-                // Update
-                result = "UY";
-            }
-            else if(generalFlag.Equals(EnumProperties.GeneralFlag.DELETE))
-            {
-                // Delete
-                result = "DY";
-            }
-            else
-            {
-                // 
-                result = "NOTHING";
+                case EnumProperties.GeneralFlag.CREATE:
+                    result = InsertCodeEntity(entity) > 0 ? "IY" : "IN";
+                    break;
+                case EnumProperties.GeneralFlag.UPDATE:
+                    result = UpdateCodeEntity(entity) > 0 ? "UY" : "UN";
+                    break;
+                case EnumProperties.GeneralFlag.DELETE:
+                    result = DeleteCodeEntity(entity) > 0 ? "DY" : "DN";
+                    break;
+
+                default:break;
             }
 
             return result;
         }
 
+        private int InsertCodeEntity(CodeEntity entity)
+        {
+            int result = 0;
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("USER_ID", entity.CREATE_ID);
+            keyValuePairs.Add("CODE_NM", entity.CODE_NM);
+            keyValuePairs.Add("SYS_CODE_ID", entity.SYS_CODE_ID);
+            keyValuePairs.Add("DIV_CODE_ID", entity.DIV_CODE_ID);
+            keyValuePairs.Add("CODE_ID", entity.CODE_ID);
+            keyValuePairs.Add("CODE_DESCRIPTION", entity.CODE_DESCRIPTION);
+            keyValuePairs.Add("USE_YN", entity.USE_YN);
+            keyValuePairs.Add("DEL_YN", "N");
+            keyValuePairs.Add("SORT_ORDER", entity.SORT_ORDER);
+
+            result = SqlHelper.GetNonQuery("SP_CMM_CODE_C", keyValuePairs);
+
+            return result;
+        }
+
+        private int UpdateCodeEntity(CodeEntity entity) 
+        {
+            int result = 0;
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("USER_ID", entity.CREATE_ID);
+            keyValuePairs.Add("CODE_NM", entity.CODE_NM);
+            keyValuePairs.Add("SYS_CODE_ID", entity.SYS_CODE_ID);
+            keyValuePairs.Add("DIV_CODE_ID", entity.DIV_CODE_ID);
+            keyValuePairs.Add("CODE_ID", entity.CODE_ID);
+            keyValuePairs.Add("CODE_DESCRIPTION", entity.CODE_DESCRIPTION);
+            keyValuePairs.Add("USE_YN", entity.USE_YN);
+            keyValuePairs.Add("DEL_YN", "N");
+            keyValuePairs.Add("SORT_ORDER", entity.SORT_ORDER);
+
+            result = SqlHelper.GetNonQuery("SP_CMM_CODE_U", keyValuePairs);
+
+            return result;
+        }
+
+        private int DeleteCodeEntity(CodeEntity entity)
+        {
+            int result = 0;
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+
+            keyValuePairs.Add("SYS_CODE_ID", entity.SYS_CODE_ID);
+            keyValuePairs.Add("DIV_CODE_ID", entity.DIV_CODE_ID);
+            keyValuePairs.Add("CODE_ID", entity.CODE_ID);
+            keyValuePairs.Add("DEL_YN", "Y");
+            keyValuePairs.Add("USER_ID", entity.CREATE_ID);
+
+            result = SqlHelper.GetNonQuery("SP_CMM_CODE_D", keyValuePairs);
+            return result;
+        }
     }
 }
