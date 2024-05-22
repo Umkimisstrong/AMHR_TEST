@@ -179,7 +179,9 @@ var MsgBox = {
     }
 }
 
-
+/**
+ * - MsgBox_Pop : 메세지 박스를 팝업에서 호출
+ */
 var MsgBox_Pop = {
     Alert: function (msg, okhandler) {
         new Promise((resolve, reject) => {

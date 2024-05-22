@@ -92,6 +92,9 @@
 
     <script type="text/javascript">
 
+        /*
+            전역변수
+        */
         var CODE_CHECK_FLAG = ('@GENERAL_FLAG' == "CREATE" ? false : true);
 
         /*
@@ -156,7 +159,7 @@
         }
 
         /*
-            requestSaveCode : 코드 저장 요청
+            requestDeleteCode : 코드 삭제 요청
         */
         function requestDeleteCode() {
 
@@ -171,8 +174,6 @@
                     return;
                 }
             });
-
-
         }
 
         /*
@@ -290,7 +291,6 @@
 
                 }
             });
-
         }
 
     </script>
