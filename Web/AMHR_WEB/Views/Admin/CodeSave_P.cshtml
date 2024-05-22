@@ -15,41 +15,51 @@
         <section class="col-md-12">
             <fieldset>
                 <div>
-                    <label for="Sys_Code_ID" class="form-label mt-4">시스템 코드</label>
+                    <label for="Sys_Code_ID_P" class="form-label mt-4">시스템 코드</label>
                     <div style="display:flex; justify-content:center;">
-                        <input type="text" class="form-control" id="Sys_Code_ID" placeholder="" style="max-width: 460px;">
+                        <input type="text" class="form-control" id="Sys_Code_ID_P" placeholder="" style="max-width: 460px;">
                     </div>
 
-                    <label for="Div_Code_ID" class="form-label mt-4">분류 코드</label>
+                    <label for="Div_Code_ID_P" class="form-label mt-4">분류 코드</label>
                     <div style="display:flex; justify-content:center;">
-                        <input type="text" class="form-control" id="Div_Code_ID" placeholder="" style="max-width: 460px;">
+                        <input type="text" class="form-control" id="Div_Code_ID_P" placeholder="" style="max-width: 460px;">
                     </div>
 
 
-                    <label for="Code_ID" class="form-label mt-4">코드</label>
+                    <label for="Code_ID_P" class="form-label mt-4">코드</label>
                     <div style="display:flex; justify-content:center;">
-                        <input type="text" class="form-control" id="Code_ID" placeholder="" style="max-width:380px;">
+                        <input type="text" class="form-control" id="Code_ID_P" placeholder="" style="max-width:380px;">
                         <button type="button" class="btn btn-primary" style="margin-left:10px; max-width:600px;" onclick="">check</button>
                     </div>
 
-                    <label for="Code_NM" class="form-label mt-4">코드명</label>
+                    <label for="Code_NM_P" class="form-label mt-4">코드명</label>
                     <div style="display:flex; justify-content:center;">
-                        <input type="text" class="form-control" id="Code_NM" placeholder="" style="max-width: 460px; ">
+                        <input type="text" class="form-control" id="Code_NM_P" placeholder="" style="max-width: 460px; ">
                     </div>
 
-                    <label for="Code_Description" class="form-label mt-4">코드 설명</label>
+                    <label for="Code_Description_P" class="form-label mt-4">코드 설명</label>
                     <div style="display:flex; justify-content:center;">
-                        <input type="text" class="form-control" id="Code_Description" placeholder="" style="max-width: 460px;">
+                        <input type="text" class="form-control" id="Code_Description_P" placeholder="" style="max-width: 460px;">
                     </div>
 
-                    <label for="Use_YN" class="form-label mt-4">사용여부</label>
-                    <div style="display:flex; justify-content:center;">
-                        <input type="text" class="form-control" id="Use_YN" placeholder="" style="max-width: 460px;">
+                    <label for="Code_Description_P" class="form-label mt-4">사용여부</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="optionsRadios_P" id="optionsRadios1_P" value="Y" checked="">
+                        <label class="form-check-label" for="optionsRadios1_P">
+                            사용
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="optionsRadios_P" id="optionsRadios2_P" value="N">
+                        <label class="form-check-label" for="optionsRadios2_P">
+                            미사용
+                        </label>
                     </div>
 
-                    <label for="Sort_Order" class="form-label mt-4">정렬순서</label>
+
+                    <label for="Sort_Order_P" class="form-label mt-4">정렬순서</label>
                     <div style="display:flex; justify-content:center;">
-                        <input type="text" class="form-control" id="Sort_Order" placeholder="" style="max-width: 460px;">
+                        <input type="text" class="form-control" id="Sort_Order_P" placeholder="" style="max-width: 460px;">
                     </div>
                 </div>
 
@@ -58,7 +68,7 @@
     </div>
 </div>
 <div class="modal-footer" id="btn_save">
-    <button type="button" class="btn btn-primary" name="save_yes" id="save_yes" data-bs-dismiss="modal">SAVE</button>
+    <button type="button" class="btn btn-primary" name="save_yes" id="save_yes" onclick="requestSaveCode()">SAVE</button>
     <button type="button" class="btn btn-secondary" name="save_no" id="save_no" data-bs-dismiss="modal">CANCEL</button>
 </div>
 <!--Main layout-->
@@ -68,6 +78,7 @@
 
     <script type="text/javascript">
 
+        var CODE_CHECK_FLAG = false;
 
         /*
             DOM 준비 시
@@ -75,6 +86,114 @@
         $(function () {
 
         });
+
+        /*
+            requestSaveCode : 코드 저장 요청
+        */
+        function requestSaveCode() {
+            if (validateData()) {
+                MsgBox.Confirm("저장하시겠습니까?", function resultFlag(flag) {
+                    if (flag) {
+                        saveData();
+                    }
+                    else {
+                        return;
+                    }
+                });
+            }
+            else {
+                return;
+            }
+
+        }
+
+        /*
+            validateData : 유효성 검사
+        */
+        function validateData() {
+            var Sys_Code_ID = $("#Sys_Code_ID_P").val();
+            if (Sys_Code_ID.trim() == "") {
+                MsgBox_Pop.Alert("시스템 코드를 입력하세요.", function () { $("#Sys_Code_ID_P").focus(); });
+                return false;
+            }
+
+            var Div_Code_ID = $("#Div_Code_ID_P").val();
+            if (Div_Code_ID.trim() == "") {
+                MsgBox_Pop.Alert("분류 코드를 입력하세요.", function () { $("#Div_Code_ID_P").focus(); });
+                return false;
+            }
+
+            var Code_ID = $("#Code_ID_P").val();
+            if (Code_ID.trim() == "") {
+                MsgBox_Pop.Alert("코드를 입력하세요.", function () { $("#Code_ID_P").focus(); });
+                return false;
+            }
+
+            if (!CODE_CHECK_FLAG) {
+                MsgBox_Pop.Alert("코드 중복여부를 확인해주세요.", function () { $("#Code_ID_P").focus(); });
+                return false;
+            }
+
+            var Code_NM = $("#Code_NM_P").val();
+            if (Code_NM.trim() == "") {
+                MsgBox_Pop.Alert("코드명을 입력하세요.", function () { $("#Code_NM_P").focus(); });
+                return false;
+            }
+
+            var Code_Description = $("#Code_Description_P").val();
+            if (Code_Description.trim() == "") {
+                MsgBox_Pop.Alert("코드설명을 입력하세요.", function () { $("#Code_Description_P").focus(); });
+                return false;
+            }
+
+
+            var Sort_Order = $("#Sort_Order_P").val();
+            if (Sort_Order.trim() == "") {
+                MsgBox_Pop.Alert("정렬순서를 입력하세요.", function () { $("#Sort_Order_P").focus(); });
+                return false;
+            }
+
+            return true;
+        }
+
+        /*
+            saveData : 사용자 Data 저장
+        */
+        function saveData() {
+            var obj = {
+                CodeEntity: {}
+            };
+
+            obj.CodeEntity.Sys_Code_ID = $("#Sys_Code_ID_P").val();
+            obj.CodeEntity.Div_Code_ID = $("#Div_Code_ID_P").val();
+            obj.CodeEntity.Code_ID = $("#Code_ID_P").val();
+            obj.CodeEntity.Code_NM = $("#Code_NM_P").val();
+            obj.CodeEntity.Code_Description = $("#Code_Description_P").val();
+            obj.CodeEntity.Sort_Order = $("#Sort_Order_P").val();
+            obj.CodeEntity.USE_YN = $("input[name='optionsRadios_P']:checked").val();
+
+            $.ajax({
+                url: "/Admin/RequestSaveCode"
+                , data: { contract: obj }
+                , type: "post"
+                , success: function (data) {
+
+                    if (data.RESULT == "IY") {
+                        MsgBox.Inform("코드 저장이 완료되었습니다.", function () { windows.location.reload(); });
+                    }
+                    else {
+                        MsgBox.Warning("예상치 못한 오류가 발생하였습니다. 관리자에게 문의하십시오.");
+                    }
+                }
+                , error: function (data) {
+                    MsgBox.Danger(
+                        setErrCustomContents(data)
+                    );
+
+                }
+            });
+
+        }
 
     </script>
 

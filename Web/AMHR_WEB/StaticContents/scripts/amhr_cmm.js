@@ -179,6 +179,132 @@ var MsgBox = {
     }
 }
 
+
+var MsgBox_Pop = {
+    Alert: function (msg, okhandler) {
+        new Promise((resolve, reject) => {
+            $("#btn_confirm_pop").hide();
+            $("#btn_alert_pop").show();
+            $("#msg_popup_pop #alert_ok_pop").unbind();
+
+            setModalDesign_Pop(msg, "alert");
+
+            $("#msg_popup_pop").modal('show');
+            $("#msg_popup_pop #alert_ok_pop").click(function () {
+                $("#msg_popup_pop").modal("hide");
+            });
+
+            $("#msg_popup_pop").on("hidden.bs.modal", function (e) {
+                e.stopPropagation();
+                if (okhandler != null) { resolve(); }
+                else { }
+            });
+        }).then(okhandler).catch(function () { });
+    },
+
+    Warning: function (msg, okhandler) {
+        new Promise((resolve, reject) => {
+            $("#btn_confirm_pop").hide();
+            $("#btn_alert_pop").show();
+            $("#msg_popup_pop #alert_ok_pop").unbind();
+
+            setModalDesign_Pop(msg, "warning");
+
+            $("#msg_popup_pop").modal('show');
+            $("#_pop #alert_ok_pop").click(function () {
+                $("#msg_popup_pop").modal("hide");
+            });
+
+            $("#msg_popup_pop").on("hidden.bs.modal", function (e) {
+                e.stopPropagation();
+                if (okhandler != null) { resolve(); }
+                else { }
+            });
+        }).then(okhandler).catch(function () { });
+    },
+
+    Danger: function (msg, okhandler) {
+        new Promise((resolve, reject) => {
+            $("#btn_confirm_pop").hide();
+            $("#btn_alert_pop").show();
+            $("#msg_popup_pop #alert_ok_pop").unbind();
+
+            setModalDesign_Pop(msg, "danger");
+
+            $("#msg_popup_pop").modal('show');
+            $("#msg_popup_pop #alert_ok_pop").click(function () {
+                $("#msg_popup_pop").modal("hide");
+            });
+
+            $("#msg_popup_pop").on("hidden.bs.modal", function (e) {
+                e.stopPropagation();
+                if (okhandler != null) { resolve(); }
+                else { }
+            });
+        }).then(okhandler).catch(function () { });
+    },
+
+    Inform: function (msg, okhandler) {
+        new Promise((resolve, reject) => {
+            $("#btn_confirm_pop").hide();
+            $("#btn_alert_pop").show();
+            $("#msg_popup_pop #alert_ok_pop").unbind();
+
+            setModalDesign_Pop(msg, "inform");
+
+            $("#msg_popup_pop").modal('show');
+            $("#msg_popup_pop #alert_ok_pop").click(function () {
+                $("#msg_popup_pop").modal("hide");
+            });
+
+            $("#msg_popup_pop").on("hidden.bs.modal", function (e) {
+                e.stopPropagation();
+                if (okhandler != null) { resolve(); }
+                else { }
+            });
+        }).then(okhandler).catch(function () { });
+    },
+
+    Confirm: function (msg, resultFlag) {
+        var flag = false;
+        $("#btn_alert_pop").hide();
+        $("#btn_confirm_pop").show();
+
+        $("#confirm_yes_pop").unbind();
+        $("#confirm_no_pop").unbind();
+        //$("#msg_popup .modal-body").html(msg);
+        setModalDesign_Pop(msg, "confirm");
+        $("#msg_popup_pop").modal("show");
+
+        $("#msg_popup_pop").on("keypress", function (e) {
+
+            var keycode = (e.keyCode ? e.keyCode : e.which);
+            if (keycode == '13') {
+                flag = false;
+                resultFlag(flag);
+                $("#msg_popup_pop").modal("hide");
+                e.stopPropagation();
+            }
+        });
+
+        $("#confirm_yes_pop").on("click", function (e) {
+            flag = true;
+            resultFlag(flag);
+            $("#msg_popup_pop").modal("hide");
+            e.stopPropagation();
+
+        });
+
+
+        $("#confirm_no_pop").on("click", function (e) {
+            flag = false;
+            resultFlag(flag);
+            $("#msg_popup_pop").modal("hide");
+            e.stopPropagation();
+
+        });
+    }
+}
 /**
  * - ModalBox 
  * - 사용자 Custom Modal 호출
@@ -263,6 +389,67 @@ function setModalDesign(message, status)
     // Design class Change
     $("#amhr_modal_header").attr("class", "modal-header " + bgColorDesign + " " + fontColorDesign);
     $("button[name='amhr_btn_ok']").attr("class", "btn " + btnBgColorDesign);
+}
+
+/**
+    * - setModalDesign
+    * @param {any} message - 팝업 내부에 작성할 메시지
+    * @param {any} status  - 팝업 디자인을 제공하기 위한 기준 상태분류
+*/
+function setModalDesign_Pop(message, status) {
+    var modal_title = "";
+    var modal_message = message;
+    var bgColorDesign = "";
+    var btnBgColorDesign = "";
+    var fontColorDesign = "";
+    switch (status) {
+        case modal_status.status_inform:
+            modal_title = "Info";
+            bgColorDesign = "bg-info";
+            btnBgColorDesign = "btn-info";
+            fontColorDesign = "text-white";
+
+            break;
+        case modal_status.status_warning:
+            modal_title = "Warning";
+            bgColorDesign = "bg-warning";
+            btnBgColorDesign = "btn-warning";
+            fontColorDesign = "";
+
+            break;
+        case modal_status.status_dagner:
+            modal_title = "Danger";
+            bgColorDesign = "bg-danger";
+            btnBgColorDesign = "btn-danger";
+            fontColorDesign = "text-white";
+            break;
+        case modal_status.status_confirm:
+            modal_title = "Confirm";
+            bgColorDesign = "bg-success";
+            btnBgColorDesign = "btn-success";
+            fontColorDesign = "text-white";
+            break;
+        case modal_status.status_alert:
+            modal_title = "Alert";
+            bgColorDesign = "bg-primary";
+            btnBgColorDesign = "btn-primary";
+            fontColorDesign = "text-white";
+            break;
+        default:
+            modal_title = "Alert";
+            bgColorDesign = "bg-primary";
+            btnBgColorDesign = "btn-primary";
+            fontColorDesign = "text-white";
+            break;
+    }
+
+    // Text Fill
+    $("#amhr_modal_title_pop").html(modal_title);
+    $("#amhr_modal_body_text_pop").html(modal_message);
+
+    // Design class Change
+    $("#amhr_modal_header_pop").attr("class", "modal-header " + bgColorDesign + " " + fontColorDesign);
+    $("button[name='amhr_btn_ok_pop']").attr("class", "btn " + btnBgColorDesign);
 }
 
 /**

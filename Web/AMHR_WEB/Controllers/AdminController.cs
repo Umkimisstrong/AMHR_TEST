@@ -58,6 +58,7 @@ namespace AMHR_WEB.Controllers
         public JsonResult RequestSaveCode(CodeContract contract)
         {
             CodeRepository repository = new CodeRepository();
+            contract.CodeEntity.CREATE_ID = UserSessionModel.USER_ID;
             string result = repository.SaveCodeEntity(contract.CodeEntity, Contract.ENUM.EnumProperties.GeneralFlag.CREATE);
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
