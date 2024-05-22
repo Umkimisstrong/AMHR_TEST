@@ -570,7 +570,7 @@ function InitEnterSubmitEvent()
     $("input[type='text']").keypress(function (e) {
         if (e.keyCode == 13)
         {
-            $("#CONST_SEARCH_FORM").submit();
+            SubmitForm("SEARCH");
         }
     });
 }

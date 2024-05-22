@@ -63,5 +63,33 @@ namespace AMHR_WEB.Controllers
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// CheckCodeID : Code ID 중복체크
+        /// </summary>
+        /// <param name="contract">Code Contract</param>
+        /// <returns></returns>
+        public JsonResult CheckCodeID(CodeContract contract)
+        {
+            string result = string.Empty;
+            if (string.IsNullOrEmpty(contract.SYS_CODE_ID))
+            {
+                result = "EMPTY_SYS";
+                return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+            }
+            if (string.IsNullOrEmpty(contract.DIV_CODE_ID))
+            {
+                result = "EMPTY_DIV";
+                return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+            }
+            if (string.IsNullOrEmpty(contract.CODE_ID))
+            {
+                result = "EMPTY_CD";
+                return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+            }
+
+            CodeRepository repository = new CodeRepository();
+            result = repository.CheckCodeID(contract.SYS_CODE_ID, contract.DIV_CODE_ID, contract.CODE_ID) ? "OK" : "NO";
+            return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

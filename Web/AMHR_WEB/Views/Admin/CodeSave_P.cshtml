@@ -88,11 +88,56 @@
         });
 
         /*
+            requestCheckCodeId : 코드 중복여부 체크
+        */
+        function requestCheckCodeId()
+        {
+            var obj = {};
+            var sysCodeId = $("#Sys_Code_ID_P").val();
+            var divCodeId = $("#Div_Code_ID_P").val();
+            var codeId = $("#Code_ID_P").val();
+            obj.SYS_CODE_ID = sysCodeId;
+            obj.DIV_CODE_ID = divCodeId;
+            obj.Code_ID = codeId;
+            
+            $.ajax({
+                url: "/Admin/CheckCodeID",
+                type: "post",
+                data: { contract: obj },
+                success: function (data)
+                {
+                    var result = data.RESULT;
+                    if (result == "OK")
+                    {
+                        CODE_CHECK_FLAG = true;
+                        MsgBox_Pop.Inform("사용가능한 코드 입니다.", function () { $("#Code_NM_P").focus(); });
+                    }
+                    else if (result == "EMPTY_SYS") {
+                        CODE_CHECK_FLAG = false;
+                        MsgBox_Pop.Alert("시스템 코드를 입력하세요.", function () { $("#Sys_Code_ID_P").focus(); });
+                    }
+                    else if (result == "EMPTY_DIV") {
+                        CODE_CHECK_FLAG = false;
+                        MsgBox_Pop.Alert("분류 코드를 입력하세요.", function () { $("#Div_Code_ID_P").focus(); });
+                    }
+                    else if (result == "EMPTY_CD") {
+                        CODE_CHECK_FLAG = false;
+                        MsgBox_Pop.Alert("코드를 입력하세요.", function () { $("#Code_ID_P").focus(); });
+                    }
+                    else if (result == "NO") {
+                        CODE_CHECK_FLAG = false;
+                        MsgBox_Pop.Alert("중복된 코드 입니다.", function () { $("#Code_ID_P").focus(); });
+                    }
+                }
+            });
+        }
+
+        /*
             requestSaveCode : 코드 저장 요청
         */
         function requestSaveCode() {
             if (validateData()) {
-                MsgBox.Confirm("저장하시겠습니까?", function resultFlag(flag) {
+                MsgBox_Pop.Confirm("저장하시겠습니까?", function resultFlag(flag) {
                     if (flag) {
                         saveData();
                     }
@@ -179,14 +224,14 @@
                 , success: function (data) {
 
                     if (data.RESULT == "IY") {
-                        MsgBox.Inform("코드 저장이 완료되었습니다.", function () { windows.location.reload(); });
+                        MsgBox_Pop.Inform("코드 저장이 완료되었습니다.", function () { window.location.reload(); });
                     }
                     else {
-                        MsgBox.Warning("예상치 못한 오류가 발생하였습니다. 관리자에게 문의하십시오.");
+                        MsgBox_Pop.Warning("예상치 못한 오류가 발생하였습니다. 관리자에게 문의하십시오.");
                     }
                 }
                 , error: function (data) {
-                    MsgBox.Danger(
+                    MsgBox_Pop.Danger(
                         setErrCustomContents(data)
                     );
 

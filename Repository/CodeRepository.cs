@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using Contract;
 using Contract.ENUM;
 using Entity;
+using MySqlX.XDevAPI.Common;
 
 namespace Repository
 {
@@ -118,15 +119,15 @@ namespace Repository
             int result = 0;
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("USER_ID", entity.CREATE_ID);
-            keyValuePairs.Add("CODE_NM", entity.CODE_NM);
-            keyValuePairs.Add("SYS_CODE_ID", entity.SYS_CODE_ID);
-            keyValuePairs.Add("DIV_CODE_ID", entity.DIV_CODE_ID);
-            keyValuePairs.Add("CODE_ID", entity.CODE_ID);
-            keyValuePairs.Add("CODE_DESCRIPTION", entity.CODE_DESCRIPTION);
-            keyValuePairs.Add("USE_YN", entity.USE_YN);
-            keyValuePairs.Add("DEL_YN", "N");
-            keyValuePairs.Add("SORT_ORDER", entity.SORT_ORDER);
+            keyValuePairs.Add("I_USER_ID", entity.CREATE_ID);
+            keyValuePairs.Add("I_CODE_NM", entity.CODE_NM);
+            keyValuePairs.Add("I_SYS_CODE_ID", entity.SYS_CODE_ID);
+            keyValuePairs.Add("I_DIV_CODE_ID", entity.DIV_CODE_ID);
+            keyValuePairs.Add("I_CODE_ID", entity.CODE_ID);
+            keyValuePairs.Add("I_CODE_DESCRIPTION", entity.CODE_DESCRIPTION);
+            keyValuePairs.Add("I_USE_YN", entity.USE_YN);
+            keyValuePairs.Add("I_DEL_YN", "N");
+            keyValuePairs.Add("I_SORT_ORDER", entity.SORT_ORDER);
 
             result = SqlHelper.GetNonQuery("SP_CMM_CODE_C", keyValuePairs);
 
@@ -166,6 +167,25 @@ namespace Repository
             keyValuePairs.Add("USER_ID", entity.CREATE_ID);
 
             result = SqlHelper.GetNonQuery("SP_CMM_CODE_D", keyValuePairs);
+            return result;
+        }
+
+        public bool CheckCodeID(string SYS_CODE_ID, string DIV_CODE_ID, string CODE_ID)
+        {
+            bool result = true;
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_SYS_CODE_ID", SYS_CODE_ID);
+            keyValuePairs.Add("I_DIV_CODE_ID", DIV_CODE_ID);
+            keyValuePairs.Add("I_CODE_ID", CODE_ID);
+
+            DataSet ds = SqlHelper.GetDataSet("SP_CMM_CODE_ID_CHECK", keyValuePairs);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+
+                result = string.IsNullOrWhiteSpace(ds.Tables[0].Rows[0][0].ToString().Trim());
+            }
+
             return result;
         }
     }
