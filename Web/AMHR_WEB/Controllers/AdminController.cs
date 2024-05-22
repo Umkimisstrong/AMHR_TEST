@@ -1,5 +1,7 @@
 ﻿using AMHR_WEB.Models;
 using Contract;
+using Contract.ENUM;
+using Entity;
 using Repository;
 using System;
 using System.Collections.Generic;
@@ -21,6 +23,11 @@ namespace AMHR_WEB.Controllers
         public const int START_NUMBER = 1;
         public const int ROW_COUNT = 10;
 
+        /// <summary>
+        /// CodeManagement : 코드 관리 목록 뷰 담당
+        /// </summary>
+        /// <param name="contract">Code Contract</param>
+        /// <returns></returns>
         public ActionResult CodeManagement(CodeContract contract)
         {
             int REQUEST_PAGE_NUMBER = (contract.PAGE_NUMBER == 0 ? START_NUMBER - 1 : (contract.PAGE_NUMBER-1) * ROW_COUNT);
@@ -49,17 +56,44 @@ namespace AMHR_WEB.Controllers
             return View(response); 
         }
 
-        public ActionResult CodeSave_P()
+        /// <summary>
+        /// CodeSave_P : 코드 저장 팝업 뷰 담당
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CodeSave_P(CodeContract contract)
         {
-            return View();
+            CodeContract codeContract = new CodeContract();
+            codeContract.CodeEntity = new CodeEntity();
+
+            if (
+                (!string.IsNullOrEmpty(contract.SYS_CODE_ID)
+                  && !string.IsNullOrEmpty(contract.DIV_CODE_ID)
+                  && !string.IsNullOrEmpty(contract.CODE_ID)
+                )
+               )
+            {
+                CodeRepository repository = new CodeRepository();
+                codeContract.CodeEntity = repository.SelectCodeEntity(contract.SYS_CODE_ID, contract.DIV_CODE_ID, contract.CODE_ID);
+                ViewBag.GENERAL_FLAG = EnumProperties.GeneralFlag.UPDATE;
+            }
+            else
+            {
+                codeContract.CodeEntity.USE_YN = "Y";
+                ViewBag.GENERAL_FLAG = EnumProperties.GeneralFlag.CREATE;
+            }
+            return View(codeContract);
         }
 
-
-        public JsonResult RequestSaveCode(CodeContract contract)
+        /// <summary>
+        /// RequestSaveCode : 코드 저장 요청
+        /// </summary>
+        /// <param name="contract">Code Contract</param>
+        /// <returns></returns>
+        public JsonResult RequestSaveCode(CodeContract contract, EnumProperties.GeneralFlag generalFlag)
         {
             CodeRepository repository = new CodeRepository();
             contract.CodeEntity.CREATE_ID = UserSessionModel.USER_ID;
-            string result = repository.SaveCodeEntity(contract.CodeEntity, Contract.ENUM.EnumProperties.GeneralFlag.CREATE);
+            string result = repository.SaveCodeEntity(contract.CodeEntity, generalFlag);
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
 
@@ -71,6 +105,7 @@ namespace AMHR_WEB.Controllers
         public JsonResult CheckCodeID(CodeContract contract)
         {
             string result = string.Empty;
+
             if (string.IsNullOrEmpty(contract.SYS_CODE_ID))
             {
                 result = "EMPTY_SYS";

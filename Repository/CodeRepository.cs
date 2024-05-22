@@ -139,15 +139,15 @@ namespace Repository
             int result = 0;
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("USER_ID", entity.CREATE_ID);
-            keyValuePairs.Add("CODE_NM", entity.CODE_NM);
-            keyValuePairs.Add("SYS_CODE_ID", entity.SYS_CODE_ID);
-            keyValuePairs.Add("DIV_CODE_ID", entity.DIV_CODE_ID);
-            keyValuePairs.Add("CODE_ID", entity.CODE_ID);
-            keyValuePairs.Add("CODE_DESCRIPTION", entity.CODE_DESCRIPTION);
-            keyValuePairs.Add("USE_YN", entity.USE_YN);
-            keyValuePairs.Add("DEL_YN", "N");
-            keyValuePairs.Add("SORT_ORDER", entity.SORT_ORDER);
+            keyValuePairs.Add("I_USER_ID", entity.CREATE_ID);
+            keyValuePairs.Add("I_CODE_NM", entity.CODE_NM);
+            keyValuePairs.Add("I_SYS_CODE_ID", entity.SYS_CODE_ID);
+            keyValuePairs.Add("I_DIV_CODE_ID", entity.DIV_CODE_ID);
+            keyValuePairs.Add("I_CODE_ID", entity.CODE_ID);
+            keyValuePairs.Add("I_CODE_DESCRIPTION", entity.CODE_DESCRIPTION);
+            keyValuePairs.Add("I_USE_YN", entity.USE_YN);
+            keyValuePairs.Add("I_DEL_YN", "N");
+            keyValuePairs.Add("I_SORT_ORDER", entity.SORT_ORDER);
 
             result = SqlHelper.GetNonQuery("SP_CMM_CODE_U", keyValuePairs);
 
@@ -160,11 +160,11 @@ namespace Repository
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
 
-            keyValuePairs.Add("SYS_CODE_ID", entity.SYS_CODE_ID);
-            keyValuePairs.Add("DIV_CODE_ID", entity.DIV_CODE_ID);
-            keyValuePairs.Add("CODE_ID", entity.CODE_ID);
-            keyValuePairs.Add("DEL_YN", "Y");
-            keyValuePairs.Add("USER_ID", entity.CREATE_ID);
+            keyValuePairs.Add("I_SYS_CODE_ID", entity.SYS_CODE_ID);
+            keyValuePairs.Add("I_DIV_CODE_ID", entity.DIV_CODE_ID);
+            keyValuePairs.Add("I_CODE_ID", entity.CODE_ID);
+            keyValuePairs.Add("I_DEL_YN", "Y");
+            keyValuePairs.Add("I_USER_ID", entity.CREATE_ID);
 
             result = SqlHelper.GetNonQuery("SP_CMM_CODE_D", keyValuePairs);
             return result;

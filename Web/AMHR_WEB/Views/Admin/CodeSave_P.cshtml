@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "SetSystem";
     Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    string GENERAL_FLAG = ViewBag.GENERAL_FLAG.ToString();
 }
 <!--Main layout-->
 <div class="modal-header bg-primary text-white" id="amhr_modal_header">
@@ -17,40 +18,48 @@
                 <div>
                     <label for="Sys_Code_ID_P" class="form-label mt-4">시스템 코드</label>
                     <div style="display:flex; justify-content:center;">
-                        <input type="text" class="form-control" id="Sys_Code_ID_P" placeholder="" style="max-width: 460px;">
+                        @Html.TextBoxFor(m => m.CodeEntity.SYS_CODE_ID, new { @class="form-control", @id="Sys_Code_ID_P", @style="max-width:460px;"})
+                        @*<input type="text" class="form-control" id="Sys_Code_ID_P" placeholder="" style="max-width: 460px;">*@
                     </div>
 
                     <label for="Div_Code_ID_P" class="form-label mt-4">분류 코드</label>
                     <div style="display:flex; justify-content:center;">
-                        <input type="text" class="form-control" id="Div_Code_ID_P" placeholder="" style="max-width: 460px;">
+                        @Html.TextBoxFor(m => m.CodeEntity.DIV_CODE_ID, new { @class = "form-control", @id = "Div_Code_ID_P", @style = "max-width:460px;" })
+                        @*<input type="text" class="form-control" id="Div_Code_ID_P" placeholder="" style="max-width: 460px;">*@
                     </div>
 
 
                     <label for="Code_ID_P" class="form-label mt-4">코드</label>
                     <div style="display:flex; justify-content:center;">
-                        <input type="text" class="form-control" id="Code_ID_P" placeholder="" style="max-width:380px;">
-                        <button type="button" class="btn btn-primary" style="margin-left:10px; max-width:600px;" onclick="">check</button>
+                        @Html.TextBoxFor(m => m.CodeEntity.CODE_ID, new { @class = "form-control", @id = "Code_ID_P", @style = "max-width:460px;" })
+                        @*<input type="text" class="form-control" id="Code_ID_P" placeholder="" style="max-width:380px;">*@
+                        <button type="button" class="btn btn-primary" style="margin-left:10px; max-width:600px;" onclick="requestCheckCodeId()" id="btnCheck">check</button>
                     </div>
 
                     <label for="Code_NM_P" class="form-label mt-4">코드명</label>
                     <div style="display:flex; justify-content:center;">
-                        <input type="text" class="form-control" id="Code_NM_P" placeholder="" style="max-width: 460px; ">
+                        @Html.TextBoxFor(m => m.CodeEntity.CODE_NM, new { @class = "form-control", @id = "Code_NM_P", @style = "max-width:460px;" })
+                        @*<input type="text" class="form-control" id="Code_NM_P" placeholder="" style="max-width: 460px; ">*@
                     </div>
 
                     <label for="Code_Description_P" class="form-label mt-4">코드 설명</label>
                     <div style="display:flex; justify-content:center;">
-                        <input type="text" class="form-control" id="Code_Description_P" placeholder="" style="max-width: 460px;">
+                        @Html.TextBoxFor(m => m.CodeEntity.CODE_DESCRIPTION, new { @class = "form-control", @id = "Code_Description_P", @style = "max-width:460px;" })
+                        @*<input type="text" class="form-control" id="Code_Description_P" placeholder="" style="max-width: 460px;">*@
                     </div>
 
                     <label for="Code_Description_P" class="form-label mt-4">사용여부</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="optionsRadios_P" id="optionsRadios1_P" value="Y" checked="">
+                        
+                        @Html.RadioButtonFor(m => m.CodeEntity.USE_YN, "Y", new { @class = "form-check-input", @name = "optionsRadios_P", id = "optionsRadios1_P" })
+                        @*<input class="form-check-input" type="radio" name="optionsRadios_P" id="optionsRadios1_P" value="Y" checked="">*@
                         <label class="form-check-label" for="optionsRadios1_P">
                             사용
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="optionsRadios_P" id="optionsRadios2_P" value="N">
+                        @*<input class="form-check-input" type="radio" name="optionsRadios_P" id="optionsRadios2_P" value="N">*@
+                        @Html.RadioButtonFor(m => m.CodeEntity.USE_YN, "N", new { @class = "form-check-input", @name = "optionsRadios_P", id = "optionsRadios2_P" })
                         <label class="form-check-label" for="optionsRadios2_P">
                             미사용
                         </label>
@@ -59,7 +68,8 @@
 
                     <label for="Sort_Order_P" class="form-label mt-4">정렬순서</label>
                     <div style="display:flex; justify-content:center;">
-                        <input type="text" class="form-control" id="Sort_Order_P" placeholder="" style="max-width: 460px;">
+                        @Html.TextBoxFor(m => m.CodeEntity.SORT_ORDER, new { @class = "form-control", @id = "Sort_Order_P", @style = "max-width:460px;" })
+                        @*<input type="text" class="form-control" id="Sort_Order_P" placeholder="" style="max-width: 460px;">*@
                     </div>
                 </div>
 
@@ -68,6 +78,10 @@
     </div>
 </div>
 <div class="modal-footer" id="btn_save">
+    @if(GENERAL_FLAG.Equals("UPDATE"))
+    { 
+        <button type="button" class="btn btn-danger" name="save_yes" id="save_del" onclick="requestDeleteCode()">DELETE</button>
+    }
     <button type="button" class="btn btn-primary" name="save_yes" id="save_yes" onclick="requestSaveCode()">SAVE</button>
     <button type="button" class="btn btn-secondary" name="save_no" id="save_no" data-bs-dismiss="modal">CANCEL</button>
 </div>
@@ -78,13 +92,22 @@
 
     <script type="text/javascript">
 
-        var CODE_CHECK_FLAG = false;
+        var CODE_CHECK_FLAG = ('@GENERAL_FLAG' == "CREATE" ? false : true);
 
         /*
             DOM 준비 시
         */
         $(function () {
+            if ('@GENERAL_FLAG' == "CREATE") {
 
+            }
+            else
+            {
+                $("#Sys_Code_ID_P").attr("disabled", true);
+                $("#Div_Code_ID_P").attr("disabled", true);
+                $("#Code_ID_P").attr("disabled", true);
+                $("#btnCheck").attr("disabled", true);
+            }
         });
 
         /*
@@ -99,7 +122,7 @@
             obj.SYS_CODE_ID = sysCodeId;
             obj.DIV_CODE_ID = divCodeId;
             obj.Code_ID = codeId;
-            
+
             $.ajax({
                 url: "/Admin/CheckCodeID",
                 type: "post",
@@ -135,11 +158,31 @@
         /*
             requestSaveCode : 코드 저장 요청
         */
+        function requestDeleteCode() {
+
+            MsgBox_Pop.Confirm("삭제하시겠습니까?", function resultFlag(flag)
+            {
+                if (flag)
+                {
+                    saveData('DELETE');
+                }
+                else
+                {
+                    return;
+                }
+            });
+
+
+        }
+
+        /*
+            requestSaveCode : 코드 저장 요청
+        */
         function requestSaveCode() {
             if (validateData()) {
                 MsgBox_Pop.Confirm("저장하시겠습니까?", function resultFlag(flag) {
                     if (flag) {
-                        saveData();
+                        saveData('@GENERAL_FLAG');
                     }
                     else {
                         return;
@@ -204,9 +247,9 @@
         /*
             saveData : 사용자 Data 저장
         */
-        function saveData() {
+        function saveData(Flag) {
             var obj = {
-                CodeEntity: {}
+                CodeEntity: {} 
             };
 
             obj.CodeEntity.Sys_Code_ID = $("#Sys_Code_ID_P").val();
@@ -215,16 +258,26 @@
             obj.CodeEntity.Code_NM = $("#Code_NM_P").val();
             obj.CodeEntity.Code_Description = $("#Code_Description_P").val();
             obj.CodeEntity.Sort_Order = $("#Sort_Order_P").val();
-            obj.CodeEntity.USE_YN = $("input[name='optionsRadios_P']:checked").val();
+            obj.CodeEntity.USE_YN = $("input[name='CodeEntity.USE_YN']:checked").val(); 
 
-            $.ajax({
-                url: "/Admin/RequestSaveCode"
-                , data: { contract: obj }
+            $.ajax({ 
+                url: "/Admin/RequestSaveCode" 
+                , data: { contract: obj, generalFlag: Flag }
                 , type: "post"
                 , success: function (data) {
 
-                    if (data.RESULT == "IY") {
+                    if (data.RESULT == "IY" || data.RESULT == "UY") {
                         MsgBox_Pop.Inform("코드 저장이 완료되었습니다.", function () { window.location.reload(); });
+                    }
+                    else if (data.RESULT == "IN" || data.RESULT == "UN")
+                    {
+                        MsgBox_Pop.Warning("코드 저장 중 오류가 발생하였습니다. 관리자에게 문의하십시오.");
+                    }
+                    else if (data.RESULT == "DY") {
+                        MsgBox_Pop.Inform("코드 삭제 처리가 완료되었습니다.", function () { window.location.reload(); });
+                    }
+                    else if (data.RESULT == "DN") {
+                        MsgBox_Pop.Warning("코드 삭제 중 오류가 발생하였습니다. 관리자에게 문의하십시오.");
                     }
                     else {
                         MsgBox_Pop.Warning("예상치 못한 오류가 발생하였습니다. 관리자에게 문의하십시오.");

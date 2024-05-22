@@ -43,7 +43,7 @@
         </div>
         <div class="row" style="text-align:right; margin-top:10px;">
             <div style="padding-right:0;">
-                <button type="button" class="btn bg-primary btn-sm text-white" onclick="RequestCodeSavePopuUp()">New Code</button>
+                <button type="button" class="btn bg-primary btn-sm text-white" onclick="RequestCodeSavePopUp()">New Code</button>
 
                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="SubmitForm('SEARCH')">Click for Search</button>
                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="RefreshCondition()">Refresh Condition</button>
@@ -86,10 +86,10 @@
                         foreach (Entity.CodeEntity entity in Model.CodeList)
                         {
                             <tr>
-                                <td>@entity.CODE_NM</td>
+                                <td><a href="javascript:void(0);" onclick="RequestCodeSavePopUp('@entity.SYS_CODE_ID', '@entity.DIV_CODE_ID', '@entity.CODE_ID');">@entity.CODE_ID</a></td>
                                 <td>@entity.SYS_CODE_ID</td>
                                 <td>@entity.DIV_CODE_ID</td>
-                                <td>@entity.CODE_ID</td>
+                                <td>@entity.CODE_NM</td>
                                 <td>@entity.CODE_DESCRIPTION</td>
                                 <td>@entity.USE_YN</td>
                                 <td>@entity.SORT_ORDER</td>
@@ -132,42 +132,21 @@
         $(function () {
             InitEnterSubmitEvent();
         });
-        /*
-            RefreshCondition : 검색조건 초기화
-        function RefreshCondition() {
-            $("#Sys_Code_ID").val("");
-            $("#Div_Code_ID").val("");
-            $("#Code_ID").val("");
-            $("#Code_NM").val("");
-        }
-        
-            RefreshPagenum : 페이지 번호 초기화
-        function RefreshPagenum()
-        {
-            $("#CONST_PAGE_NUMBER").val("0");
-        }
-        
-            SubmitForm : 폼 서브밋(검색)
-        function SubmitForm(submitFlag)
-        {
-            var flag = submitFlag;
-            if (flag == "SEARCH")
-            {
-                RefreshPagenum();
-                $("#CONST_SEARCH_FORM").submit();
-            }
-            else(flag == "")
-            {
-                $("#CONST_SEARCH_FORM").submit();
-            }
-        }
-        */
 
-        function RequestCodeSavePopuUp()
+        function RequestCodeSavePopUp()
         {
             ModalBox.Show("/Admin/CodeSave_P", null);
         }
 
+        function RequestCodeSavePopUp(Sys_Code_ID, Div_Code_ID, Code_ID)
+        {
+            var requestData = {};
+            requestData.SYS_CODE_ID = Sys_Code_ID;
+            requestData.DIV_CODE_ID = Div_Code_ID;
+            requestData.CODE_ID = Code_ID;
+
+            ModalBox.Show("/Admin/CodeSave_P", requestData);
+        }
     </script>
 
 }
