@@ -114,6 +114,11 @@ namespace Repository
             return result;
         }
 
+        /// <summary>
+        /// InsertCodeEntity : 코드 입력
+        /// </summary>
+        /// <param name="entity">Code 엔티티</param>
+        /// <returns></returns>
         private int InsertCodeEntity(CodeEntity entity)
         {
             int result = 0;
@@ -134,6 +139,11 @@ namespace Repository
             return result;
         }
 
+        /// <summary>
+        /// UpdateCodeEntity : 코드 수정
+        /// </summary>
+        /// <param name="entity">Code 엔티티</param>
+        /// <returns></returns>
         private int UpdateCodeEntity(CodeEntity entity) 
         {
             int result = 0;
@@ -154,6 +164,11 @@ namespace Repository
             return result;
         }
 
+        /// <summary>
+        /// DeleteCodeEntity : 코드 삭제
+        /// </summary>
+        /// <param name="entity">Code 엔티티</param>
+        /// <returns></returns>
         private int DeleteCodeEntity(CodeEntity entity)
         {
             int result = 0;
@@ -170,6 +185,13 @@ namespace Repository
             return result;
         }
 
+        /// <summary>
+        /// CheckCodeID : 코드 중복여부 체크
+        /// </summary>
+        /// <param name="SYS_CODE_ID">시스템 코드 ID</param>
+        /// <param name="DIV_CODE_ID">분류 코드 ID</param>
+        /// <param name="CODE_ID">코드 ID</param>
+        /// <returns></returns>
         public bool CheckCodeID(string SYS_CODE_ID, string DIV_CODE_ID, string CODE_ID)
         {
             bool result = true;

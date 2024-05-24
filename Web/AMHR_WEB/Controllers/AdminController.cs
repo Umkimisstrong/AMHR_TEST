@@ -22,7 +22,7 @@ namespace AMHR_WEB.Controllers
         public const string CONTROLLER_NAME = "Admin";
         public const int START_NUMBER = 1;
         public const int ROW_COUNT = 10;
-
+        
         /// <summary>
         /// CodeManagement : 코드 관리 목록 뷰 담당
         /// </summary>
@@ -32,8 +32,6 @@ namespace AMHR_WEB.Controllers
         {
             int REQUEST_PAGE_NUMBER = (contract.PAGE_NUMBER == 0 ? START_NUMBER - 1 : (contract.PAGE_NUMBER-1) * ROW_COUNT);
             int NOW_PAGE_NUMBER = contract.PAGE_NUMBER == 0 ? START_NUMBER : contract.PAGE_NUMBER;
-
-            int PAGE_COUNT = 0;
             ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
             ViewBag.SECOND_BREADCRUMB_NAME = "CodeManagement";
             ViewBag.ADMIN_VIEW = CONTROLLER_NAME;
@@ -44,7 +42,7 @@ namespace AMHR_WEB.Controllers
             response = repository.SelectCodeEntityList(contract.SYS_CODE_ID, contract.DIV_CODE_ID, contract.CODE_ID, contract.CODE_NM, REQUEST_PAGE_NUMBER, ROW_COUNT);
 
             // 5       = 55 / 10
-            PAGE_COUNT = response.TOTAL_COUNT / ROW_COUNT;
+            int PAGE_COUNT = response.TOTAL_COUNT / ROW_COUNT;
             //         = 10 * 5 < 55 ? PAGE_COUNT+1
             PAGE_COUNT = (ROW_COUNT * PAGE_COUNT < response.TOTAL_COUNT) ? PAGE_COUNT + 1 : PAGE_COUNT;
             ViewBag.PAGE_COUNT = PAGE_COUNT;
@@ -52,6 +50,9 @@ namespace AMHR_WEB.Controllers
             // START = 0, ELSE = 1, 2, 3, ...
             ViewBag.NOW_PAGE_NUMBER = NOW_PAGE_NUMBER;
             ViewBag.TOTAL_COUNT = response.TOTAL_COUNT;
+
+            // 현재 액션명을 TempData 로 넘겨준다. Admin 사이드 Bar 에서 메뉴 Display 에 사용
+            TempData["ACTION_NAME"] = RouteData.Values["Action"].ToString();
 
             return View(response); 
         }

@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@* Main Layer *@
 <main style="padding-left:0;">
     <div class="row" style="justify-content:center;">
         <section class="col-md-12" aria-labelledby="gettingStartedTitle" style="justify-content:center; width:30%;">
@@ -141,7 +142,9 @@
         </section>
     </div>
 </main>
+@* Main Layer *@
 
+@* Script Layer *@
 @section scripts
 {
     <script type="text/javascript">
@@ -151,10 +154,9 @@
         /*
             requestCheckID : ID 중복여부 체크
         */
-        function requestCheckID()
-        {
+        function requestCheckID() {
             var useriD = $("#exampleInputId1").val();
-            
+
             $.ajax
                 ({
                     url: "/User/CheckUserID"
@@ -167,15 +169,13 @@
                             ID_CHECK_FLAG = true;
                             //alert("사용 가능한 ID 입니다.", $("#exampleInputPassword1").focus());
                             MsgBox.Inform("사용 가능한 ID 입니다.", function () { $("#exampleInputPassword1").focus(); });
-                            
+
                         }
-                        else if (result == "EMPTY")
-                        {
+                        else if (result == "EMPTY") {
                             //alert("ID를 입력하세요.", $("#exampleInputId1").focus());
                             MsgBox.Alert("ID를 입력하세요.", function () { $("#exampleInputId1").focus(); });
                         }
-                        else if (result == "NO")
-                        {
+                        else if (result == "NO") {
                             //alert("중복된 ID 입니다.", $("#exampleInputId1").focus());
                             MsgBox.Alert("중복된 ID 입니다.", function () { $("#exampleInputId1").focus(); });
                         }
@@ -191,35 +191,29 @@
         }
 
         /*
-            requestSignUp : 회원가입 
+            requestSignUp : 회원가입
         */
-        function requestSignUp()
-        {
-            if (validateData())
-            {
+        function requestSignUp() {
+            if (validateData()) {
                 MsgBox.Confirm("저장하시겠습니까?", function resultFlag(flag) {
-                    if (flag)
-                    {
+                    if (flag) {
                         saveData();
                     }
-                    else
-                    {
+                    else {
                         return;
                     }
                 });
             }
-            else
-            {
+            else {
                 return;
             }
-            
+
         }
 
         /*
             validateData : 유효성 검사
         */
-        function validateData()
-        {
+        function validateData() {
             var useriD = $("#exampleInputId1").val();
             if (useriD.trim() == "") {
                 MsgBox.Alert("ID를 입력하세요.", function () { $("#exampleInputId1").focus(); });
@@ -232,8 +226,7 @@
 
             var userPassword1 = $("#exampleInputPassword1").val();
             var userPassword2 = $("#exampleInputPassword2").val();
-            if (userPassword1.trim() == "")
-            {
+            if (userPassword1.trim() == "") {
                 MsgBox.Alert("비밀번호를 입력하세요.", function () { $("#exampleInputPassword1").focus(); });
                 return false;
             }
@@ -241,29 +234,25 @@
                 MsgBox.Alert("비밀번호 확인을 입력하세요.", function () { $("#exampleInputPassword2").focus(); });
                 return false;
             }
-            if (userPassword1 != userPassword2)
-            {
+            if (userPassword1 != userPassword2) {
                 MsgBox.Alert("비밀번호와 비밀번호 확인 값이 다릅니다. 동일하게 입력하세요.", function () { $("#exampleInputPassword1").focus(); });
                 return false;
             }
 
             var userDescription = $("#exampleTextarea").val();
-            if (userDescription.trim() == "")
-            {
+            if (userDescription.trim() == "") {
                 MsgBox.Alert("설명을 입력하세요.", function () { $("#exampleTextarea").focus(); });
                 return false;
             }
 
             var userName = $("#exampleInputName1").val();
-            if (userName.trim() == "")
-            {
+            if (userName.trim() == "") {
                 MsgBox.Alert("이름을 입력하세요.", function () { $("#exampleInputName1").focus(); });
                 return false;
             }
 
             var userEmail = $("#exampleInputEmail1").val();
-            if (userEmail.trim() == "")
-            {
+            if (userEmail.trim() == "") {
                 MsgBox.Alert("이메일을 입력하세요.", function () { $("#exampleInputEmail1").focus(); });
                 return false;
             }
@@ -273,8 +262,7 @@
         /*
             saveData : 사용자 Data 저장
         */
-        function saveData()
-        {
+        function saveData() {
             var obj = {
                 UserEntity: {}
             };
@@ -296,12 +284,10 @@
                 , type: "post"
                 , success: function (data) {
 
-                    if (data.RESULT)
-                    {
-                        MsgBox.Inform("회원가입이 완료되었습니다. 로그인 후 이용하여 주십시오.", function () { location.href="/User/UserLogin" });
+                    if (data.RESULT) {
+                        MsgBox.Inform("회원가입이 완료되었습니다. 로그인 후 이용하여 주십시오.", function () { location.href = "/User/UserLogin" });
                     }
-                    else
-                    {
+                    else {
                         MsgBox.Warning("예상치 못한 오류가 발생하였습니다. 관리자에게 문의하십시오.");
                     }
                 }
@@ -312,11 +298,11 @@
 
                 }
             });
-            
+
         }
     </script>
 }
-
+@* Script Layer *@
 
 
 

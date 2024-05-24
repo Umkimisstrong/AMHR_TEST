@@ -5,11 +5,11 @@
 
     string MESSAGE = ViewBag.MESSAGE.ToString();
 }
-
+@* Main Layer *@
 <main style="padding-left:0;">
-    
+
     <div class="row" style="justify-content:center; margin-top:100px;">
-        <div class="card  mb-12" style="max-width: 30rem; box-shadow: 0 4px 16px rgba(17, 17, 26, .05), 0 8px 32px rgba(17, 17, 26, .05); border-color:white;" >
+        <div class="card  mb-12" style="max-width: 30rem; box-shadow: 0 4px 16px rgba(17, 17, 26, .05), 0 8px 32px rgba(17, 17, 26, .05); border-color:white;">
             <div class="card-header bg-white" style="text-align:center;">
                 <p style="font-size:40px; font-weight:bold;">Welcome !</p>
                 <p style="font-size: 18px;  color: #797979;">Sign in AMHR.</p>
@@ -29,7 +29,7 @@
                     <button type="button" class="btn btn-primary" onclick="requestSignIn()" style="max-width:600px; width:100%;" id="btnLogin">Login</button>
                     <button type="button" class="btn " onclick="requestKakaoSignIn()" style="max-width: 600px; width: 100%; margin-top: 15px; background-color: #FEE500; display: flex; align-items: center; justify-content: space-between; ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-fill" viewBox="0 0 16 16">
-                        <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9 9 0 0 0 8 15" />
+                            <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9 9 0 0 0 8 15" />
                         </svg> Login with Kakao
                         <span></span>
                     </button>
@@ -43,7 +43,7 @@
                 <hr />
                 <div style="text-align:center;">
                     <p style="font-size: 18px; color: #797979;">
-                        Don't have an account?  @Html.ActionLink("Sign Up", "UserSignup", "User", null, new { @class=""})
+                        Don't have an account?  @Html.ActionLink("Sign Up", "UserSignup", "User", null, new { @class = "" })
                     </p>
                 </div>
             </div>
@@ -53,7 +53,9 @@
 
 
 </main>
+@* Main Layer *@
 
+@* Script Layer *@
 @section scripts
 {
     <script type="text/javascript">
@@ -64,10 +66,9 @@
 
             /*
                 ID 엔터 이벤트
-            */ 
+            */
             $("#exampleInputId1").keypress(function (e) {
-                if (e.keyCode && e.keyCode == 13)
-                {
+                if (e.keyCode && e.keyCode == 13) {
                     $("#btnLogin").click();
                 }
             });
@@ -75,7 +76,7 @@
 
             /*
                 PWD 엔터 이벤트
-            */ 
+            */
             $("#exampleInputPassword1").keypress(function (e) {
                 if (e.keyCode && e.keyCode == 13) {
                     $("#btnLogin").click();
@@ -89,22 +90,18 @@
         /*
             requestKakaoSignIn : 카카오 로그인 버튼 클릭 시 이동한다.
         */
-        function requestKakaoSignIn()
-        {
+        function requestKakaoSignIn() {
             location.href = "/Kakao/KakaoLogin";
         }
 
         /*
             requestSignIn : 로그인
         */
-        function requestSignIn()
-        {
-            if (validateData())
-            {
+        function requestSignIn() {
+            if (validateData()) {
                 loginData();
             }
-            else
-            {
+            else {
                 return;
             }
         }
@@ -113,8 +110,7 @@
         /*
             validateData : 유효성 검사
         */
-        function validateData()
-        {
+        function validateData() {
             var useriD = $("#exampleInputId1").val();
             if (useriD.trim() == "") {
                 MsgBox.Alert("ID를 입력하세요.");
@@ -122,8 +118,7 @@
             }
 
             var userPassword1 = $("#exampleInputPassword1").val();
-            if (userPassword1.trim() == "")
-            {
+            if (userPassword1.trim() == "") {
                 MsgBox.Alert("비밀번호를 입력하세요.");
                 return false;
             }
@@ -134,8 +129,7 @@
         /*
             loginData : 사용자 Data 로그인
         */
-        function loginData()
-        {
+        function loginData() {
             var obj = {
                 UserEntity: {}
             };
@@ -147,36 +141,31 @@
                 url: "/User/LoginCheckUser"
                 , data: {
                     contract: obj
-                    , returnUrl : ""
+                    , returnUrl: ""
                 }
                 , type: "post"
-                , success: function (data)
-                {
+                , success: function (data) {
                     //alert(data);
-                    if (data.RESULT == "OK")
-                    {
+                    if (data.RESULT == "OK") {
                         location.href = "/Home/Index";
                     }
-                    else if (data.RESULT == "NO")
-                    {
+                    else if (data.RESULT == "NO") {
                         //alert("아이디 또는 비밀번호가 잘못되었습니다.");
                         MsgBox.Warning("아이디 또는 비밀번호가 잘못되었습니다.")
                     }
-                    else
-                    {
+                    else {
                         MsgBox.Danger(data.RESULT);
                     }
                 }
-                , error: function (data)
-                {
+                , error: function (data) {
                     MsgBox.Danger(
-                                     setErrCustomContents(data)
-                                  );
+                        setErrCustomContents(data)
+                    );
                 }
             });
 
         }
     </script>
 }
-
+@* Script Layer *@
 

@@ -10,13 +10,19 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    @* Main Layer *@
     <div class="modal-content" style="justify-content:center;">
         @RenderBody()
     </div>
+    @* Main Layer *@
+
 
     @* Modal Layer Area Message *@
     @Html.Partial("Amhr_Modal_Pop")
+    @* Modal Layer Area Message *@
+
     @* Javascript Area *@
     @RenderSection("scripts", required: false)
+    @* Javascript Area *@
 </body>
 </html>

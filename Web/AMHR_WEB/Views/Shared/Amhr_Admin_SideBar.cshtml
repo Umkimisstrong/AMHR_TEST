@@ -1,13 +1,36 @@
-﻿<nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+﻿@* Main Layer *@
+@{ 
+    object[,] MenuActiveList = new object[,]
+    {
+        {"Code Management", false, "active", "CodeManagement"},
+        {"User Management", false, "active", "UserManagement"},
+    };
+    int RowLength = MenuActiveList.GetLength(0);
+    System.Text.StringBuilder builder = new System.Text.StringBuilder();
+    for(int i=0; i< RowLength; i++)
+    {
+        builder.Append("<a href=\"#\"  class=\"list-group-item list-group-item-action py-2 ripple ");
+        if(    !string.IsNullOrEmpty(TempData["ACTION_NAME"].ToString())
+            && TempData["ACTION_NAME"].ToString().Equals(MenuActiveList[i, 3].ToString()))
+        {
+            builder.Append(MenuActiveList[i, 2].ToString());
+        }
+        builder.Append("\"><i class=\"fas fa-tachometer-alt fa-fw me-3\"></i><span>");
+        builder.Append(MenuActiveList[i, 0].ToString());
+        builder.Append("");
+        builder.Append("</span></a>");
+    }
+
+
+  }
+<nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
     <div class="position-sticky">
         <div class="list-group list-group-flush mx-3 mt-4">
-            <a href="#"
-                class="list-group-item list-group-item-action py-2 ripple active">
-                <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Code Management</span>
-            </a>
-            
-            <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-lock fa-fw me-3"></i><span>User Management</span></a>
+            @*<a href="#"  class="list-group-item list-group-item-action py-2 ripple active"><i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Code Management</span></a>
+            <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-lock fa-fw me-3"></i><span>User Management</span></a>*@
             @*<a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-chart-line fa-fw me-3"></i><span>Analytics</span></a>*@
+            @Html.Raw(builder.ToString())
         </div>
     </div>
 </nav>
+@* Main Layer *@

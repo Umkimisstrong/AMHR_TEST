@@ -11,7 +11,7 @@
     int TOTAL_COUNT = int.Parse(ViewBag.TOTAL_COUNT.ToString());
 }
 
-<!--Main layout-->
+@* Main Layer *@
 <main style="padding-left:50px; width:90%;">
 
     <form method="post" action="/Admin/CodeManagement" id="CONST_SEARCH_FORM">
@@ -66,7 +66,7 @@
                 <span class="text-secondary">Total : @TOTAL_COUNT</span>
             </div>
         </div>
-        
+
         <div style="padding-right:0;">
             <table class="table table-hover">
                 <thead>
@@ -122,7 +122,9 @@
     </div>
 
 </main>
-<!--Main layout-->
+@* Main Layer *@
+
+@* Script Layer *@
 @section scripts{
 
     <script type="text/javascript">
@@ -133,13 +135,11 @@
             InitEnterSubmitEvent();
         });
 
-        function RequestCodeSavePopUp()
-        {
+        function RequestCodeSavePopUp() {
             ModalBox.Show("/Admin/CodeSave_P", null);
         }
 
-        function RequestCodeSavePopUp(Sys_Code_ID, Div_Code_ID, Code_ID)
-        {
+        function RequestCodeSavePopUp(Sys_Code_ID, Div_Code_ID, Code_ID) {
             var requestData = {};
             requestData.SYS_CODE_ID = Sys_Code_ID;
             requestData.DIV_CODE_ID = Div_Code_ID;
@@ -150,3 +150,4 @@
     </script>
 
 }
+@* Script Layer *@
