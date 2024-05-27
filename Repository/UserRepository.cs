@@ -111,5 +111,47 @@ namespace Repository
 
             return entity;
         }
+
+        /// <summary>
+        /// SelectUserEntityList : 사용자 조회
+        /// </summary>
+        /// <param name="USER_ID">사용자 ID</param>
+        /// <param name="USER_NM">사용자 이름</param>
+        /// <param name="USER_TYPE">사용자 타입</param>
+        /// <param name="USER_CREATE_TYPE">사용자 생성 타입</param>
+        /// <param name="START_NUMBER">조회시작 번호</param>
+        /// <param name="ROW_COUNT">조회 행 수</param>
+        /// <returns></returns>
+        public UserContract SelectUserEntityList(string USER_ID, string USER_NM, string USER_TYPE, string USER_CREATE_TYPE, int START_NUMBER, int ROW_COUNT)
+        {
+            UserContract userContract = new UserContract();
+            List<UserEntity> entityList = new List<UserEntity>();
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_USER_ID            ", USER_ID);
+	    	keyValuePairs.Add("I_USER_NM            ", USER_NM);
+        	keyValuePairs.Add("I_USER_TYPE          ", USER_TYPE);
+            keyValuePairs.Add("I_USER_CREATE_TYPE   ", USER_CREATE_TYPE);
+            keyValuePairs.Add("I_START_NUMBER       ", START_NUMBER);
+            keyValuePairs.Add("I_ROW_COUNT          ", ROW_COUNT);
+
+            DataSet ds = SqlHelper.GetDataSet("SP_CMM_USER_L", keyValuePairs);
+
+
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                entityList = UtilRepository.ConverToEntityList<UserEntity>(ds.Tables[0]);
+            }
+
+            if (ds != null && ds.Tables[1].Rows.Count > 0)
+            {
+                userContract.TOTAL_COUNT = int.Parse(ds.Tables[1].Rows[0]["TOTAL_COUNT"].ToString());
+            }
+
+            userContract.UserList = entityList;
+
+            return userContract;
+        }
+
     }
 }

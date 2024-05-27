@@ -24,16 +24,16 @@
                 @Html.TextBoxFor(m => m.USER_ID, new { @class = "form-control", @tyle = "text", @placeholder = "사용자 ID", @id = "User_ID" })
             </div>
             <div class="col-md-3">
-                <label for="User_NM" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">코드명</label>
-                @Html.TextBoxFor(m => m.USER_NM, new { @class = "form-control", @tyle = "text", @placeholder = "코드명", @id = "USER_NM" })
+                <label for="User_NM" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">사용자 이름</label>
+                @Html.TextBoxFor(m => m.USER_NM, new { @class = "form-control", @tyle = "text", @placeholder = "사용자 이름", @id = "USER_NM" })
             </div>
             <div class="col-md-3">
                 <label for="User_Type" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">사용자 타입</label>
-                @Html.TextBoxFor(m => m.USER_TYPE, new { @class = "form-control", @tyle = "text", @placeholder = "분류 코드", @id = "User_Type" })
+                @Html.TextBoxFor(m => m.USER_TYPE, new { @class = "form-control", @tyle = "text", @placeholder = "사용자 타입", @id = "User_Type" })
             </div>
             <div class="col-md-3">
-                <label for="User_Create_Type" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">코드</label>
-                @Html.TextBoxFor(m => m.USER_CREATE_TYPE, new { @class = "form-control", @tyle = "text", @placeholder = "코드", @id = "User_Create_Type" })
+                <label for="User_Create_Type" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">사용자 생성 타입</label>
+                @Html.TextBoxFor(m => m.USER_CREATE_TYPE, new { @class = "form-control", @tyle = "text", @placeholder = "사용자 생성 타입", @id = "User_Create_Type" })
             </div>
 
 
@@ -85,13 +85,12 @@
                             <tr>
                                 <td>@entity.USER_ID</td>
                                 <td>@entity.USER_NM</td>
-                                <td>@entity.USER_TYPE</td>
-                                <td>@entity.USER_CREATE_TYPE</td>
+                                <td>@entity.USER_TYPE / @entity.USER_TYPE_NM</td>
+                                <td>@entity.USER_CREATE_TYPE /  @entity.USER_CREATE_TYPE_NM</td>
                                 <td>@entity.USER_EMAIL</td>
                                 <td>@entity.USER_DESCRIPTION</td>
                                 <td>@entity.USE_YN</td>
                             </tr>
-
                         }
                     }
                     else

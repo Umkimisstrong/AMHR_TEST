@@ -22,6 +22,10 @@
         /// </summary>
         public string USER_TYPE { get; set; }
         /// <summary>
+        /// USER_TYPE : 사용자 타입 명
+        /// </summary>
+        public string USER_TYPE_NM { get; set; }
+        /// <summary>
         /// USER_EMAIL : 사용자 이메일
         /// </summary>
         public string USER_EMAIL { get; set; }
@@ -33,6 +37,10 @@
         /// USER_CREATE_TYPE : 사용자 생성 타입
         /// </summary>
         public string USER_CREATE_TYPE { get; set; }
+        /// <summary>
+        /// USER_CREATE_TYPE : 사용자 생성 타입 명
+        /// </summary>
+        public string USER_CREATE_TYPE_NM { get; set; }
         /// <summary>
         /// USE_YN : 사용여부
         /// </summary>
