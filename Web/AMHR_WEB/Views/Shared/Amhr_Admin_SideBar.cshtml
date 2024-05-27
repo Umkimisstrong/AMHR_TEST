@@ -9,7 +9,9 @@
     System.Text.StringBuilder builder = new System.Text.StringBuilder();
     for(int i=0; i< RowLength; i++)
     {
-        builder.Append("<a href=\"#\"  class=\"list-group-item list-group-item-action py-2 ripple ");
+        builder.Append("<a href=\"/Admin/\"" +
+            MenuActiveList[i, 3].ToString() +
+            "  class=\"list-group-item list-group-item-action py-2 ripple ");
         if(    !string.IsNullOrEmpty(TempData["ACTION_NAME"].ToString())
             && TempData["ACTION_NAME"].ToString().Equals(MenuActiveList[i, 3].ToString()))
         {

@@ -1,0 +1,139 @@
+﻿@model Contract.UserContract
+@{
+    ViewBag.Title = "UserManagement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    // PAGE 관련 소스 정의
+    int PAGE_COUNT = int.Parse(ViewBag.PAGE_COUNT.ToString());
+    int NOW_PAGE_NUMBER = int.Parse(ViewBag.NOW_PAGE_NUMBER.ToString());
+    int TOTAL_COUNT = int.Parse(ViewBag.TOTAL_COUNT.ToString());
+}
+
+@* Main Layer *@
+<main style="padding-left:50px; width:90%;">
+
+    <form method="post" action="/Admin/UserManagement" id="CONST_SEARCH_FORM">
+        <div class="row border-bottom" style="margin-top:20px;padding-bottom:20px;" id="SearchBox">
+            <div style="margin-top: 10px; margin-bottom:10px;">
+                <span class="badge bg-primary">Search</span>
+            </div>
+            <div class="col-md-3">
+                <label for="User_ID" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">사용자 ID</label>
+                @Html.TextBoxFor(m => m.USER_ID, new { @class = "form-control", @tyle = "text", @placeholder = "사용자 ID", @id = "User_ID" })
+            </div>
+            <div class="col-md-3">
+                <label for="User_NM" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">코드명</label>
+                @Html.TextBoxFor(m => m.USER_NM, new { @class = "form-control", @tyle = "text", @placeholder = "코드명", @id = "USER_NM" })
+            </div>
+            <div class="col-md-3">
+                <label for="User_Type" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">사용자 타입</label>
+                @Html.TextBoxFor(m => m.USER_TYPE, new { @class = "form-control", @tyle = "text", @placeholder = "분류 코드", @id = "User_Type" })
+            </div>
+            <div class="col-md-3">
+                <label for="User_Create_Type" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">코드</label>
+                @Html.TextBoxFor(m => m.USER_CREATE_TYPE, new { @class = "form-control", @tyle = "text", @placeholder = "코드", @id = "User_Create_Type" })
+            </div>
+
+
+        </div>
+        <div class="row" style="text-align:right; margin-top:10px;">
+            <div style="padding-right:0;">
+                @*<button type="button" class="btn bg-primary btn-sm text-white" onclick="RequestCodeSavePopUp()">New Code</button>*@
+
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="SubmitForm('SEARCH')">Click for Search</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="RefreshCondition()">Refresh Condition</button>
+            </div>
+        </div>
+
+
+        @Html.HiddenFor(m => m.PAGE_NUMBER, new { @id = "CONST_PAGE_NUMBER" })
+    </form>
+
+
+
+
+    <div class="row" style="margin-top:30px;" id="SearchList">
+        <div style="margin-top: 10px; margin-bottom:10px; display:flex; justify-content:space-between;">
+            <div>
+                <span class="badge bg-primary">List</span>
+            </div>
+            <div style="text-align:right;">
+                <span class="text-secondary">Total : @TOTAL_COUNT</span>
+            </div>
+        </div>
+
+        <div style="padding-right:0;">
+            <table class="table table-hover">
+                <thead>
+                    <tr class="table-primary">
+                        <th scope="col">ID</th>
+                        <th scope="col">이름</th>
+                        <th scope="col">타입</th>
+                        <th scope="col">생성 타입</th>
+                        <th scope="col">이메일</th>
+                        <th scope="col">설명</th>
+                        <th scope="col">사용여부</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.UserList != null && Model.UserList.Count > 0)
+                    {
+                        foreach (Entity.UserEntity entity in Model.UserList)
+                        {
+                            <tr>
+                                <td>@entity.USER_ID</td>
+                                <td>@entity.USER_NM</td>
+                                <td>@entity.USER_TYPE</td>
+                                <td>@entity.USER_CREATE_TYPE</td>
+                                <td>@entity.USER_EMAIL</td>
+                                <td>@entity.USER_DESCRIPTION</td>
+                                <td>@entity.USE_YN</td>
+                            </tr>
+
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7">No Data</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div style="margin-top:30px;">
+            <ul class="pagination" style="align-items:center; justify-content:center;">
+
+                @* Pagination *@
+                @AMHR_WEB.GlobalAttribute.GlobalHtmlAttributes.Pagination(Html, NOW_PAGE_NUMBER, PAGE_COUNT)
+
+            </ul>
+        </div>
+    </div>
+
+</main>
+@* Main Layer *@
+
+@* Script Layer *@
+@section scripts{
+
+    <script type="text/javascript">
+        /*
+            DOM 준비 시
+        */
+        $(function () {
+            InitEnterSubmitEvent();
+        });
+
+        
+    </script>
+
+}
+@* Script Layer *@

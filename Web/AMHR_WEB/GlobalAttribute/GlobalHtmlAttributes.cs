@@ -10,7 +10,7 @@ namespace AMHR_WEB.GlobalAttribute
 {
     public static class GlobalHtmlAttributes
     {
-        public static MvcHtmlString Pagination(this HtmlHelper helper, int currentPage, int totalPageCount, int totalResults, string pageUrlParamater, string isCustom)
+        public static MvcHtmlString Pagination(this HtmlHelper helper, int currentPage, int totalPageCount)
         {
             var builder = new StringBuilder();
             var strResults = string.Empty;

@@ -127,5 +127,10 @@ namespace AMHR_WEB.Controllers
             result = repository.CheckCodeID(contract.SYS_CODE_ID, contract.DIV_CODE_ID, contract.CODE_ID) ? "OK" : "NO";
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult UserManagement(UserContract contract)
+        {
+            return View(contract);
+        }
     }
 }

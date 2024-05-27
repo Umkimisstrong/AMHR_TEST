@@ -14,9 +14,18 @@ namespace Contract
         /// </summary>
         public string USER_ID { get; set; }
         /// <summary>
+        /// USER_NM : 사용자 명
+        /// </summary>
+        public string USER_NM { get; set; }
+        /// <summary>
+        /// USER_TYPE : 사용자 생성 타입
+        /// </summary>
+        public string USER_CREATE_TYPE { get; set; }
+        /// <summary>
         /// USER_TYPE : 사용자 타입
         /// </summary>
         public string USER_TYPE { get; set; }
+
         /// <summary>
         /// UserEntity : 사용자 엔티티(1개의 사용자 테이블)
         /// </summary>
