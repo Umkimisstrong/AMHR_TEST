@@ -122,16 +122,16 @@ namespace Repository
         /// <param name="START_NUMBER">조회시작 번호</param>
         /// <param name="ROW_COUNT">조회 행 수</param>
         /// <returns></returns>
-        public UserContract SelectUserEntityList(string USER_ID, string USER_NM, string USER_TYPE, string USER_CREATE_TYPE, int START_NUMBER, int ROW_COUNT)
+        public UserContract SelectUserEntityList(string userID, string userNM, string userType, string userCreateType, int START_NUMBER, int ROW_COUNT)
         {
             UserContract userContract = new UserContract();
             List<UserEntity> entityList = new List<UserEntity>();
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("I_USER_ID            ", USER_ID);
-	    	keyValuePairs.Add("I_USER_NM            ", USER_NM);
-        	keyValuePairs.Add("I_USER_TYPE          ", USER_TYPE);
-            keyValuePairs.Add("I_USER_CREATE_TYPE   ", USER_CREATE_TYPE);
+            keyValuePairs.Add("I_USER_ID            ", userID);
+	    	keyValuePairs.Add("I_USER_NM            ", userNM);
+        	keyValuePairs.Add("I_USER_TYPE          ", userType);
+            keyValuePairs.Add("I_USER_CREATE_TYPE   ", userCreateType);
             keyValuePairs.Add("I_START_NUMBER       ", START_NUMBER);
             keyValuePairs.Add("I_ROW_COUNT          ", ROW_COUNT);
 
@@ -151,6 +151,26 @@ namespace Repository
             userContract.UserList = entityList;
 
             return userContract;
+        }
+
+        public string UserChangePassword(string userID, string userEmail, string userCreateType, string userPwd, string loginID)
+        {
+            string result = "";
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_USER_ID            ", userID);
+            keyValuePairs.Add("I_USER_EMAIL         ", userEmail);
+            keyValuePairs.Add("I_USER_CREATE_TYPE   ", userCreateType);
+            keyValuePairs.Add("I_USER_CHANGE_PWD    ", userPwd);
+            keyValuePairs.Add("I_LOGIN_ID           ", loginID);
+
+            DataSet ds = SqlHelper.GetDataSet("SP_CMM_USER_PWD_CHANGE", keyValuePairs);
+
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                result = ds.Tables[0].Rows[0]["RETURN_RESULT"].ToString();
+            }
+
+            return result;
         }
 
     }

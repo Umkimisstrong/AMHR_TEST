@@ -135,5 +135,47 @@ namespace AMHR_WEB.Controllers
             return RedirectToAction("UserLogin", "User");
 
         }
+
+        public ActionResult MyPage()
+        {
+            if (UserSessionModel != null && !string.IsNullOrEmpty(UserSessionModel.USER_ID))
+            {
+                ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
+                ViewBag.SECOND_BREADCRUMB_NAME = "MyPage";
+
+                return View();
+            }
+            else
+            {
+                TempData.Add("MESSAGE", "마이페이지는 로그인 후 이용 가능합니다.");
+                return RedirectToAction("UserLogin", "User");
+            }
+        }
+
+        public ActionResult UserPasswordChange_P()
+        {
+           
+            return View();
+            
+        }
+
+
+        public ActionResult ChangePassword(string userId, string userPwd)
+        {
+            if (UserSessionModel != null && !string.IsNullOrEmpty(UserSessionModel.USER_ID))
+            {
+                UserRepository repository = new UserRepository();
+
+                string result = repository.UserChangePassword(userId, UserSessionModel.USER_EMAIL, UserSessionModel.USER_CREATE_TYPE, userPwd, UserSessionModel.USER_ID);
+                return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                TempData.Add("MESSAGE", "비밀번호 변경은 로그인 후 이용 가능합니다.");
+                return RedirectToAction("UserLogin", "User");
+            }
+            
+
+        }
     }
 }
