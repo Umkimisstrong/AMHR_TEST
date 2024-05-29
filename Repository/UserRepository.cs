@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using Contract;
 using Entity;
 using Repository;
+using System.Diagnostics.Contracts;
 
 namespace Repository
 {
@@ -115,10 +116,10 @@ namespace Repository
         /// <summary>
         /// SelectUserEntityList : 사용자 조회
         /// </summary>
-        /// <param name="USER_ID">사용자 ID</param>
-        /// <param name="USER_NM">사용자 이름</param>
-        /// <param name="USER_TYPE">사용자 타입</param>
-        /// <param name="USER_CREATE_TYPE">사용자 생성 타입</param>
+        /// <param name="userID">사용자 ID</param>
+        /// <param name="userNM">사용자 이름</param>
+        /// <param name="userType">사용자 타입</param>
+        /// <param name="userCreateType">사용자 생성 타입</param>
         /// <param name="START_NUMBER">조회시작 번호</param>
         /// <param name="ROW_COUNT">조회 행 수</param>
         /// <returns></returns>
@@ -153,6 +154,13 @@ namespace Repository
             return userContract;
         }
 
+        /// <summary>
+        /// SelectUserEntity : 사용자 정보 조회
+        /// </summary>
+        /// <param name="userID">사용자 ID</param>
+        /// <param name="userEmail">사용자 이메일</param>
+        /// <param name="userCreateType">사용자 생성 타입</param>
+        /// <returns></returns>
         public UserEntity SelectUserEntity(string userID, string userEmail, string userCreateType)
         { 
             UserEntity userEntity = new UserEntity();
@@ -172,9 +180,19 @@ namespace Repository
             return userEntity;
         }
 
-        public string UserChangePassword(string userID, string userEmail, string userCreateType, string userPwd, string loginID)
+        /// <summary>
+        /// UserChangePassword : 사용자 비밀번호 변경
+        /// </summary>
+        /// <param name="userID">사용자 ID</param>
+        /// <param name="userEmail">사용자 이메일</param>
+        /// <param name="userCreateType">사용자 생성 타입</param>
+        /// <param name="userPwd">사용자 비밀번호</param>
+        /// <param name="loginID">로그인 ID</param>
+        /// <returns></returns>
+        public bool UserChangePassword(string userID, string userEmail, string userCreateType, string userPwd, string loginID)
         {
-            string result = "";
+
+            bool result = false;
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
             keyValuePairs.Add("I_USER_ID            ", userID);
             keyValuePairs.Add("I_USER_EMAIL         ", userEmail);
@@ -182,13 +200,39 @@ namespace Repository
             keyValuePairs.Add("I_USER_CHANGE_PWD    ", userPwd);
             keyValuePairs.Add("I_LOGIN_ID           ", loginID);
 
-            DataSet ds = SqlHelper.GetDataSet("SP_CMM_USER_PWD_CHANGE", keyValuePairs);
+            int iResult = SqlHelper.GetNonQuery("SP_CMM_USER_PWD_CHANGE", keyValuePairs);
 
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            if (iResult > 0)
             {
-                result = ds.Tables[0].Rows[0]["RETURN_RESULT"].ToString();
+                result = true;
             }
 
+            return result;
+        }
+
+        /// <summary>
+        /// UpdateUser : 사용자 정보 수정
+        /// </summary>
+        /// <param name="contract">User 모델</param>
+        /// <returns></returns>
+        public bool UpdateUser(UserContract contract)
+        {
+            bool result = false;
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_USER_ID         ", contract.UserEntity.USER_ID);
+            keyValuePairs.Add("I_USER_NM         ", contract.UserEntity.USER_NM);
+            keyValuePairs.Add("I_USER_TYPE       ", contract.UserEntity.USER_TYPE);
+            keyValuePairs.Add("I_USER_DESCRIPTION", contract.UserEntity.USER_DESCRIPTION);
+            keyValuePairs.Add("I_USE_YN          ", contract.UserEntity.USE_YN);
+            keyValuePairs.Add("I_DEL_YN          ", contract.UserEntity.DEL_YN);
+
+            int iResult = SqlHelper.GetNonQuery("SP_CMM_USER_U", keyValuePairs);
+
+            if (iResult > 0)
+            {
+                result = true;
+            }
             return result;
         }
 

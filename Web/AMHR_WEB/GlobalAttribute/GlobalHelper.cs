@@ -50,7 +50,12 @@ namespace AMHR_WEB.GlobalAttribute
             return JsonConvert.DeserializeObject<T>(data);
         }
 
-
+        /// <summary>
+        /// GetTextValueItem : 코드정보를 Text 와 Value 로 가져오는 메소드
+        /// </summary>
+        /// <param name="SYS_CODE_ID">시스템 코드 아이디</param>
+        /// <param name="DIV_CODE_ID">분류 코드 아이디</param>
+        /// <returns></returns>
         public static List<SelectListItem> GetTextValueItem(string SYS_CODE_ID, string DIV_CODE_ID)
         {
             CodeRepository repository = new CodeRepository();

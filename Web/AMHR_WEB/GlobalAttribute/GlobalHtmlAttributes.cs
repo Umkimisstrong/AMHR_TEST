@@ -8,8 +8,18 @@ using System.Web.Mvc;
 
 namespace AMHR_WEB.GlobalAttribute
 {
+    /// <summary>
+    /// GlobalHtmlAttributes : 글로벌 Html 요소 클래스
+    /// </summary>
     public static class GlobalHtmlAttributes
     {
+        /// <summary>
+        /// Pagination : 페이징 메소드(주어진정보로 태그들을 그려서 반환한다.)
+        /// </summary>
+        /// <param name="helper">HtmlHelper 인스턴스</param>
+        /// <param name="currentPage">현재 페이지번호</param>
+        /// <param name="totalPageCount">전체 페이지 갯수</param>
+        /// <returns></returns>
         public static MvcHtmlString Pagination(this HtmlHelper helper, int currentPage, int totalPageCount)
         {
             var builder = new StringBuilder();

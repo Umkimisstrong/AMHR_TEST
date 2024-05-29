@@ -41,11 +41,11 @@
                     <label for="exampleInputName1" class="form-label mt-4">Name</label>
                     @Html.TextBoxFor(m => m.UserEntity.USER_NM, new { @class = "form-control", @id = "exampleInputName1" })
                 </div>
-                <div>
+                @*<div>
                     <label for="exampleInputEmail1" class="form-label mt-4">Email address</label>
-                    @Html.TextBoxFor(m => m.UserEntity.USER_EMAIL, new { @type = "email", @class = "form-control" })
+                    @Html.TextBoxFor(m => m.UserEntity.USER_EMAIL, new { @type = "email", @class = "form-control", @id="exampleInputEmail1"})
                     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                </div>
+                </div>*@
 
                 <fieldset>
                     <legend class="mt-4">Usable</legend>
@@ -65,7 +65,7 @@
 
                 <hr />
                 <div style="text-align:center; margin-top:15px;">
-                    <button type="button" class="btn btn-primary" onclick="requestSignUp()">Submit</button>
+                    <button type="button" class="btn btn-primary" onclick="requestUpdateUser()">Submit</button>
                 </div>
             </fieldset>
         </section>
@@ -81,48 +81,9 @@
         var ID_CHECK_FLAG = false;
 
         /*
-            requestCheckID : ID 중복여부 체크
+            requestUpdateUser : 회원가입
         */
-        function requestCheckID() {
-            var useriD = $("#exampleInputId1").val();
-
-            $.ajax
-                ({
-                    url: "/User/CheckUserID"
-                    , type: "get"
-                    , data: { 'userID': useriD }
-                    , success: function (data) {
-                        //console.log(data);
-                        var result = data.RESULT;
-                        if (result == "OK") {
-                            ID_CHECK_FLAG = true;
-                            //alert("사용 가능한 ID 입니다.", $("#exampleInputPassword1").focus());
-                            MsgBox.Inform("사용 가능한 ID 입니다.", function () { $("#exampleInputPassword1").focus(); });
-
-                        }
-                        else if (result == "EMPTY") {
-                            //alert("ID를 입력하세요.", $("#exampleInputId1").focus());
-                            MsgBox.Alert("ID를 입력하세요.", function () { $("#exampleInputId1").focus(); });
-                        }
-                        else if (result == "NO") {
-                            //alert("중복된 ID 입니다.", $("#exampleInputId1").focus());
-                            MsgBox.Alert("중복된 ID 입니다.", function () { $("#exampleInputId1").focus(); });
-                        }
-                    },
-                    error: function (data) {
-                        MsgBox.Danger(
-                            setErrCustomContents(data)
-                        );
-                    }
-
-                });
-
-        }
-
-        /*
-            requestSignUp : 회원가입
-        */
-        function requestSignUp() {
+        function requestUpdateUser() {
             if (validateData()) {
                 MsgBox.Confirm("저장하시겠습니까?", function resultFlag(flag) {
                     if (flag) {
@@ -143,30 +104,6 @@
             validateData : 유효성 검사
         */
         function validateData() {
-            var useriD = $("#exampleInputId1").val();
-            if (useriD.trim() == "") {
-                MsgBox.Alert("ID를 입력하세요.", function () { $("#exampleInputId1").focus(); });
-                return false;
-            }
-            if (!ID_CHECK_FLAG) {
-                MsgBox.Alert("ID 중복여부를 확인해주세요.", function () { $("#exampleInputId1").focus(); });
-                return false;
-            }
-
-            var userPassword1 = $("#exampleInputPassword1").val();
-            var userPassword2 = $("#exampleInputPassword2").val();
-            if (userPassword1.trim() == "") {
-                MsgBox.Alert("비밀번호를 입력하세요.", function () { $("#exampleInputPassword1").focus(); });
-                return false;
-            }
-            if (userPassword2.trim() == "") {
-                MsgBox.Alert("비밀번호 확인을 입력하세요.", function () { $("#exampleInputPassword2").focus(); });
-                return false;
-            }
-            if (userPassword1 != userPassword2) {
-                MsgBox.Alert("비밀번호와 비밀번호 확인 값이 다릅니다. 동일하게 입력하세요.", function () { $("#exampleInputPassword1").focus(); });
-                return false;
-            }
 
             var userDescription = $("#exampleTextarea").val();
             if (userDescription.trim() == "") {
@@ -180,11 +117,7 @@
                 return false;
             }
 
-            var userEmail = $("#exampleInputEmail1").val();
-            if (userEmail.trim() == "") {
-                MsgBox.Alert("이메일을 입력하세요.", function () { $("#exampleInputEmail1").focus(); });
-                return false;
-            }
+            
             return true;
         }
 
@@ -196,25 +129,19 @@
                 UserEntity: {}
             };
 
-            obj.UserEntity.USER_ID = $("#exampleInputId1").val();
             obj.UserEntity.USER_NM = $("#exampleInputName1").val();
-            obj.UserEntity.USER_PWD = $("#exampleInputPassword1").val();
             obj.UserEntity.USER_TYPE = $("#exampleSelect1").val();
-            obj.UserEntity.USER_EMAIL = $("#exampleInputEmail1").val();
             obj.UserEntity.USER_DESCRIPTION = $("#exampleTextarea").val();
-            obj.UserEntity.USE_YN = $("input[name='optionsRadios']:checked").val();
-            obj.UserEntity.DEL_YN = $("input[name='optionsRadios2']:checked").val();
-            obj.UserEntity.CREATE_ID = $("#exampleInputId1").val();
-            obj.UserEntity.UPDATE_ID = $("#exampleInputId1").val();
+            obj.UserEntity.USE_YN = $("input[name='USE_YN']:checked").val();
 
             $.ajax({
-                url: "/User/CreateUser"
+                url: "/User/UpdateUser"
                 , data: { contract: obj }
                 , type: "post"
                 , success: function (data) {
 
                     if (data.RESULT) {
-                        MsgBox.Inform("회원가입이 완료되었습니다. 로그인 후 이용하여 주십시오.", function () { location.href = "/User/UserLogin" });
+                        MsgBox.Inform("회원정보가 수정되었습니다.", function () { window.location.reload(); });
                     }
                     else {
                         MsgBox.Warning("예상치 못한 오류가 발생하였습니다. 관리자에게 문의하십시오.");

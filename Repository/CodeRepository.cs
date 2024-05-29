@@ -211,6 +211,12 @@ namespace Repository
             return result;
         }
 
+        /// <summary>
+        /// GetCodeTextValueItem : 코드를 Text 와 Value 로 조회
+        /// </summary>
+        /// <param name="SYS_CODE_ID">시스템 코드 ID</param>
+        /// <param name="DIV_CODE_ID">분류 코드 ID</param>
+        /// <returns></returns>
         public DataSet GetCodeTextValueItem(string SYS_CODE_ID, string DIV_CODE_ID)
         {
             DataSet ds = new DataSet();

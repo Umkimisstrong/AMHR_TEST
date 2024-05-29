@@ -2,6 +2,7 @@
 using AMHR_WEB.Models;
 using Contract;
 using Contract.ENUM;
+using Entity;
 using Repository;
 using System;
 using System.Collections.Generic;
@@ -118,7 +119,6 @@ namespace AMHR_WEB.Controllers
             vm.Password = userPWD;
             string result = authController.SignIn(vm, context, "");
             return result;
-            //return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -138,6 +138,25 @@ namespace AMHR_WEB.Controllers
 
         }
 
+        /// <summary>
+        /// LogoutNoMessage : 로그아웃 액션 : 메세지 없음
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult LogoutNoMessage()
+        {
+            AuthController authController = new AuthController();
+
+            HttpContextBase context = this.HttpContext;
+
+            authController.Signout(context);
+            return RedirectToAction("UserLogin", "User");
+
+        }
+
+        /// <summary>
+        /// MyPage : 마이페이지 뷰 담당
+        /// </summary>
+        /// <returns></returns>
         public ActionResult MyPage()
         {
             if (UserSessionModel != null && !string.IsNullOrEmpty(UserSessionModel.USER_ID))
@@ -166,33 +185,79 @@ namespace AMHR_WEB.Controllers
             }
         }
 
+        /// <summary>
+        /// UserPasswordChange : 비밀번호 변경 뷰 담당
+        /// </summary>
+        /// <returns></returns>
         public ActionResult UserPasswordChange()
-        {
-
-            ViewBag.MY_PAGE_VIEW = "MY_PAGE_VIEW";
-            // 현재 액션명을 TempData 로 넘겨준다. User 사이드 Bar 에서 메뉴 Display 에 사용
-            TempData["ACTION_NAME"] = RouteData.Values["Action"].ToString();
-            return View();
-            
-        }
-
-
-        public ActionResult ChangePassword(string userId, string userPwd)
         {
             if (UserSessionModel != null && !string.IsNullOrEmpty(UserSessionModel.USER_ID))
             {
-                UserRepository repository = new UserRepository();
-
-                string result = repository.UserChangePassword(userId, UserSessionModel.USER_EMAIL, UserSessionModel.USER_CREATE_TYPE, userPwd, UserSessionModel.USER_ID);
-                return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+                ViewBag.MY_PAGE_VIEW = "MY_PAGE_VIEW";
+                ViewBag.USER_ID = UserSessionModel.USER_ID;
+                // 현재 액션명을 TempData 로 넘겨준다. User 사이드 Bar 에서 메뉴 Display 에 사용
+                TempData["ACTION_NAME"] = RouteData.Values["Action"].ToString();
+                return View();
             }
             else
             {
                 TempData.Add("MESSAGE", "비밀번호 변경은 로그인 후 이용 가능합니다.");
                 return RedirectToAction("UserLogin", "User");
             }
-            
 
+        }
+
+        /// <summary>
+        /// ChangePassword : 비밀번호 변경 요청
+        /// </summary>
+        /// <param name="userId">사용자 ID</param>
+        /// <param name="userPwd">사용자 PWD</param>
+        /// <returns></returns>
+        public ActionResult ChangePassword(string userId, string userPwd)
+        {
+            if (UserSessionModel != null && !string.IsNullOrEmpty(UserSessionModel.USER_ID))
+            {
+                UserRepository repository = new UserRepository();
+
+
+                Encoding encoding = Encoding.UTF8;
+                string encryptedPwd =  GlobalAttribute.GlobalCrypto.EncryptSHA512(userPwd, encoding);
+                bool result = repository.UserChangePassword(userId, UserSessionModel.USER_EMAIL, UserSessionModel.USER_CREATE_TYPE, encryptedPwd, UserSessionModel.USER_ID);
+                return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+
+            }
+            else
+            {
+                TempData.Add("MESSAGE", "비밀번호 변경은 로그인 후 이용 가능합니다.");
+                return RedirectToAction("UserLogin", "User");
+            }
+        }
+
+
+        /// <summary>
+        /// UpdateUser : 사용자 정보 수정
+        /// </summary>
+        /// <param name="contract">User 모델</param>
+        /// <returns></returns>
+        public ActionResult UpdateUser(UserContract contract)
+        {
+            
+            if (UserSessionModel != null && !string.IsNullOrEmpty(UserSessionModel.USER_ID))
+            {
+                UserRepository repository = new UserRepository();
+                bool result = false;
+
+                contract.UserEntity.DEL_YN = "N";
+                contract.UserEntity.USER_ID = UserSessionModel.USER_ID;
+                result = repository.UpdateUser(contract);
+                return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+
+            }
+            else
+            {
+                TempData.Add("MESSAGE", "사용자 정보 수정은 로그인 후 이용 가능합니다.");
+                return RedirectToAction("UserLogin", "User");
+            }
         }
 
         
