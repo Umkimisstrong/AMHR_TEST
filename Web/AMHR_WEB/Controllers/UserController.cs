@@ -145,10 +145,13 @@ namespace AMHR_WEB.Controllers
                 ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
                 ViewBag.SECOND_BREADCRUMB_NAME = "MyPage";
 
-
+                ViewBag.MY_PAGE_VIEW = "MY_PAGE_VIEW";
                 ViewBag.SELECT_LIST_USER_TYPE = UserSessionModel.USER_TYPE == EnumProperties.UserTypeFlag.ADM.ToString()
                                                     ? GlobalHelper.GetTextValueItem("USER", "USER_TYPE")
                                                     : GlobalHelper.GetTextValueItem("USER", "USER_TYPE").Where(w => !w.Value.Equals(EnumProperties.UserTypeFlag.ADM.ToString())).ToList();
+
+                // 현재 액션명을 TempData 로 넘겨준다. User 사이드 Bar 에서 메뉴 Display 에 사용
+                TempData["ACTION_NAME"] = RouteData.Values["Action"].ToString();
 
                 UserRepository repository = new UserRepository();
                 UserContract contract = new UserContract();
@@ -163,9 +166,12 @@ namespace AMHR_WEB.Controllers
             }
         }
 
-        public ActionResult UserPasswordChange_P()
+        public ActionResult UserPasswordChange()
         {
-           
+
+            ViewBag.MY_PAGE_VIEW = "MY_PAGE_VIEW";
+            // 현재 액션명을 TempData 로 넘겨준다. User 사이드 Bar 에서 메뉴 Display 에 사용
+            TempData["ACTION_NAME"] = RouteData.Values["Action"].ToString();
             return View();
             
         }

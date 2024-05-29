@@ -94,8 +94,8 @@
                                     if (userInfo != null && !string.IsNullOrEmpty(userInfo.USER_ID))
                                     {
                                         @*<li class="nav-item" style="margin-left:20px;">
-                                                @Html.ActionLink("Logout", "LogoutUser", "User", null, new { @class = "nav-link" })
-                                            </li>*@
+                                        @Html.ActionLink("Logout", "LogoutUser", "User", null, new { @class = "nav-link" })
+                                    </li>*@
                                         <li class="nav-item dropdown" id="amhr-nav-bar-li">
                                             <a id="amhr-nav-bar-toggle" class="nav-link dropdown-toggle" data-bs-toggle="" href="#" role="button" aria-haspopup="true" aria-expanded="false" onclick="javascript: Nav_Bar_DropDownToggle();">@userInfo.USER_NM 님</a>
                                             <div class="dropdown-menu bg-primary" data-bs-popper="static" id="amhr-nav-bar-dropdown">
@@ -112,7 +112,7 @@
                                         if (userInfo.USER_TYPE.Equals("ADM"))
                                         {
                                             @*<li class="nav-item" style="margin-left:20px;">
-                                                </li>*@
+                                        </li>*@
                                         }
                                     }
                                     else
@@ -157,8 +157,18 @@
             {
                 @* Container Body Area *@
                 <div class="container body-content" style="max-width:100%; padding-left:0; margin-top:0;">
-                    <div style="display:flex;">
+                    <div style="display: flex; min-height: 770px;">
                         @Html.Partial("Amhr_Admin_SideBar")
+                        @RenderBody()
+                    </div>
+                </div>
+            }
+            else if(ViewBag.MY_PAGE_VIEW != null && ViewBag.MY_PAGE_VIEW.ToString().Equals("MY_PAGE_VIEW"))
+            {
+                @* Container Body Area *@
+                <div class="container body-content" style="max-width:100%; padding-left:0; margin-top:0;">
+                    <div style="display:flex; min-height:770px;">
+                        @Html.Partial("Amhr_SideBar")
                         @RenderBody()
                     </div>
                 </div>

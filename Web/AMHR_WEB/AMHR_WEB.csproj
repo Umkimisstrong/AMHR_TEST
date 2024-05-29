@@ -236,7 +236,8 @@
     <Content Include="Views\Shared\Amhr_Modal_Pop.cshtml" />
     <Content Include="Views\Admin\UserManagement.cshtml" />
     <Content Include="Views\User\MyPage.cshtml" />
-    <Content Include="Views\User\UserPasswordChange_P.cshtml" />
+    <Content Include="Views\User\UserPasswordChange.cshtml" />
+    <Content Include="Views\Shared\Amhr_SideBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
