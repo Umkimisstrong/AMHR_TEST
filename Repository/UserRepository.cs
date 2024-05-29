@@ -153,6 +153,25 @@ namespace Repository
             return userContract;
         }
 
+        public UserEntity SelectUserEntity(string userID, string userEmail, string userCreateType)
+        { 
+            UserEntity userEntity = new UserEntity();
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_USER_ID", userID);
+            keyValuePairs.Add("I_USER_EMAIL", userEmail);
+            keyValuePairs.Add("I_USER_CREATE_TYPE", userCreateType);
+
+            DataSet ds = SqlHelper.GetDataSet("SP_CMM_USER_S", keyValuePairs);
+
+            if(ds != null && ds.Tables[0].Rows.Count>0)
+            {
+                userEntity = UtilRepository.ConvertToEntity<UserEntity>(ds.Tables[0].Rows[0]);
+            }
+
+            return userEntity;
+        }
+
         public string UserChangePassword(string userID, string userEmail, string userCreateType, string userPwd, string loginID)
         {
             string result = "";

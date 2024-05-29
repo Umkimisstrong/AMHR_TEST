@@ -1,12 +1,14 @@
 ﻿using AMHR_WEB.Models;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
+using Repository;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Mvc;
 
 namespace AMHR_WEB.GlobalAttribute
 {
@@ -48,6 +50,27 @@ namespace AMHR_WEB.GlobalAttribute
             return JsonConvert.DeserializeObject<T>(data);
         }
 
+
+        public static List<SelectListItem> GetTextValueItem(string SYS_CODE_ID, string DIV_CODE_ID)
+        {
+            CodeRepository repository = new CodeRepository();
+            DataSet ds = repository.GetCodeTextValueItem(SYS_CODE_ID, DIV_CODE_ID);
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (ds != null && ds.Tables[0].Rows.Count>0)
+            {
+                foreach(DataRow rowItem in ds.Tables[0].Rows ) 
+                {
+                    SelectListItem selectListItem = new SelectListItem();
+                    selectListItem.Text = rowItem["CD_NM"].ToString();
+                    selectListItem.Value = rowItem["CD"].ToString();
+                    list.Add(selectListItem);
+                }
+            }
+
+            return list;
+        }
 
     }
 }

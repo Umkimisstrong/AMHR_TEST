@@ -210,5 +210,18 @@ namespace Repository
 
             return result;
         }
+
+        public DataSet GetCodeTextValueItem(string SYS_CODE_ID, string DIV_CODE_ID)
+        {
+            DataSet ds = new DataSet();
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_SYS_CODE_ID", SYS_CODE_ID);
+            keyValuePairs.Add("I_DIV_CODE_ID", DIV_CODE_ID);
+
+            ds = SqlHelper.GetDataSet("SP_CMM_CODE_TEXTVALUE", keyValuePairs);
+
+            return ds;
+        }
     }
 }

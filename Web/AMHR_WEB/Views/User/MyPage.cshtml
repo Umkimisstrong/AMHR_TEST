@@ -1,4 +1,7 @@
-﻿@{
+﻿@model Contract.UserContract
+
+
+@{
     ViewBag.Title = "MyPage";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -11,33 +14,36 @@
                 <div>
                     <label for="exampleInputId1" class="form-label mt-4">Id</label>
                     <div style="display:flex;">
-                        <input type="text" class="form-control" id="exampleInputId1" placeholder="Enter Id">
-                        <button type="button" class="btn btn-primary" style="margin-left:10px; max-width:600px;" onclick="requestCheckID()">check</button>
+                        @Html.TextBoxFor(m => m.UserEntity.USER_ID, new { @class="form-control", @id="exampleInputId1", @disabled="disabled" })
+                        @*<input type="text" class="form-control" id="exampleInputId1" placeholder="Enter Id">*@
+                        @*<button type="button" class="btn btn-primary" style="margin-left:10px; max-width:600px;" onclick="requestCheckID()">check</button>*@
                     </div>
                 </div>
-                <div>
+                @*<div>
                     <label for="exampleInputPassword1" class="form-label mt-4">Password</label>
                     <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" autocomplete="off">
                 </div>
                 <div>
                     <label for="exampleInputPassword2" class="form-label mt-4">Password Check</label>
                     <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password Check" autocomplete="off">
-                </div>
+                </div>*@
                 <div>
                     <label for="exampleSelect1" class="form-label mt-4">User Type</label>
-                    <select class="form-select" id="exampleSelect1">
+                    @Html.DropDownListFor(m=>m.UserEntity.USER_TYPE,  new SelectList(ViewBag.SELECT_LIST_USER_TYPE, "Value", "Text", Model.UserEntity.USER_TYPE), new {@id="exampleSelect1", @class="form-select"})
+                    @*<select class="form-select" id="exampleSelect1">
                         <option value="ADM">Admin</option>
                         <option value="GNL">General</option>
                         <option value="PDS">Product Seller</option>
                         <option value="PDM">Product Manager</option>
                         <option value="CLS">Class Seller</option>
                         <option value="CLM">Class Manager</option>
-                    </select>
+                    </select>*@
                 </div>
 
                 <div>
                     <label for="exampleTextarea" class="form-label mt-4">Description</label>
-                    <textarea class="form-control" id="exampleTextarea" rows="3" maxlength="300"></textarea>
+                    @Html.TextAreaFor(m=>m.UserEntity.USER_DESCRIPTION, new {@class="form-control", @id="exampleTextarea", @rows="3", @maxlength="300"})
+                    @*<textarea class="form-control" id="exampleTextarea" rows="3" maxlength="300"></textarea>*@
                 </div>
 
 
@@ -45,44 +51,49 @@
             <fieldset>
                 <div>
                     <label for="exampleInputName1" class="form-label mt-4">Name</label>
-                    <input type="text" class="form-control" id="exampleInputName1" placeholder="Enter Name">
+                    @Html.TextBoxFor(m=>m.UserEntity.USER_NM, new  { @class="form-control", @id="exampleInputName1" })
+                    @*<input type="text" class="form-control" id="exampleInputName1" placeholder="Enter Name">*@
                 </div>
                 <div>
                     <label for="exampleInputEmail1" class="form-label mt-4">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                    @Html.TextBoxFor(m=> m.UserEntity.USER_EMAIL, new {@type="email", @class="form-control"})
+                    @*<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">*@
                     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
 
                 <fieldset>
                     <legend class="mt-4">Usable</legend>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="optionsRadios" id="optionsRadios1" value="Y" checked="">
+                        @Html.RadioButton("USE_YN", "Y", Model.UserEntity.USE_YN.Equals("Y"), new {@id="optionsRadios1", @class="form-check-input"})
+                        @*<input class="form-check-input" type="radio" name="optionsRadios" id="optionsRadios1" value="Y" checked="">*@
                         <label class="form-check-label" for="optionsRadios1">
                             Use
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="optionsRadios" id="optionsRadios2" value="N">
+                        @Html.RadioButton("USE_YN", "N", Model.UserEntity.USE_YN.Equals("N"), new { @id = "optionsRadios2", @class = "form-check-input" })
+                        @*<input class="form-check-input" type="radio" name="optionsRadios" id="optionsRadios2" value="N">*@
                         <label class="form-check-label" for="optionsRadios2">
                             Not Used
                         </label>
                     </div>
                 </fieldset>
-                <fieldset>
+
+                @*<fieldset>
                     <legend class="mt-4">Deleted</legend>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="optionsRadios2" id="optionsRadios3" value="Y" checked="">
+                        @Html.RadioButton("DEL_YN", "Y", Model.UserEntity.DEL_YN.Equals("Y"), new { @id = "optionsRadios3", @class = "form-check-input" })
                         <label class="form-check-label" for="optionsRadios3">
                             Delete
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="optionsRadios2" id="optionsRadios4" value="N">
+                        @Html.RadioButton("DEL_YN", "N", Model.UserEntity.DEL_YN.Equals("Y"), new { @id = "optionsRadios4", @class = "form-check-input" })
                         <label class="form-check-label" for="optionsRadios4">
                             Not Deleted
                         </label>
                     </div>
-                </fieldset>
+                </fieldset>*@
 
             </fieldset>
         </section>

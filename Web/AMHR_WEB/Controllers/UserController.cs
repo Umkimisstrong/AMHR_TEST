@@ -1,13 +1,15 @@
-﻿using AMHR_WEB.Models;
+﻿using AMHR_WEB.GlobalAttribute;
+using AMHR_WEB.Models;
 using Contract;
+using Contract.ENUM;
 using Repository;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using SelectListItem = System.Web.Mvc.SelectListItem;
 
 namespace AMHR_WEB.Controllers
 {
@@ -143,7 +145,16 @@ namespace AMHR_WEB.Controllers
                 ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
                 ViewBag.SECOND_BREADCRUMB_NAME = "MyPage";
 
-                return View();
+
+                ViewBag.SELECT_LIST_USER_TYPE = UserSessionModel.USER_TYPE == EnumProperties.UserTypeFlag.ADM.ToString()
+                                                    ? GlobalHelper.GetTextValueItem("USER", "USER_TYPE")
+                                                    : GlobalHelper.GetTextValueItem("USER", "USER_TYPE").Where(w => !w.Value.Equals(EnumProperties.UserTypeFlag.ADM.ToString())).ToList();
+
+                UserRepository repository = new UserRepository();
+                UserContract contract = new UserContract();
+                contract.UserEntity = repository.SelectUserEntity(UserSessionModel.USER_ID, UserSessionModel.USER_EMAIL, UserSessionModel.USER_CREATE_TYPE);
+
+                return View(contract);
             }
             else
             {
@@ -177,5 +188,7 @@ namespace AMHR_WEB.Controllers
             
 
         }
+
+        
     }
 }
