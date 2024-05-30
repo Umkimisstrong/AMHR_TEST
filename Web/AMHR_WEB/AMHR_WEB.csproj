@@ -145,6 +145,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -238,6 +239,7 @@
     <Content Include="Views\User\MyPage.cshtml" />
     <Content Include="Views\User\UserPasswordChange.cshtml" />
     <Content Include="Views\Shared\Amhr_SideBar.cshtml" />
+    <Content Include="Views\Board\BoardList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

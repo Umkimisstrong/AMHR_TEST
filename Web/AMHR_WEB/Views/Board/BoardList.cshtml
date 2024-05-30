@@ -1,0 +1,153 @@
+﻿@model Contract.BoardContract
+@{
+    ViewBag.Title = "BoardList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+// PAGE 관련 소스 정의
+
+//int PAGE_COUNT = int.Parse(ViewBag.PAGE_COUNT.ToString());
+//int NOW_PAGE_NUMBER = int.Parse(ViewBag.NOW_PAGE_NUMBER.ToString());
+//int TOTAL_COUNT = int.Parse(ViewBag.TOTAL_COUNT.ToString());
+}
+
+@* Main Layer *@
+<main style="padding-left:50px; width:90%;">
+
+    <form method="post" action="/Admin/CodeManagement" id="CONST_SEARCH_FORM">
+        <div class="row border-bottom" style="margin-top:20px;padding-bottom:20px;" id="SearchBox">
+            <div style="margin-top: 10px; margin-bottom:10px;">
+                <span class="badge bg-primary">Search</span>
+            </div>
+            <div class="col-md-2">
+                <label for="Brd_Title" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">제목</label>
+                @Html.TextBoxFor(m => m.BRD_TITLE, new { @class = "form-control", @type = "text", @placeholder = "제목", @id = "Brd_Title" })
+            </div>
+            <div class="col-md-4">
+                <label for="Brd_Contents" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">내용</label>
+                @Html.TextBoxFor(m => m.BRD_CONTENTS, new { @class = "form-control", @type = "text", @placeholder = "내용", @id = "Brd_Contents", @style="max-width:355px;" })
+            </div>
+
+            <div class="col-md-2">
+                <label for="Brd_Write_NM" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">작성자</label>
+                @Html.TextBoxFor(m => m.BRD_WRITE_NM, new { @class = "form-control", @type = "text", @placeholder = "작성자", @id = "Brd_Write_NM" })
+            </div>
+
+            <div class="col-md-2">
+                <label for="Brd_Write_Start_Dt" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">검색시작일</label>
+                @Html.TextBoxFor(m => m.BRD_WRITE_START_DT, new { @class = "form-control", @type = "text", @placeholder = "검색시작일", @id = "Brd_Write_Start_Dt" })
+            </div>
+
+            <div class="col-md-2">
+                <label for="Brd_Write_End_Dt" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">검색종료일</label>
+                @Html.TextBoxFor(m => m.BRD_WRITE_END_DT, new { @class = "form-control", @type = "text", @placeholder = "검색종료일", @id = "Brd_Write_End_Dt" })
+            </div>
+            
+        </div>
+        <div class="row" style="text-align:right; margin-top:10px;">
+            <div style="padding-right:0;">
+                <button type="button" class="btn bg-primary btn-sm text-white" onclick="">New Board</button>
+
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="SubmitForm('SEARCH')">Click for Search</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="RefreshCondition()">Refresh Condition</button>
+            </div>
+        </div>
+
+
+        @Html.HiddenFor(m => m.PAGE_NUMBER, new { @id = "CONST_PAGE_NUMBER" })
+    </form>
+
+
+
+
+    <div class="row" style="margin-top:30px;" id="SearchList">
+        <div style="margin-top: 10px; margin-bottom:10px; display:flex; justify-content:space-between;">
+            <div>
+                <span class="badge bg-primary">List</span>
+            </div>
+            <div style="text-align:right;">
+                @*<span class="text-secondary">Total : @TOTAL_COUNT</span>*@
+            </div>
+        </div>
+
+        <div style="padding-right:0;">
+            <table class="table table-hover">
+                <thead>
+                    <tr class="table-primary">
+                        <th scope="col">작성자</th>
+                        <th scope="col">제목</th>
+                        <th scope="col">작성일</th>
+                        <th scope="col">수정일</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @*@if (Model.BoardList != null && Model.BoardList.Count > 0)
+                    {
+                        foreach (Entity.BoardEntity entity in Model.BoardList)
+                        {
+                            <tr>
+
+                                <td>@entity.BRD_WRITE_NM</td>
+                                <td>@entity.BRD_TITLE</td>
+                                <td>@entity.CREATE_DT</td>
+                                <td>@entity.UPDATE_DT</td>
+                            </tr>
+
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">No Data</td>
+                        </tr>
+                    }*@
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div style="margin-top:30px;">
+            <ul class="pagination" style="align-items:center; justify-content:center;">
+
+                @* Pagination *@
+                @*@AMHR_WEB.GlobalAttribute.GlobalHtmlAttributes.Pagination(Html, NOW_PAGE_NUMBER, PAGE_COUNT)*@
+
+            </ul>
+        </div>
+    </div>
+
+</main>
+@* Main Layer *@
+
+@* Script Layer *@
+@section scripts{
+
+    <script type="text/javascript">
+        /*
+            DOM 준비 시
+        */
+        $(function () {
+            InitEnterSubmitEvent();
+        });
+
+        function RequestCodeSavePopUp() {
+            ModalBox.Show("/Admin/CodeSave_P", null);
+        }
+
+        function RequestCodeSavePopUp(Sys_Code_ID, Div_Code_ID, Code_ID) {
+            var requestData = {};
+            requestData.SYS_CODE_ID = Sys_Code_ID;
+            requestData.DIV_CODE_ID = Div_Code_ID;
+            requestData.CODE_ID = Code_ID;
+
+            ModalBox.Show("/Admin/CodeSave_P", requestData);
+        }
+    </script>
+
+}
+@* Script Layer *@
