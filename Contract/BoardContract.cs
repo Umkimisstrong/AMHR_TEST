@@ -15,7 +15,7 @@ namespace Contract
         public string BRD_WRITE_NM { get; set; }
         public string BRD_WRITE_START_DT { get; set; }
         public string BRD_WRITE_END_DT { get; set; }
-        
+        public string BRD_PICK_DT { get; set; }
         
         public BoardEntity BoardEntity { get; set; }
         
