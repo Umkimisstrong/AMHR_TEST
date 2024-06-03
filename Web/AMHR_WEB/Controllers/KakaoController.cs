@@ -281,7 +281,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// SaveKakaoUser : 사용자 정보 등록 메소드
         /// </summary>
-        /// <param name="entity">UserEntity 인스턴스</param>
+        /// <param name="entity">UserEntity</param>
         /// <returns></returns>
         private bool SaveKakaoUser(UserEntity entity)
         { 

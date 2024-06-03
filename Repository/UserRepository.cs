@@ -20,7 +20,7 @@ namespace Repository
         /// <summary>
         /// CreateUser : User 생성
         /// </summary>
-        /// <param name="contract"></param>
+        /// <param name="contract">User Contract</param>
         /// <returns></returns>
         public bool CreateUser(UserContract contract)
         {
@@ -213,7 +213,7 @@ namespace Repository
         /// <summary>
         /// UpdateUser : 사용자 정보 수정
         /// </summary>
-        /// <param name="contract">User 모델</param>
+        /// <param name="contract">User Contract</param>
         /// <returns></returns>
         public bool UpdateUser(UserContract contract)
         {

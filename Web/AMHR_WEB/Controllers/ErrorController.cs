@@ -15,7 +15,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// ErrorView : 에러 발생 시 호출되는 뷰 담당
         /// </summary>
-        /// <param name="contract">CustormErrorModel 인스턴스</param>
+        /// <param name="contract">CustormErrorModel</param>
         /// <returns></returns>
         public ActionResult ErrorView(CustomErrorModel contract)
         {

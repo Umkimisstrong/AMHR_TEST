@@ -10,16 +10,30 @@ using Entity;
 
 namespace AMHR_WEB.Controllers
 {
+    /// <summary>
+    /// BoardController : 게시판 관련 Buisness Logic 담당
+    /// </summary>
     public class BoardController : BaseController
     {
-
+        /// <summary>
+        /// START_NUMBER : 페이징 관련 시작 번호
+        /// </summary>
         public const int START_NUMBER = 1;
+        /// <summary>
+        /// ROW_COUNT : 페이징 관련 조회 행 수
+        /// </summary>
         public const int ROW_COUNT = 10;
 
         /// <summary>
         /// CONTROLLER_NAME : 전역변수 Controller Name
         /// </summary>
         public const string CONTROLLER_NAME = "Board";
+
+        /// <summary>
+        /// BoardList : 게시판 목록 뷰 담당
+        /// </summary>
+        /// <param name="contract">Board Contract</param>
+        /// <returns></returns>
         public ActionResult BoardList(BoardContract contract)
         {
             ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
@@ -45,6 +59,11 @@ namespace AMHR_WEB.Controllers
             return View(response);
         }
 
+        /// <summary>
+        /// BoardSave : 게시판 저장 뷰 담당
+        /// </summary>
+        /// <param name="contract">Board Contract</param>
+        /// <returns></returns>
         public ActionResult BoardSave(BoardContract contract)
         {
             BoardContract response = new BoardContract();
@@ -56,10 +75,7 @@ namespace AMHR_WEB.Controllers
 
                 // 게시물 조회
                 BoardRepository repository = new BoardRepository();
-                response.BoardEntity = repository.SelectBoardEntity();
-
-
-
+                response.BoardEntity = repository.SelectBoardEntity(contract.BRD_SEQ, contract.BRD_CATEGORY, contract.BRD_DIV);
 
             }
             else

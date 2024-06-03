@@ -12,24 +12,41 @@ using MySqlX.XDevAPI.Common;
 
 namespace Repository
 {
+    /// <summary>
+    /// BoardRepository : 게시판 리포지토리
+    /// </summary>
     public class BoardRepository
     {
-        public BoardContract SelectBoardEntityList(string I_BRD_CATEGORY, string I_BRD_DIV, string I_BRD_TITLE, string I_BRD_CONTENTS, string I_BRD_WRITE_NM, string I_BRD_WRITE_START_DT, string I_BRD_WRITE_END_DT, string I_BRD_PICK_DT
-                                            , int I_START_NUMBER, int I_ROW_COUNT)
+        /// <summary>
+        /// SelectBoardEntityList : 게시판 리스트 조회
+        /// </summary>
+        /// <param name="BRD_CATEGORY">게시판 카테고리</param>
+        /// <param name="BRD_DIV">게시판 분류</param>
+        /// <param name="BRD_TITLE">제목</param>
+        /// <param name="BRD_CONTENTS">내용</param>
+        /// <param name="BRD_WRITE_NM">작성자 명</param>
+        /// <param name="BRD_WRITE_START_DT">시작일</param>
+        /// <param name="BRD_WRITE_END_DT">종료일</param>
+        /// <param name="BRD_PICK_DT">특정일</param>
+        /// <param name="START_NUMBER">조회시작 번호</param>
+        /// <param name="ROW_COUNT">조회 행 수</param>
+        /// <returns></returns>
+        public BoardContract SelectBoardEntityList(string BRD_CATEGORY, string BRD_DIV, string BRD_TITLE, string BRD_CONTENTS, string BRD_WRITE_NM, string BRD_WRITE_START_DT, string BRD_WRITE_END_DT, string BRD_PICK_DT
+                                            , int START_NUMBER, int ROW_COUNT)
         { 
             BoardContract boardContract = new BoardContract();
             boardContract.BoardList = new List<BoardEntity>();
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("I_BRD_CATEGORY       ", I_BRD_CATEGORY);
-            keyValuePairs.Add("I_BRD_DIV			", I_BRD_DIV);
-            keyValuePairs.Add("I_BRD_TITLE			", I_BRD_TITLE);
-            keyValuePairs.Add("I_BRD_CONTENTS		", I_BRD_CONTENTS);
-            keyValuePairs.Add("I_BRD_WRITE_NM		", I_BRD_WRITE_NM);
-            keyValuePairs.Add("I_BRD_WRITE_START_DT ", I_BRD_WRITE_START_DT);
-            keyValuePairs.Add("I_BRD_WRITE_END_DT	", I_BRD_WRITE_END_DT);
-            keyValuePairs.Add("I_BRD_PICK_DT	    ", I_BRD_PICK_DT);
-            keyValuePairs.Add("I_START_NUMBER		", I_START_NUMBER);
-            keyValuePairs.Add("I_ROW_COUNT			", I_ROW_COUNT);
+            keyValuePairs.Add("I_BRD_CATEGORY       ", BRD_CATEGORY);
+            keyValuePairs.Add("I_BRD_DIV			", BRD_DIV);
+            keyValuePairs.Add("I_BRD_TITLE			", BRD_TITLE);
+            keyValuePairs.Add("I_BRD_CONTENTS		", BRD_CONTENTS);
+            keyValuePairs.Add("I_BRD_WRITE_NM		", BRD_WRITE_NM);
+            keyValuePairs.Add("I_BRD_WRITE_START_DT ", BRD_WRITE_START_DT);
+            keyValuePairs.Add("I_BRD_WRITE_END_DT	", BRD_WRITE_END_DT);
+            keyValuePairs.Add("I_BRD_PICK_DT	    ", BRD_PICK_DT);
+            keyValuePairs.Add("I_START_NUMBER		", START_NUMBER);
+            keyValuePairs.Add("I_ROW_COUNT			", ROW_COUNT);
 
             DataSet ds = SqlHelper.GetDataSet("SP_CMM_BOARD_L", keyValuePairs);
 
@@ -45,9 +62,28 @@ namespace Repository
             return boardContract;
         }
 
-        public BoardEntity SelectBoardEntity()
+        /// <summary>
+        /// SelectBoardEntity : 단일 게시판 조회
+        /// </summary>
+        /// <param name="BRD_SEQ">게시판 SEQ</param>
+        /// <param name="BRD_CATEGORY">게시판 카테고리</param>
+        /// <param name="BRD_DIV">게시판 분류</param>
+        /// <returns></returns>
+        public BoardEntity SelectBoardEntity(string BRD_SEQ, string BRD_CATEGORY, string BRD_DIV)
         {
             BoardEntity boardEntity = new BoardEntity();
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("BRD_SEQ      ", BRD_SEQ);
+            keyValuePairs.Add("BRD_CATEGORY ", BRD_CATEGORY);
+            keyValuePairs.Add("BRD_DIV      ", BRD_DIV);
+
+            DataSet ds = SqlHelper.GetDataSet("SP_CMM_BOARD_S", keyValuePairs);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                boardEntity = ds.Tables[0].Rows[0].ConvertToEntity<BoardEntity>();
+            }
+
             return boardEntity; 
         }
 

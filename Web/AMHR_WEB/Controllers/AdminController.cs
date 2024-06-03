@@ -19,10 +19,19 @@ namespace AMHR_WEB.Controllers
     /// </summary>
     public class AdminController : BaseController
     {
+        /// <summary>
+        /// CONTROLLER_NAME : 전역변수 컨트롤러 명
+        /// </summary>
         public const string CONTROLLER_NAME = "Admin";
+        /// <summary>
+        /// START_NUMBER : 페이징 관련 시작 번호
+        /// </summary>
         public const int START_NUMBER = 1;
+        /// <summary>
+        /// ROW_COUNT : 페이징 관련 조회 행 수
+        /// </summary>
         public const int ROW_COUNT = 10;
-        
+
         /// <summary>
         /// CodeManagement : 코드 관리 목록 뷰 담당
         /// </summary>
@@ -58,8 +67,9 @@ namespace AMHR_WEB.Controllers
         }
 
         /// <summary>
-        /// CodeSave_P : 코드 저장 팝업 뷰 담당
+        /// CodeSave_P : 코드 저장 팝업 담당
         /// </summary>
+        /// <param name="contract">Code Contract</param>
         /// <returns></returns>
         public ActionResult CodeSave_P(CodeContract contract)
         {
@@ -128,6 +138,11 @@ namespace AMHR_WEB.Controllers
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// UserManagement : 사용자 관리 뷰 담당
+        /// </summary>
+        /// <param name="contract">User Contract</param>
+        /// <returns></returns>
         public ActionResult UserManagement(UserContract contract)
         {
             int REQUEST_PAGE_NUMBER = (contract.PAGE_NUMBER == 0 ? START_NUMBER - 1 : (contract.PAGE_NUMBER - 1) * ROW_COUNT);

@@ -34,10 +34,11 @@ namespace AMHR_WEB.Controllers
             ViewBag.SECOND_BREADCRUMB_NAME = "SignUp";
             return View();
         }
-        /// <summary>
-        /// UserLogin : 로그인 뷰 담당
-        /// </summary>
-        /// <returns></returns>
+       /// <summary>
+       /// UserLogin : 사용자 로그인 뷰 담당
+       /// </summary>
+       /// <param name="message">메시지</param>
+       /// <returns></returns>
         public ActionResult UserLogin(string message = "")
         {
             var x = TempData;
@@ -50,7 +51,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// CreateUser : User 생성
         /// </summary>
-        /// <param name="contract">User 모델</param>
+        /// <param name="contract">User Contract</param>
         /// <returns></returns>
         public JsonResult CreateUser(UserContract contract)
         {
@@ -81,10 +82,12 @@ namespace AMHR_WEB.Controllers
             return Json(new { RESULT = result}, JsonRequestBehavior.AllowGet);
         }
 
+        
         /// <summary>
         /// LoginCheckUser : ID, PWD 로 Login Check
         /// </summary>
-        /// <param name="contract">User 모델</param>
+        /// <param name="contract">User Contract</param>
+        /// <param name="returnUrl">returnUrl</param>
         /// <returns></returns>
         public JsonResult LoginCheckUser(UserContract contract, string returnUrl = "")
         {
@@ -105,7 +108,9 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// LoginCheckUser : ID, PWD 로 Login Check
         /// </summary>
-        /// <param name="contract">User 모델</param>
+        /// <param name="userID">사용자 ID</param>
+        /// <param name="userPWD">사용자 PWD</param>
+        /// <param name="context">HttpContextBase</param>
         /// <returns></returns>
         public string SNSLoginCheckUser(string userID, string userPWD, HttpContextBase context)
         {
@@ -241,7 +246,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// UpdateUser : 사용자 정보 수정
         /// </summary>
-        /// <param name="contract">User 모델</param>
+        /// <param name="contract">User Contract</param>
         /// <returns></returns>
         public ActionResult UpdateUser(UserContract contract)
         {
