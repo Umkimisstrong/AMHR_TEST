@@ -32,7 +32,7 @@ namespace Repository
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
             keyValuePairs.Add("I_SYS_CODE_ID", SYS_CODE_ID);
             keyValuePairs.Add("I_DIV_CODE_ID", DIV_CODE_ID);
-            keyValuePairs.Add("I_CODE_ID", CODE_ID);
+            keyValuePairs.Add("I_CODE_ID    ", CODE_ID);
 
             DataSet ds = SqlHelper.GetDataSet("SP_CMM_CODE_S", keyValuePairs);
 
@@ -61,12 +61,12 @@ namespace Repository
             List<CodeEntity> entityList = new List<CodeEntity>();
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("I_SYS_CODE_ID", SYS_CODE_ID);
-            keyValuePairs.Add("I_DIV_CODE_ID", DIV_CODE_ID);
-            keyValuePairs.Add("I_CODE_ID", CODE_ID);
-            keyValuePairs.Add("I_CODE_NM", CODE_NM);
-            keyValuePairs.Add("I_START_NUMBER", START_NUMBER);
-            keyValuePairs.Add("I_ROW_COUNT", ROW_COUNT);
+            keyValuePairs.Add("I_SYS_CODE_ID    ", SYS_CODE_ID);
+            keyValuePairs.Add("I_DIV_CODE_ID    ", DIV_CODE_ID);
+            keyValuePairs.Add("I_CODE_ID        ", CODE_ID);
+            keyValuePairs.Add("I_CODE_NM        ", CODE_NM);
+            keyValuePairs.Add("I_START_NUMBER   ", START_NUMBER);
+            keyValuePairs.Add("I_ROW_COUNT      ", ROW_COUNT);
 
             DataSet ds = SqlHelper.GetDataSet("SP_CMM_CODE_L", keyValuePairs);
 
@@ -124,15 +124,15 @@ namespace Repository
             int result = 0;
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("I_USER_ID", entity.CREATE_ID);
-            keyValuePairs.Add("I_CODE_NM", entity.CODE_NM);
-            keyValuePairs.Add("I_SYS_CODE_ID", entity.SYS_CODE_ID);
-            keyValuePairs.Add("I_DIV_CODE_ID", entity.DIV_CODE_ID);
-            keyValuePairs.Add("I_CODE_ID", entity.CODE_ID);
-            keyValuePairs.Add("I_CODE_DESCRIPTION", entity.CODE_DESCRIPTION);
-            keyValuePairs.Add("I_USE_YN", entity.USE_YN);
-            keyValuePairs.Add("I_DEL_YN", "N");
-            keyValuePairs.Add("I_SORT_ORDER", entity.SORT_ORDER);
+            keyValuePairs.Add("I_USER_ID            ", entity.CREATE_ID);
+            keyValuePairs.Add("I_CODE_NM            ", entity.CODE_NM);
+            keyValuePairs.Add("I_SYS_CODE_ID        ", entity.SYS_CODE_ID);
+            keyValuePairs.Add("I_DIV_CODE_ID        ", entity.DIV_CODE_ID);
+            keyValuePairs.Add("I_CODE_ID            ", entity.CODE_ID);
+            keyValuePairs.Add("I_CODE_DESCRIPTION   ", entity.CODE_DESCRIPTION);
+            keyValuePairs.Add("I_USE_YN             ", entity.USE_YN);
+            keyValuePairs.Add("I_DEL_YN             ", "N");
+            keyValuePairs.Add("I_SORT_ORDER         ", entity.SORT_ORDER);
 
             result = SqlHelper.GetNonQuery("SP_CMM_CODE_C", keyValuePairs);
 
@@ -149,15 +149,15 @@ namespace Repository
             int result = 0;
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("I_USER_ID", entity.CREATE_ID);
-            keyValuePairs.Add("I_CODE_NM", entity.CODE_NM);
-            keyValuePairs.Add("I_SYS_CODE_ID", entity.SYS_CODE_ID);
-            keyValuePairs.Add("I_DIV_CODE_ID", entity.DIV_CODE_ID);
-            keyValuePairs.Add("I_CODE_ID", entity.CODE_ID);
-            keyValuePairs.Add("I_CODE_DESCRIPTION", entity.CODE_DESCRIPTION);
-            keyValuePairs.Add("I_USE_YN", entity.USE_YN);
-            keyValuePairs.Add("I_DEL_YN", "N");
-            keyValuePairs.Add("I_SORT_ORDER", entity.SORT_ORDER);
+            keyValuePairs.Add("I_USER_ID            ", entity.CREATE_ID);
+            keyValuePairs.Add("I_CODE_NM            ", entity.CODE_NM);
+            keyValuePairs.Add("I_SYS_CODE_ID        ", entity.SYS_CODE_ID);
+            keyValuePairs.Add("I_DIV_CODE_ID        ", entity.DIV_CODE_ID);
+            keyValuePairs.Add("I_CODE_ID            ", entity.CODE_ID);
+            keyValuePairs.Add("I_CODE_DESCRIPTION   ", entity.CODE_DESCRIPTION);
+            keyValuePairs.Add("I_USE_YN             ", entity.USE_YN);
+            keyValuePairs.Add("I_DEL_YN             ", "N");
+            keyValuePairs.Add("I_SORT_ORDER         ", entity.SORT_ORDER);
 
             result = SqlHelper.GetNonQuery("SP_CMM_CODE_U", keyValuePairs);
 
@@ -175,11 +175,11 @@ namespace Repository
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
 
-            keyValuePairs.Add("I_SYS_CODE_ID", entity.SYS_CODE_ID);
-            keyValuePairs.Add("I_DIV_CODE_ID", entity.DIV_CODE_ID);
-            keyValuePairs.Add("I_CODE_ID", entity.CODE_ID);
-            keyValuePairs.Add("I_DEL_YN", "Y");
-            keyValuePairs.Add("I_USER_ID", entity.CREATE_ID);
+            keyValuePairs.Add("I_SYS_CODE_ID    ", entity.SYS_CODE_ID);
+            keyValuePairs.Add("I_DIV_CODE_ID    ", entity.DIV_CODE_ID);
+            keyValuePairs.Add("I_CODE_ID        ", entity.CODE_ID);
+            keyValuePairs.Add("I_DEL_YN         ", "Y");
+            keyValuePairs.Add("I_USER_ID        ", entity.CREATE_ID);
 
             result = SqlHelper.GetNonQuery("SP_CMM_CODE_D", keyValuePairs);
             return result;
@@ -197,9 +197,9 @@ namespace Repository
             bool result = true;
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("I_SYS_CODE_ID", SYS_CODE_ID);
-            keyValuePairs.Add("I_DIV_CODE_ID", DIV_CODE_ID);
-            keyValuePairs.Add("I_CODE_ID", CODE_ID);
+            keyValuePairs.Add("I_SYS_CODE_ID    ", SYS_CODE_ID);
+            keyValuePairs.Add("I_DIV_CODE_ID    ", DIV_CODE_ID);
+            keyValuePairs.Add("I_CODE_ID        ", CODE_ID);
 
             DataSet ds = SqlHelper.GetDataSet("SP_CMM_CODE_ID_CHECK", keyValuePairs);
             if (ds != null && ds.Tables[0].Rows.Count > 0)

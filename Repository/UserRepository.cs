@@ -80,8 +80,8 @@ namespace Repository
             string result = "";
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("I_USER_EMAIL", userEmail);
-            keyValuePairs.Add("I_USER_CREATE_TYPE", userCreateType);
+            keyValuePairs.Add("I_USER_EMAIL         ", userEmail);
+            keyValuePairs.Add("I_USER_CREATE_TYPE   ", userCreateType);
 
             DataSet ds = SqlHelper.GetDataSet("SP_CMM_USER_CREATE_TYPE_CHECK", keyValuePairs);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -101,8 +101,8 @@ namespace Repository
         {
             UserEntity entity = null;
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("I_USER_ID", userID);
-            keyValuePairs.Add("I_USER_PWD", userPWD);
+            keyValuePairs.Add("I_USER_ID    ", userID);
+            keyValuePairs.Add("I_USER_PWD   ", userPWD);
 
             DataSet ds = SqlHelper.GetDataSet("SP_CMM_USER_LOGIN_S", keyValuePairs);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -166,9 +166,9 @@ namespace Repository
             UserEntity userEntity = new UserEntity();
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("I_USER_ID", userID);
-            keyValuePairs.Add("I_USER_EMAIL", userEmail);
-            keyValuePairs.Add("I_USER_CREATE_TYPE", userCreateType);
+            keyValuePairs.Add("I_USER_ID            ", userID);
+            keyValuePairs.Add("I_USER_EMAIL         ", userEmail);
+            keyValuePairs.Add("I_USER_CREATE_TYPE   ", userCreateType);
 
             DataSet ds = SqlHelper.GetDataSet("SP_CMM_USER_S", keyValuePairs);
 
@@ -227,9 +227,9 @@ namespace Repository
             keyValuePairs.Add("I_USE_YN          ", contract.UserEntity.USE_YN);
             keyValuePairs.Add("I_DEL_YN          ", contract.UserEntity.DEL_YN);
 
-            int iResult = SqlHelper.GetNonQuery("SP_CMM_USER_U", keyValuePairs);
+            int uResult = SqlHelper.GetNonQuery("SP_CMM_USER_U", keyValuePairs);
 
-            if (iResult > 0)
+            if (uResult > 0)
             {
                 result = true;
             }

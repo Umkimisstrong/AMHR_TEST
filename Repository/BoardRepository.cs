@@ -31,8 +31,11 @@ namespace Repository
         /// <param name="START_NUMBER">조회시작 번호</param>
         /// <param name="ROW_COUNT">조회 행 수</param>
         /// <returns></returns>
-        public BoardContract SelectBoardEntityList(string BRD_CATEGORY, string BRD_DIV, string BRD_TITLE, string BRD_CONTENTS, string BRD_WRITE_NM, string BRD_WRITE_START_DT, string BRD_WRITE_END_DT, string BRD_PICK_DT
-                                            , int START_NUMBER, int ROW_COUNT)
+        public BoardContract SelectBoardEntityList(
+                                                   string BRD_CATEGORY, string BRD_DIV, string BRD_TITLE, string BRD_CONTENTS, string BRD_WRITE_NM
+                                                 , string BRD_WRITE_START_DT, string BRD_WRITE_END_DT, string BRD_PICK_DT
+                                                 , int START_NUMBER, int ROW_COUNT
+                                                   )
         { 
             BoardContract boardContract = new BoardContract();
             boardContract.BoardList = new List<BoardEntity>();
@@ -74,9 +77,9 @@ namespace Repository
             BoardEntity boardEntity = new BoardEntity();
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("BRD_SEQ      ", BRD_SEQ);
-            keyValuePairs.Add("BRD_CATEGORY ", BRD_CATEGORY);
-            keyValuePairs.Add("BRD_DIV      ", BRD_DIV);
+            keyValuePairs.Add("I_BRD_SEQ      ", BRD_SEQ);
+            keyValuePairs.Add("I_BRD_CATEGORY ", BRD_CATEGORY);
+            keyValuePairs.Add("I_BRD_DIV      ", BRD_DIV);
 
             DataSet ds = SqlHelper.GetDataSet("SP_CMM_BOARD_S", keyValuePairs);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -88,21 +91,95 @@ namespace Repository
         }
 
 
-        public bool SaveBoard()
+        public bool SaveBoard(BoardEntity entity, EnumProperties.GeneralFlag generalFlag)
         {
             bool result = false;
+            switch (generalFlag)
+            {
+                case EnumProperties.GeneralFlag.CREATE:
+                    result = InsertBoard(entity);
+                    break;
+                case EnumProperties.GeneralFlag.UPDATE:
+                    result = UpdateBoard(entity);
+                    break;
+                case EnumProperties.GeneralFlag.DELETE:
+                    result = DeleteBoard(entity);
+                    break;
+                default:
+                    break;
+            }
+
             return result;
         }
 
-        private bool InsertBoard()
+        private bool InsertBoard(BoardEntity entity)
         {
             bool result = false;
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_BRD_CATEGORY   ", entity.BRD_CATEGORY);
+            keyValuePairs.Add("I_BRD_DIV        ", entity.BRD_DIV);
+            keyValuePairs.Add("I_BRD_TITLE      ", entity.BRD_TITLE);
+            keyValuePairs.Add("I_BRD_CONTENTS   ", entity.BRD_CONTENTS);
+            keyValuePairs.Add("I_BRD_WRITE_ID   ", entity.BRD_WRITE_ID);
+            keyValuePairs.Add("I_USE_YN         ", entity.USE_YN);
+            keyValuePairs.Add("I_DEL_YN         ", entity.DEL_YN);
+            keyValuePairs.Add("I_CREATE_ID      ", entity.CREATE_ID);
+            keyValuePairs.Add("I_UPDATE_ID      ", entity.UPDATE_ID);
+
+            DataSet ds = SqlHelper.GetDataSet("SP_CMM_BORD_C", keyValuePairs);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                if (ds.Tables[0].Rows[0]["BRD_SEQ"] != null)
+                {
+                    string sResult = ds.Tables[0].Rows[0]["BRD_SEQ"].ToString();
+                    if (string.IsNullOrEmpty(sResult))
+                    {
+                        result = true;
+                    }
+                } 
+            }
+
             return result;
         }
 
-        private bool UpdateBoard() 
+        private bool UpdateBoard(BoardEntity entity) 
         {
             bool result = false;
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("BRD_SEQ      ", entity.BRD_SEQ);
+            keyValuePairs.Add("BRD_CATEGORY ", entity.BRD_CATEGORY);
+            keyValuePairs.Add("BRD_DIV      ", entity.BRD_DIV);
+            keyValuePairs.Add("BRD_TITLE    ", entity.BRD_TITLE);
+            keyValuePairs.Add("BRD_CONTENTS ", entity.BRD_CONTENTS);
+            keyValuePairs.Add("BRD_WRITE_ID ", entity.BRD_WRITE_ID);
+            keyValuePairs.Add("UPDATE_ID    ", entity.UPDATE_ID);
+
+            int uResult = SqlHelper.GetNonQuery("SP_CMM_BOARD_U", keyValuePairs);
+            if (uResult > 0)
+            {
+                result = true;
+            }
+            return result;
+        }
+
+        private bool DeleteBoard(BoardEntity entity) 
+        {
+            bool result = false;
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+
+            keyValuePairs.Add("BRD_SEQ      ", entity.BRD_SEQ);
+            keyValuePairs.Add("BRD_CATEGORY ", entity.BRD_CATEGORY);
+            keyValuePairs.Add("BRD_DIV      ", entity.BRD_DIV);
+            keyValuePairs.Add("BRD_WRITE_ID ", entity.BRD_WRITE_ID);
+
+            int dResult = SqlHelper.GetNonQuery("SP_CMM_BOARD_D", keyValuePairs);
+            if (dResult > 0)
+            {
+                result = true;
+            }
+
             return result;
         }
     }
