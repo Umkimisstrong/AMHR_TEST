@@ -45,6 +45,8 @@ namespace AMHR_WEB.Controllers
             BoardRepository repository = new BoardRepository();
             response = repository.SelectBoardEntityList(contract.BRD_CATEGORY, contract.BRD_DIV, contract.BRD_TITLE, contract.BRD_CONTENTS, contract.BRD_WRITE_NM, contract.BRD_WRITE_START_DT, contract.BRD_WRITE_END_DT, contract.BRD_PICK_DT
                                                      ,  REQUEST_PAGE_NUMBER, ROW_COUNT);
+            response.BRD_CATEGORY = contract.BRD_CATEGORY;
+            response.BRD_DIV = contract.BRD_DIV;
 
             // 5       = 55 / 10
             int PAGE_COUNT = response.TOTAL_COUNT / ROW_COUNT;
@@ -82,9 +84,38 @@ namespace AMHR_WEB.Controllers
             {
                 ViewBag.GENERAL_FLAG = EnumProperties.GeneralFlag.CREATE;
                 response.BoardEntity = new BoardEntity();
+                response.BoardEntity.BRD_CATEGORY = contract.BRD_CATEGORY;
+                response.BoardEntity.BRD_DIV = contract.BRD_DIV;
             }
 
+
             return View(response);
+        }
+
+        /// <summary>
+        /// SaveBoard : 게시판 저장 
+        /// </summary>
+        /// <param name="contract">Board Contract</param>
+        /// <returns></returns>
+        public ActionResult SaveBoard(BoardContract contract, EnumProperties.GeneralFlag generalFlag)
+        {
+            
+            BoardRepository repository = new BoardRepository();
+
+
+            contract.BoardEntity.CREATE_ID = UserSessionModel.USER_ID;
+            contract.BoardEntity.UPDATE_ID = UserSessionModel.USER_ID;
+            contract.BoardEntity.BRD_WRITE_ID = UserSessionModel.USER_ID;
+            contract.BoardEntity.USE_YN = "Y";
+            contract.BoardEntity.DEL_YN = "N";
+
+            repository.SaveBoard(contract.BoardEntity, generalFlag);
+
+            return RedirectToAction("BoardSave", new { 
+                    contract.BoardEntity.BRD_SEQ,
+                    contract.BoardEntity.BRD_CATEGORY,
+                    contract.BoardEntity.BRD_DIV
+            });
         }
     }
 }

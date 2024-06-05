@@ -126,15 +126,16 @@ namespace Repository
             keyValuePairs.Add("I_CREATE_ID      ", entity.CREATE_ID);
             keyValuePairs.Add("I_UPDATE_ID      ", entity.UPDATE_ID);
 
-            DataSet ds = SqlHelper.GetDataSet("SP_CMM_BORD_C", keyValuePairs);
+            DataSet ds = SqlHelper.GetDataSet("SP_CMM_BOARD_C", keyValuePairs);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                if (ds.Tables[0].Rows[0]["BRD_SEQ"] != null)
+                if (ds.Tables[0].Rows[0]["SEQ_NO"] != null)
                 {
-                    string sResult = ds.Tables[0].Rows[0]["BRD_SEQ"].ToString();
+                    string sResult = ds.Tables[0].Rows[0]["SEQ_NO"].ToString();
                     if (string.IsNullOrEmpty(sResult))
                     {
                         result = true;
+                        entity.BRD_SEQ = sResult;
                     }
                 } 
             }
