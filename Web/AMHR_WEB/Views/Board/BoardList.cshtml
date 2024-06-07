@@ -10,17 +10,31 @@
     int PAGE_COUNT = int.Parse(ViewBag.PAGE_COUNT.ToString());
     int NOW_PAGE_NUMBER = int.Parse(ViewBag.NOW_PAGE_NUMBER.ToString());
     int TOTAL_COUNT = int.Parse(ViewBag.TOTAL_COUNT.ToString());
+
+    @* Global User Session Info Area *@
+    var user = User as System.Security.Claims.ClaimsPrincipal;
+    var userInfo = new AMHR_WEB.Models.UserSessionModel();
+    if (user != null)
+    {
+        var claims = user.Claims.ToList();
+        var sessionClaim = claims.FirstOrDefault(o => o.Type == AMHR_WEB.Models.Constants.UserSession);
+        if (sessionClaim != null)
+        {
+            userInfo = AMHR_WEB.GlobalAttribute.GlobalHelper.stringToObject<AMHR_WEB.Models.UserSessionModel>(sessionClaim.Value);
+        }
+    }
+
 }
 
 @* Main Layer *@
 <main style="padding-left:50px; width:90%;">
-    
+
     <div>
         <h1 style="text-align:center;">
             Board
         </h1>
     </div>
-    
+
     <form method="post" action="/Board/BoardList" id="CONST_SEARCH_FORM">
         <div class="row border-bottom" style="margin-top:20px;padding-bottom:20px;" id="SearchBox">
             <div style="margin-top: 10px; margin-bottom:10px;">
@@ -55,9 +69,9 @@
                 </div>
             </div>
 
-            
 
-            
+
+
 
         </div>
         <div class="row" style="text-align:right; margin-top:10px;">
@@ -107,7 +121,9 @@
                             <tr>
 
                                 <td style="text-align:center;">@entity.BRD_WRITE_NM</td>
-                                <td style="text-align:center;">@entity.BRD_TITLE</td>
+                                <td style="text-align:center;">
+                                     <a href="/Board/BoardSave?BRD_SEQ=@entity.BRD_SEQ&BRD_CATEGORY=@entity.BRD_CATEGORY&BRD_DIV=@entity.BRD_DIV">@entity.BRD_TITLE</a>
+                                </td>
                                 <td style="text-align:center;">@entity.CREATE_DT</td>
                                 <td style="text-align:center;">@entity.UPDATE_DT</td>
                             </tr>
@@ -152,21 +168,11 @@
             InitEnterSubmitEvent();
         });
 
-        function RequestCodeSavePopUp() {
-            ModalBox.Show("/Admin/CodeSave_P", null);
-        }
 
-        function RequestCodeSavePopUp(Sys_Code_ID, Div_Code_ID, Code_ID) {
-            var requestData = {};
-            requestData.SYS_CODE_ID = Sys_Code_ID;
-            requestData.DIV_CODE_ID = Div_Code_ID;
-            requestData.CODE_ID = Code_ID;
-
-            ModalBox.Show("/Admin/CodeSave_P", requestData);
-        }
-
-        function BoardSave(brdCategory, brdDiv)
-        {
+        /*
+            BoardSave : 게시판 저장 이동
+        */
+        function BoardSave(brdCategory, brdDiv) {
             location.href = "/Board/BoardSave?BRD_CATEGORY=" + brdCategory + "&BRD_DIV=" + brdDiv;
         }
     </script>

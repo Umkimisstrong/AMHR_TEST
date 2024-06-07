@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using MySqlConnector;
 using System.Reflection;
 
+
 namespace Repository
 {
     /// <summary>
@@ -112,7 +113,30 @@ namespace Repository
             return iResult;
         }
 
+        public static string GetReturnValue(string spName, Dictionary<string, object> paramSource)
+        {
+            string result = string.Empty;
 
+            using (MySqlConnection mySqlConnection = getConnection(strSqlConnection))
+            {
+                mySqlConnection.Open();
+                using (MySqlCommand mySqlCommand = new MySqlCommand(spName, mySqlConnection))
+                {
+
+                    mySqlCommand.CommandType = CommandType.StoredProcedure;
+                    mySqlCommand.CommandTimeout = 30;
+                    mySqlCommand.Parameters.AddRange(ToSqlParams(paramSource));
+                    mySqlCommand.Parameters.Add(new MySqlParameter("STR_RESULT", MySqlDbType.VarChar));
+
+                    mySqlCommand.ExecuteNonQuery();
+
+                    result = (string)mySqlCommand.Parameters["STR_RESULT"].Value;
+                }
+                mySqlConnection.Close();
+            }
+
+            return result;
+        }
         /// <summary>
         /// Dictionary 형식의 파라미터를 SqlParameter [] 형식으로 변환
         /// </summary>

@@ -21,7 +21,9 @@ namespace AMHR_WEB.Controllers
     /// </summary>
     public class UserController : BaseController
     {
-
+        /// <summary>
+        /// CONTROLLER_NAME : 전역변수 Controller Name
+        /// </summary>
         public const string CONTROLLER_NAME = "User";
 
         /// <summary>

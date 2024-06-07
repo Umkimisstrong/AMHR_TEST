@@ -3,12 +3,26 @@
     ViewBag.Title = "BoardSave";
     Layout = "~/Views/Shared/_Layout.cshtml";
     string generalFlag = ViewBag.GENERAL_FLAG.ToString();
+
+    @* Global User Session Info Area *@
+    var user = User as System.Security.Claims.ClaimsPrincipal;
+    var userInfo = new AMHR_WEB.Models.UserSessionModel();
+    if (user != null)
+    {
+        var claims = user.Claims.ToList();
+        var sessionClaim = claims.FirstOrDefault(o => o.Type == AMHR_WEB.Models.Constants.UserSession);
+        if (sessionClaim != null)
+        {
+            userInfo = AMHR_WEB.GlobalAttribute.GlobalHelper.stringToObject<AMHR_WEB.Models.UserSessionModel>(sessionClaim.Value);
+        }
+    }
 }
 
 @* Main Layer *@
 <main style="padding-left:0;">
     <div class="row" style="justify-content:center;">
-        <form method="post" action="/Board/SaveBoard" onsubmit="return requestSaveBoard()" id="CONST_SAVE_FORM">
+        <form method="post" action="/Board/SaveBoard" id="CONST_SAVE_FORM">
+
             <section class="col-md-12" aria-labelledby="gettingStartedTitle" style="justify-content:center; width:100%;">
 
                 <fieldset style="justify-content:center;">
@@ -17,6 +31,19 @@
                             Board
                         </h1>
                         <hr />
+                        <div style="text-align:right; margin-top:10px;">
+                            <div style="padding-right:0;">
+                                <button type="button" class="btn bg-primary btn-sm text-white" onclick="BoardList('@Model.BoardEntity.BRD_CATEGORY', '@Model.BoardEntity.BRD_DIV')">Back to List</button>
+                                @if (userInfo != null)
+                                {
+                                    if (userInfo.USER_ID != null && userInfo.USER_ID.Equals(Model.BoardEntity.BRD_WRITE_ID))
+                                    {
+                                        <button type="button" class="btn bg-danger btn-sm text-white" onclick="BoardDelete()">Delete Board</button>
+                                    }
+                                }
+                            </div>
+
+                        </div>
                     </div>
                     <div>
                         <label for="Brd_Title" class="form-label mt-4">Title</label>
@@ -27,7 +54,7 @@
                     </div>
                     <div>
                         <label for="exampleInputPassword1" class="form-label mt-4">Contents</label>
-                        @Html.TextAreaFor(m => m.BoardEntity.BRD_CONTENTS, new { @class = "form-control", @id="Brd_Contents", @placeholder = "Write Contents", @style = "max-width:1400px;", @rows = "17" })
+                        @Html.TextAreaFor(m => m.BoardEntity.BRD_CONTENTS, new { @class = "form-control", @id = "Brd_Contents", @placeholder = "Write Contents", @style = "max-width:1400px;", @rows = "17" })
                         @*<textarea class="form-control" placeholder="Write Contents" style="max-width:1400px;" rows="17"></textarea>*@
 
                         @Html.HiddenFor(m => m.BoardEntity.BRD_SEQ, new { @id = "Brd_Seq" })
@@ -39,16 +66,26 @@
 
                 </fieldset>
             </section>
+
             <div class="row" style="margin-top:10px;">
                 <section class="col-md-12" aria-labelledby="gettingStartedTitle" style="text-align:center;">
                     <div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        @if (
+                            (generalFlag.Equals(Contract.ENUM.EnumProperties.GeneralFlag.CREATE.ToString()) && userInfo != null)
+                            ||
+                            (generalFlag.Equals(Contract.ENUM.EnumProperties.GeneralFlag.UPDATE.ToString()) && userInfo.USER_ID != null && userInfo.USER_ID.Equals(Model.BoardEntity.BRD_WRITE_ID))
+
+                            )
+                        {
+                            <button type="button" class="btn btn-primary" onclick="requestSaveBoard()">Submit</button>
+                        }
+
                     </div>
                 </section>
             </div>
         </form>
     </div>
-    
+
 </main>
 @* Main Layer *@
 
@@ -59,15 +96,20 @@
 
         var ID_CHECK_FLAG = false;
 
+        $(function () {
+            var generalFlag = '@generalFlag';
+            $("#Hidden_GeneralFlag").val(generalFlag);
+        });
+
         /*
-            requestSaveBoard : 게시판 저장
+            requestSaveBoard : 게시판 저장 요청
         */
         function requestSaveBoard() {
             if (validateData()) {
-                askSave();
+                saveData();
             }
             else {
-                return false;
+                return;
             }
 
         }
@@ -90,32 +132,76 @@
             return true;
         }
 
-
-        function askSave()
+        /*
+            saveData : 게시판 데이터 저장
+        */
+        function saveData()
         {
 
             MsgBox.Confirm("저장하시겠습니까?", function resultFlag(flag) {
                 if (flag) {
-                    return true;
+                    $("#CONST_SAVE_FORM").submit();
                 }
                 else {
-                    return false;
+                    return;
                 }
             });
-
         }
-        /*
-            saveData : 게시판 Data 저장
-        */
-        //function saveData()
-        //{
-        //    $("#CONST_SAVE_FORM").submit();
-        //}
 
-        $(function () {
-            var generalFlag = '@generalFlag';
-            $("#Hidden_GeneralFlag").val(generalFlag);
-        });
+        /*
+            BoardList : 게시판 목록 돌아가기
+        */
+        function BoardList(brd_category, brd_div)
+        {
+            location.href = "/Board/BoardList?BRD_CATEGORY=" + brd_category + "&BRD_DIV=" + brd_div;
+        }
+
+
+        function BoardDelete()
+        {
+            MsgBox.Confirm("삭제하시겠습니까?", function resultFlag(flag) {
+                if (flag) {
+                    deleteData();
+                }
+                else {
+                    return;
+                }
+            });
+        }
+
+        function deleteData()
+        {
+            var obj = {
+                BoardEntity: {}
+            };
+
+            obj.BoardEntity.BRD_SEQ = '@Model.BoardEntity.BRD_SEQ';
+            obj.BoardEntity.BRD_CATEGORY = '@Model.BoardEntity.BRD_CATEGORY';
+            obj.BoardEntity.BRD_DIV = '@Model.BoardEntity.BRD_DIV';
+
+            $.ajax({
+                url: "/Board/DeleteBoard"
+                , data: {
+                    contract: obj
+                }
+                , type: "post"
+                , success: function (data) {
+                    //alert(data);
+                    if (data.RESULT) {
+                        MsgBox.Inform("삭제 되었습니다.", function () { location.href = "/Board/BoardList?BRD_CATEGORY=" + '@Model.BoardEntity.BRD_CATEGORY' + "&BRD_DIV=" + '@Model.BoardEntity.BRD_DIV'});
+
+                    }
+                    else {
+                        MsgBox.Danger("삭제 실패하였습니다.");
+                    }
+                }
+                , error: function (data) {
+                    MsgBox.Danger(
+                        setErrCustomContents(data)
+                    );
+                }
+            });
+        }
     </script>
 }
 @* Script Layer *@

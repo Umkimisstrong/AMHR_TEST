@@ -93,16 +93,14 @@ namespace AMHR_WEB.Controllers
         }
 
         /// <summary>
-        /// SaveBoard : 게시판 저장 
+        /// SaveBoard : 게시판 저장
         /// </summary>
         /// <param name="contract">Board Contract</param>
+        /// <param name="generalFlag">일반 플래그</param>
         /// <returns></returns>
         public ActionResult SaveBoard(BoardContract contract, EnumProperties.GeneralFlag generalFlag)
         {
-            
             BoardRepository repository = new BoardRepository();
-
-
             contract.BoardEntity.CREATE_ID = UserSessionModel.USER_ID;
             contract.BoardEntity.UPDATE_ID = UserSessionModel.USER_ID;
             contract.BoardEntity.BRD_WRITE_ID = UserSessionModel.USER_ID;
@@ -116,6 +114,20 @@ namespace AMHR_WEB.Controllers
                     contract.BoardEntity.BRD_CATEGORY,
                     contract.BoardEntity.BRD_DIV
             });
+        }
+
+        /// <summary>
+        /// DeleteBoard : 게시판 삭제
+        /// </summary>
+        /// <param name="contract">Board Contract</param>
+        /// <returns></returns>
+        public JsonResult DeleteBoard(BoardContract contract)
+        {
+            BoardRepository repository = new BoardRepository();
+            contract.BoardEntity.BRD_WRITE_ID = UserSessionModel.USER_ID;
+            bool result = repository.SaveBoard(contract.BoardEntity, EnumProperties.GeneralFlag.DELETE);
+
+            return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
     }
 }

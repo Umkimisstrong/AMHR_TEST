@@ -20,7 +20,7 @@ namespace AMHR_WEB.Controllers
     public class AdminController : BaseController
     {
         /// <summary>
-        /// CONTROLLER_NAME : 전역변수 컨트롤러 명
+        /// CONTROLLER_NAME : 전역변수 Controller Name
         /// </summary>
         public const string CONTROLLER_NAME = "Admin";
         /// <summary>
@@ -99,6 +99,7 @@ namespace AMHR_WEB.Controllers
         /// RequestSaveCode : 코드 저장 요청
         /// </summary>
         /// <param name="contract">Code Contract</param>
+        /// <param name="generalFlag">일반 플래그</param>
         /// <returns></returns>
         public JsonResult RequestSaveCode(CodeContract contract, EnumProperties.GeneralFlag generalFlag)
         {

@@ -91,6 +91,12 @@ namespace Repository
         }
 
 
+        /// <summary>
+        /// SaveBoard : 게시판 저장
+        /// </summary>
+        /// <param name="entity">게시판 엔티티</param>
+        /// <param name="generalFlag">일반 플래그</param>
+        /// <returns></returns>
         public bool SaveBoard(BoardEntity entity, EnumProperties.GeneralFlag generalFlag)
         {
             bool result = false;
@@ -108,10 +114,14 @@ namespace Repository
                 default:
                     break;
             }
-
             return result;
         }
 
+        /// <summary>
+        /// InsertBoard : 게시판 입력
+        /// </summary>
+        /// <param name="entity">게시판 엔티티</param>
+        /// <returns></returns>
         private bool InsertBoard(BoardEntity entity)
         {
             bool result = false;
@@ -126,35 +136,32 @@ namespace Repository
             keyValuePairs.Add("I_CREATE_ID      ", entity.CREATE_ID);
             keyValuePairs.Add("I_UPDATE_ID      ", entity.UPDATE_ID);
 
-            DataSet ds = SqlHelper.GetDataSet("SP_CMM_BOARD_C", keyValuePairs);
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            string sResult = SqlHelper.GetReturnValue("SP_CMM_BOARD_C", keyValuePairs);
+            if (!string.IsNullOrEmpty(sResult))
             {
-                if (ds.Tables[0].Rows[0]["SEQ_NO"] != null)
-                {
-                    string sResult = ds.Tables[0].Rows[0]["SEQ_NO"].ToString();
-                    if (string.IsNullOrEmpty(sResult))
-                    {
-                        result = true;
-                        entity.BRD_SEQ = sResult;
-                    }
-                } 
+                entity.BRD_SEQ = sResult;
+                result = true;
             }
-
             return result;
         }
 
+        /// <summary>
+        /// UpdateBoard : 게시판 수정 
+        /// </summary>
+        /// <param name="entity">게시판 엔티티</param>
+        /// <returns></returns>
         private bool UpdateBoard(BoardEntity entity) 
         {
             bool result = false;
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("BRD_SEQ      ", entity.BRD_SEQ);
-            keyValuePairs.Add("BRD_CATEGORY ", entity.BRD_CATEGORY);
-            keyValuePairs.Add("BRD_DIV      ", entity.BRD_DIV);
-            keyValuePairs.Add("BRD_TITLE    ", entity.BRD_TITLE);
-            keyValuePairs.Add("BRD_CONTENTS ", entity.BRD_CONTENTS);
-            keyValuePairs.Add("BRD_WRITE_ID ", entity.BRD_WRITE_ID);
-            keyValuePairs.Add("UPDATE_ID    ", entity.UPDATE_ID);
+            keyValuePairs.Add("I_BRD_SEQ      ", entity.BRD_SEQ);
+            keyValuePairs.Add("I_BRD_CATEGORY ", entity.BRD_CATEGORY);
+            keyValuePairs.Add("I_BRD_DIV      ", entity.BRD_DIV);
+            keyValuePairs.Add("I_BRD_TITLE    ", entity.BRD_TITLE);
+            keyValuePairs.Add("I_BRD_CONTENTS ", entity.BRD_CONTENTS);
+            keyValuePairs.Add("I_BRD_WRITE_ID ", entity.BRD_WRITE_ID);
+            keyValuePairs.Add("I_UPDATE_ID    ", entity.UPDATE_ID);
 
             int uResult = SqlHelper.GetNonQuery("SP_CMM_BOARD_U", keyValuePairs);
             if (uResult > 0)
@@ -164,16 +171,21 @@ namespace Repository
             return result;
         }
 
+        /// <summary>
+        /// DeleteBoard
+        /// </summary>
+        /// <param name="entity">게시판 엔티티</param>
+        /// <returns></returns>
         private bool DeleteBoard(BoardEntity entity) 
         {
             bool result = false;
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
 
-            keyValuePairs.Add("BRD_SEQ      ", entity.BRD_SEQ);
-            keyValuePairs.Add("BRD_CATEGORY ", entity.BRD_CATEGORY);
-            keyValuePairs.Add("BRD_DIV      ", entity.BRD_DIV);
-            keyValuePairs.Add("BRD_WRITE_ID ", entity.BRD_WRITE_ID);
+            keyValuePairs.Add("I_BRD_SEQ      ", entity.BRD_SEQ);
+            keyValuePairs.Add("I_BRD_CATEGORY ", entity.BRD_CATEGORY);
+            keyValuePairs.Add("I_BRD_DIV      ", entity.BRD_DIV);
+            keyValuePairs.Add("I_BRD_WRITE_ID ", entity.BRD_WRITE_ID);
 
             int dResult = SqlHelper.GetNonQuery("SP_CMM_BOARD_D", keyValuePairs);
             if (dResult > 0)
