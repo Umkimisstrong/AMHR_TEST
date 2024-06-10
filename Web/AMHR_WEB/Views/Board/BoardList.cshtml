@@ -57,15 +57,15 @@
             <div class="row" style="margin-top:15px;">
                 <div class="col-md-4">
                     <label for="Brd_Write_Start_Dt" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">검색시작일</label>
-                    @Html.TextBoxFor(m => m.BRD_WRITE_START_DT, new { @class = "form-control", @type = "text", @placeholder = "검색시작일", @id = "Brd_Write_Start_Dt" })
+                    @Html.TextBoxFor(m => m.BRD_WRITE_START_DT, new { @class = "form-control datepicker", @type = "text", @placeholder = "검색시작일(선택)", @id = "Brd_Write_Start_Dt", @autocomplete="off"})
                 </div>
                 <div class="col-md-4">
                     <label for="Brd_Write_End_Dt" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">검색종료일</label>
-                    @Html.TextBoxFor(m => m.BRD_WRITE_END_DT, new { @class = "form-control", @type = "text", @placeholder = "검색종료일", @id = "Brd_Write_End_Dt" })
+                    @Html.TextBoxFor(m => m.BRD_WRITE_END_DT, new { @class = "form-control datepicker", @type = "text", @placeholder = "검색종료일(선택)", @id = "Brd_Write_End_Dt", @autocomplete="off" })
                 </div>
                 <div class="col-md-4">
                     <label for="Brd_Pick_Dt" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">특정일</label>
-                    @Html.TextBoxFor(m => m.BRD_PICK_DT, new { @class = "form-control", @type = "text", @placeholder = "특정일", @id = "Brd_Pick_Dt" })
+                    @Html.TextBoxFor(m => m.BRD_PICK_DT, new { @class = "form-control datepicker", @type = "text", @placeholder = "특정일", @id = "Brd_Pick_Dt", @autocomplete="off"})
                 </div>
             </div>
 
@@ -166,6 +166,24 @@
         */
         $(function () {
             InitEnterSubmitEvent();
+
+            $('.datepicker').datepicker({
+                closeText: "CLOSE",
+                prevText: "이전달",
+                nextText: "다음달",
+                currentText: "TODAY",
+                monthNames: ["1월(JAN)", "2월(FEB)", "3월(MAR)", "4월(APR)", "5월(MAY)", "6월(JUN)", "7월(JUL)", "8월(AUG)", "9월(SEP)", "10월(OCT)", "11월(NOV)", "12월(DEC)"],
+                monthNamesShort: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+                dayNames: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
+                dayNamesShort: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
+                dayNamesMin: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
+                weekHeader: "Wk",
+                dateFormat: "yy-mm-dd",
+                firstDay: 0,
+                isRTL: false,
+                showMonthAfterYear: true,
+                yearSuffix: ""
+            });
         });
 
 

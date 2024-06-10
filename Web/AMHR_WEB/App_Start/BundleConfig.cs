@@ -24,11 +24,21 @@ namespace AMHR_WEB
 
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
+            bundles.Add(new Bundle("~/bundles/bootstrap_datepicker").Include(
+                      "~/Scripts/bootstrap-datepicker*"
+                      ));
 
+            bundles.Add(new ScriptBundle ("~/bundles/jquery_ui").Include(
+                            "~/Scripts/jquery-ui.min.js"
+                        ));
+            bundles.Add(new StyleBundle("~/bundles/bootstrap_datepicker_ui").Include(
+                      "~/Content/jquery-ui.css"
+                      ));
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/bootstrap.min.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css"
+                      ));
 
             bundles.Add(new StyleBundle("~/bundles/amhrCss").Include(
                      "~/StaticContents/css/amhr_*"));

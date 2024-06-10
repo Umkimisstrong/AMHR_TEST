@@ -11,6 +11,7 @@
     @Styles.Render("~/Content/css")
     @Styles.Render("~/bundles/amhrCss")
     @Scripts.Render("~/bundles/modernizr")
+
 </head>
 
 
@@ -79,7 +80,7 @@
                             </li>
                             <li class="nav-item"
                                 style="margin-left:20px;">
-                                @Html.ActionLink("Board", "BoardList", "Board", new { @BRD_CATEGORY="NOTIE", @BRD_DIV="CMM"}, new { @class = "nav-link" })
+                                @Html.ActionLink("Board", "BoardList", "Board", new { @BRD_CATEGORY = "NOTIE", @BRD_DIV = "CMM" }, new { @class = "nav-link" })
                             </li>
                             <li class="nav-item"
                                 style="margin-left:20px;">
@@ -94,8 +95,8 @@
                                     if (userInfo != null && !string.IsNullOrEmpty(userInfo.USER_ID))
                                     {
                                         @*<li class="nav-item" style="margin-left:20px;">
-                                        @Html.ActionLink("Logout", "LogoutUser", "User", null, new { @class = "nav-link" })
-                                    </li>*@
+                                                @Html.ActionLink("Logout", "LogoutUser", "User", null, new { @class = "nav-link" })
+                                            </li>*@
                                         <li class="nav-item dropdown" id="amhr-nav-bar-li">
                                             <a id="amhr-nav-bar-toggle" class="nav-link dropdown-toggle" data-bs-toggle="" href="#" role="button" aria-haspopup="true" aria-expanded="false" onclick="javascript: Nav_Bar_DropDownToggle();">@userInfo.USER_NM 님</a>
                                             <div class="dropdown-menu bg-primary" data-bs-popper="static" id="amhr-nav-bar-dropdown">
@@ -112,7 +113,7 @@
                                         if (userInfo.USER_TYPE.Equals("ADM"))
                                         {
                                             @*<li class="nav-item" style="margin-left:20px;">
-                                        </li>*@
+                                                </li>*@
                                         }
                                     }
                                     else
@@ -163,7 +164,7 @@
                     </div>
                 </div>
             }
-            else if(ViewBag.MY_PAGE_VIEW != null && ViewBag.MY_PAGE_VIEW.ToString().Equals("MY_PAGE_VIEW"))
+            else if (ViewBag.MY_PAGE_VIEW != null && ViewBag.MY_PAGE_VIEW.ToString().Equals("MY_PAGE_VIEW"))
             {
                 @* Container Body Area *@
                 <div class="container body-content" style="max-width:100%; padding-left:0; margin-top:0;">
@@ -205,7 +206,12 @@
     @* JavaScript Rendered Area *@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/bootstrap_datepicker")
+    @Scripts.Render("~/bundles/jquery_ui")
+    @Styles.Render("~/bundles/bootstrap_datepicker_ui")
     @Scripts.Render("~/bundles/amhr")
+    @*<script type="text/javascript" src="~/Scripts/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="~/Content/jquery-ui.css" />*@
 
     <script type="text/javascript">
         /*
