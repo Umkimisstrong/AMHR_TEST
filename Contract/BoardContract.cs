@@ -50,7 +50,7 @@ namespace Contract
         /// </summary>
         public BoardEntity BoardEntity { get; set; }
         /// <summary>
-        /// BoardEntity : 게시판 엔티티의 집합
+        /// BoardList : 게시판 엔티티의 집합
         /// </summary>
         public List<BoardEntity> BoardList { get; set; }
 

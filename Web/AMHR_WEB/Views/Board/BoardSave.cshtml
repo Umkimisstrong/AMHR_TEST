@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div>
-                        <label for="exampleInputPassword1" class="form-label mt-4">Contents</label>
+                        <label for="Brd_Contents" class="form-label mt-4">Contents</label>
                         @Html.TextAreaFor(m => m.BoardEntity.BRD_CONTENTS, new { @class = "form-control", @id = "Brd_Contents", @placeholder = "Write Contents", @style = "max-width:1400px;", @rows = "17" })
                         @*<textarea class="form-control" placeholder="Write Contents" style="max-width:1400px;" rows="17"></textarea>*@
 
@@ -86,6 +86,48 @@
         </form>
     </div>
 
+    <div class="row" style="margin-top:30px;">
+        
+        <section class="col-md-12" aria-labelledby="gettingStartedTitle" style="justify-content:center; width:100%;">
+            
+            <fieldset style="justify-content:center;">
+                <div>
+                    <label class="form-label mt-4" >Comments</label>
+                </div>
+
+                <div>
+                    <div style="display:block;">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td style="width:15%;">김상기</td>
+                                <td style="text-align:left;">댓글</td>
+                                <td style="text-align:right;">2024-06-10</td>
+                            </tr>
+                            <tr>
+                                <td style="width:15%;">김민성</td>
+                                <td style="text-align:left;">댓글</td>
+                                <td style="text-align:right;">2024-06-10</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+
+                <div>
+                    <div style="display:flex;">
+                        <div contenteditable="true" class="form-control" id="editor">
+                                    
+                        </div>
+                        <button class="btn btn-primary" style="margin-left:10px;">Reply</button>
+                        @*<textarea class="form-control" style="max-width:100%;">#김상기</textarea>*@
+                    </div>
+                </div>
+                
+
+            </fieldset>
+        </section>
+    </div>
+
 </main>
 @* Main Layer *@
 
@@ -99,6 +141,7 @@
         $(function () {
             var generalFlag = '@generalFlag';
             $("#Hidden_GeneralFlag").val(generalFlag);
+
         });
 
         /*
@@ -208,6 +251,37 @@
                 }
             });
         }
+
+        function BoardReply(string FLAG)
+        {
+            var x = $("#editor")[0].innerText.trim();
+            if (x == "")
+            {
+                MsgBox.Inform("댓글을 입력하세요.");
+                return;
+            }
+
+            var obj = {
+                ReplyEntity: {}
+            };
+
+
+
+            $.ajax({
+                type: "post"
+                , url: "/Reply/SaveReply"
+                , data: obj
+                , success: function (data)
+                {
+                    if (data.RESULT)
+                    {
+
+                    }
+                }
+            });
+
+        }
+
     </script>
 }
 @* Script Layer *@

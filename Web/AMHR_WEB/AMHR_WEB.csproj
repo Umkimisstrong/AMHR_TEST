@@ -150,6 +150,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KakaoController.cs" />
+    <Compile Include="Controllers\ReplyController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -258,6 +259,7 @@
     <Folder Include="Views\Auth\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Kakao\" />
+    <Folder Include="Views\Reply\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
