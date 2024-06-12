@@ -213,7 +213,7 @@ namespace Repository
         /// <summary>
         /// UpdateUser : 사용자 정보 수정
         /// </summary>
-        /// <param name="contract">User Contract</param>
+        /// <param name="contract">사용자 Contract</param>
         /// <returns></returns>
         public bool UpdateUser(UserContract contract)
         {

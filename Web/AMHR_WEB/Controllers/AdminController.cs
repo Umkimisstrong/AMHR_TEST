@@ -35,7 +35,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// CodeManagement : 코드 관리 목록 뷰 담당
         /// </summary>
-        /// <param name="contract">Code Contract</param>
+        /// <param name="contract">코드 Contract</param>
         /// <returns></returns>
         public ActionResult CodeManagement(CodeContract contract)
         {
@@ -69,7 +69,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// CodeSave_P : 코드 저장 팝업 담당
         /// </summary>
-        /// <param name="contract">Code Contract</param>
+        /// <param name="contract">코드 Contract</param>
         /// <returns></returns>
         public ActionResult CodeSave_P(CodeContract contract)
         {
@@ -98,7 +98,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// RequestSaveCode : 코드 저장 요청
         /// </summary>
-        /// <param name="contract">Code Contract</param>
+        /// <param name="contract">코드 Contract</param>
         /// <param name="generalFlag">일반 플래그</param>
         /// <returns></returns>
         public JsonResult RequestSaveCode(CodeContract contract, EnumProperties.GeneralFlag generalFlag)
@@ -112,7 +112,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// CheckCodeID : Code ID 중복체크
         /// </summary>
-        /// <param name="contract">Code Contract</param>
+        /// <param name="contract">코드 Contract</param>
         /// <returns></returns>
         public JsonResult CheckCodeID(CodeContract contract)
         {
@@ -142,7 +142,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// UserManagement : 사용자 관리 뷰 담당
         /// </summary>
-        /// <param name="contract">User Contract</param>
+        /// <param name="contract">사용자 Contract</param>
         /// <returns></returns>
         public ActionResult UserManagement(UserContract contract)
         {
