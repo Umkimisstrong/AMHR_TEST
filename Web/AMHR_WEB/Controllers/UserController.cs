@@ -53,7 +53,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// CreateUser : User 생성
         /// </summary>
-        /// <param name="contract">User Contract</param>
+        /// <param name="contract">사용자 Contract</param>
         /// <returns></returns>
         public JsonResult CreateUser(UserContract contract)
         {
@@ -88,7 +88,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// LoginCheckUser : ID, PWD 로 Login Check
         /// </summary>
-        /// <param name="contract">User Contract</param>
+        /// <param name="contract">사용자 Contract</param>
         /// <param name="returnUrl">returnUrl</param>
         /// <returns></returns>
         public JsonResult LoginCheckUser(UserContract contract, string returnUrl = "")
@@ -248,7 +248,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// UpdateUser : 사용자 정보 수정
         /// </summary>
-        /// <param name="contract">User Contract</param>
+        /// <param name="contract">사용자 Contract</param>
         /// <returns></returns>
         public ActionResult UpdateUser(UserContract contract)
         {

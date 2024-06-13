@@ -32,7 +32,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// BoardList : 게시판 목록 뷰 담당
         /// </summary>
-        /// <param name="contract">Board Contract</param>
+        /// <param name="contract">게시판 Contract</param>
         /// <returns></returns>
         public ActionResult BoardList(BoardContract contract)
         {
@@ -64,7 +64,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// BoardSave : 게시판 저장 뷰 담당
         /// </summary>
-        /// <param name="contract">Board Contract</param>
+        /// <param name="contract">게시판 Contract</param>
         /// <returns></returns>
         public ActionResult BoardSave(BoardContract contract)
         {
@@ -95,7 +95,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// SaveBoard : 게시판 저장
         /// </summary>
-        /// <param name="contract">Board Contract</param>
+        /// <param name="contract">게시판 Contract</param>
         /// <param name="generalFlag">일반 플래그</param>
         /// <returns></returns>
         public ActionResult SaveBoard(BoardContract contract, EnumProperties.GeneralFlag generalFlag)
@@ -119,7 +119,7 @@ namespace AMHR_WEB.Controllers
         /// <summary>
         /// DeleteBoard : 게시판 삭제
         /// </summary>
-        /// <param name="contract">Board Contract</param>
+        /// <param name="contract">게시판 Contract</param>
         /// <returns></returns>
         public JsonResult DeleteBoard(BoardContract contract)
         {

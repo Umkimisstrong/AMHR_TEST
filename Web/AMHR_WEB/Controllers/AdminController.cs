@@ -18,7 +18,7 @@ namespace AMHR_WEB.Controllers
     /// AdminController : Admin 관련 Buisness Logic 담당
     /// </summary>
     public class AdminController : BaseController
-    {Default
+    {
         /// <summary>
         /// CONTROLLER_NAME : 전역변수 Controller Name
         /// </summary>
