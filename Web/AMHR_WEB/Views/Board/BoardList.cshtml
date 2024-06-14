@@ -122,7 +122,7 @@
 
                                 <td style="text-align:center;">@entity.BRD_WRITE_NM</td>
                                 <td style="text-align:center;">
-                                     <a href="/Board/BoardSave?BRD_SEQ=@entity.BRD_SEQ&BRD_CATEGORY=@entity.BRD_CATEGORY&BRD_DIV=@entity.BRD_DIV">@entity.BRD_TITLE</a>
+                                     <a href="/Board/BoardDetail?BRD_SEQ=@entity.BRD_SEQ&BRD_CATEGORY=@entity.BRD_CATEGORY&BRD_DIV=@entity.BRD_DIV">@entity.BRD_TITLE</a>
                                 </td>
                                 <td style="text-align:center;">@entity.CREATE_DT.ToString("yyyy-MM-dd HH:mm:ss")</td>
                                 <td style="text-align:center;">@entity.UPDATE_DT.ToString("yyyy-MM-dd HH:mm:ss")</td>
@@ -193,6 +193,7 @@
         function BoardSave(brdCategory, brdDiv) {
             location.href = "/Board/BoardSave?BRD_CATEGORY=" + brdCategory + "&BRD_DIV=" + brdDiv;
         }
+       
     </script>
 
 }

@@ -80,15 +80,15 @@ namespace Repository
             int result = 0;
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("REPLY_SEQ", entity.REPLY_SEQ);
-            keyValuePairs.Add("REPLY_PARENT_SEQ", entity.REPLY_PARENT_SEQ);
-            keyValuePairs.Add("BRD_SEQ", entity.BRD_SEQ);
-            keyValuePairs.Add("BRD_CATEGORY", entity.BRD_CATEGORY);
-            keyValuePairs.Add("BRD_DIV", entity.BRD_DIV);
-            keyValuePairs.Add("REPLY_COMMENTs", entity.REPLY_COMMENTS);
-            keyValuePairs.Add("REPLY_WRITE_ID", entity.REPLY_WRITE_ID);
-            keyValuePairs.Add("CREATE_ID", entity.CREATE_ID);
-            keyValuePairs.Add("UPDATE_ID", entity.UPDATE_ID);
+            keyValuePairs.Add("I_REPLY_SEQ", entity.REPLY_SEQ);
+            keyValuePairs.Add("I_REPLY_PARENT_SEQ", entity.REPLY_PARENT_SEQ);
+            keyValuePairs.Add("I_BRD_SEQ", entity.BRD_SEQ);
+            keyValuePairs.Add("I_BRD_CATEGORY", entity.BRD_CATEGORY);
+            keyValuePairs.Add("I_BRD_DIV", entity.BRD_DIV);
+            keyValuePairs.Add("I_REPLY_COMMENTs", entity.REPLY_COMMENTS);
+            keyValuePairs.Add("I_REPLY_WRITE_ID", entity.REPLY_WRITE_ID);
+            keyValuePairs.Add("I_CREATE_ID", entity.CREATE_ID);
+            keyValuePairs.Add("I_UPDATE_ID", entity.UPDATE_ID);
 
             result = SqlHelper.GetNonQuery("SP_BRD_REPLY_U", keyValuePairs);
 
@@ -105,9 +105,9 @@ namespace Repository
             int result = 0;
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("REPLY_SEQ", entity.REPLY_SEQ);
-            keyValuePairs.Add("REPLY_PARENT_SEQ", entity.REPLY_PARENT_SEQ);
-            keyValuePairs.Add("UPDATE_ID", entity.UPDATE_ID);
+            keyValuePairs.Add("I_REPLY_SEQ", entity.REPLY_SEQ);
+            keyValuePairs.Add("I_REPLY_PARENT_SEQ", entity.REPLY_PARENT_SEQ);
+            keyValuePairs.Add("I_UPDATE_ID", entity.UPDATE_ID);
 
             result = SqlHelper.GetNonQuery("SP_BRD_REPLY_D", keyValuePairs);
 
@@ -126,9 +126,9 @@ namespace Repository
             List<ReplyEntity > replyList = new List<ReplyEntity>();
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-            keyValuePairs.Add("BRD_SEQ", BRD_SEQ);
-            keyValuePairs.Add("BRD_CATEGORY", BRD_CATEGORY);
-            keyValuePairs.Add("BRD_DIV", BRD_DIV);
+            keyValuePairs.Add("I_BRD_SEQ", BRD_SEQ);
+            keyValuePairs.Add("I_BRD_CATEGORY", BRD_CATEGORY);
+            keyValuePairs.Add("I_BRD_DIV", BRD_DIV);
 
             DataSet ds = SqlHelper.GetDataSet("SP_BRD_REPLY_L", keyValuePairs);
 

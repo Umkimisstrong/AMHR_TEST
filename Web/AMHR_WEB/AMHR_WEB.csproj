@@ -253,6 +253,7 @@
     <Content Include="Views\Shared\Amhr_SideBar.cshtml" />
     <Content Include="Views\Board\BoardList.cshtml" />
     <Content Include="Views\Board\BoardSave.cshtml" />
+    <Content Include="Views\Board\BoardDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

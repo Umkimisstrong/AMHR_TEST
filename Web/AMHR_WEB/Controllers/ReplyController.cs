@@ -20,6 +20,9 @@ namespace AMHR_WEB.Controllers
         public JsonResult SaveReply(ReplyContract contract, EnumProperties.GeneralFlag generalFlag)
         {
             ReplyRepository repository = new ReplyRepository();
+            contract.ReplyEntity.REPLY_WRITE_ID = UserSessionModel.USER_ID;
+            contract.ReplyEntity.CREATE_ID = UserSessionModel.USER_ID;
+            contract.ReplyEntity.UPDATE_ID = UserSessionModel.USER_ID;
             bool result = repository.SaveReply(contract.ReplyEntity, generalFlag);
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }

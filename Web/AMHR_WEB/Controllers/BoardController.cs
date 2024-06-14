@@ -93,6 +93,23 @@ namespace AMHR_WEB.Controllers
         }
 
         /// <summary>
+        /// BoardDetail : 게시판 상세
+        /// </summary>
+        /// <param name="contract">게시판 Contract</param>
+        /// <returns></returns>
+        public ActionResult BoardDetail(BoardContract contract)
+        {
+            BoardContract response = new BoardContract();
+            BoardRepository repository = new BoardRepository();
+
+            ReplyRepository replyRepository = new ReplyRepository();
+            response.ReplyList = replyRepository.SelectReplyList(contract.BRD_SEQ, contract.BRD_CATEGORY, contract.BRD_DIV);
+            response.BoardEntity = repository.SelectBoardEntity(contract.BRD_SEQ, contract.BRD_CATEGORY, contract.BRD_DIV);
+
+            return View(response);
+        }
+
+        /// <summary>
         /// SaveBoard : 게시판 저장
         /// </summary>
         /// <param name="contract">게시판 Contract</param>
@@ -109,7 +126,7 @@ namespace AMHR_WEB.Controllers
 
             repository.SaveBoard(contract.BoardEntity, generalFlag);
 
-            return RedirectToAction("BoardSave", new { 
+            return RedirectToAction("BoardDetail", new { 
                     contract.BoardEntity.BRD_SEQ,
                     contract.BoardEntity.BRD_CATEGORY,
                     contract.BoardEntity.BRD_DIV

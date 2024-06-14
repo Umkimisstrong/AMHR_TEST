@@ -1,0 +1,205 @@
+﻿@model Contract.BoardContract
+@{
+    ViewBag.Title = "BoardSave";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    @* Global User Session Info Area *@
+    var user = User as System.Security.Claims.ClaimsPrincipal;
+    var userInfo = new AMHR_WEB.Models.UserSessionModel();
+    if (user != null)
+    {
+        var claims = user.Claims.ToList();
+        var sessionClaim = claims.FirstOrDefault(o => o.Type == AMHR_WEB.Models.Constants.UserSession);
+        if (sessionClaim != null)
+        {
+            userInfo = AMHR_WEB.GlobalAttribute.GlobalHelper.stringToObject<AMHR_WEB.Models.UserSessionModel>(sessionClaim.Value);
+        }
+    
+    }
+
+    bool ISOWNER = false;
+    string USER_ID = "";
+    if (userInfo != null)
+    {
+        if (userInfo.USER_ID != null && userInfo.USER_ID.Equals(Model.BoardEntity.BRD_WRITE_ID))
+        {
+            ISOWNER = true;
+            USER_ID = userInfo.USER_ID;
+        }
+    }
+}
+
+@* Main Layer *@
+<main style="padding-left:0;">
+    <div class="row" style="justify-content:center;">
+        <section class="col-md-12" aria-labelledby="gettingStartedTitle" style="justify-content:center; width:100%;">
+            <fieldset style="justify-content:center;">
+                <div style="text-align:center;">
+                    <h1>
+                        Board
+                    </h1>
+                    <hr />
+                    <div style="text-align:right; margin-top:10px;">
+                        <div style="padding-right:0;">
+                            <button type="button" class="btn bg-primary btn-sm text-white" onclick="BoardList('@Model.BoardEntity.BRD_CATEGORY', '@Model.BoardEntity.BRD_DIV')">Back to List</button>
+                            @if(ISOWNER)
+                            { 
+                                <button type="button" class="btn bg-primary btn-sm text-white" onclick="BoardModify()">Modity Board</button>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+                <div>
+                    <label for="Brd_Title" class="form-label mt-4" style="font-weight:bold;">Title</label>
+                    <div style="display:flex; margin-left:15px; min-height:60px;">
+                        @Model.BoardEntity.BRD_TITLE
+                    </div>
+                </div>
+                <div>
+                    <label for="Brd_Contents" class="form-label mt-4" style="font-weight:bold;">Contents</label>
+                    <div style="display:flex; margin-left:15px; min-height:350px;">
+                        @Model.BoardEntity.BRD_CONTENTS
+                    </div>
+                </div>
+                <hr />
+
+            </fieldset>
+        </section>
+    </div>
+
+    <div class="row" style="margin-top:30px;">
+
+        <section class="col-md-12" aria-labelledby="gettingStartedTitle" style="justify-content:center; width:100%;">
+
+            <fieldset style="justify-content:center;">
+                <div>
+                    <label class="form-label mt-4">Comments</label>
+                </div>
+
+                <div>
+                    <div style="display:block;">
+                        <table class="table table-borderless">
+                            @if (Model.ReplyList != null && Model.ReplyList.Count > 0)
+                            {
+                                foreach (var item in Model.ReplyList)
+                                {
+                                    <tr>
+                                        <td style="width:15%;">@item.REPLY_WRITE_NM</td>
+
+                                        <td style="text-align:left;" contenteditable="@(USER_ID.Equals(item.REPLY_WRITE_ID) ? "true" : "false")">@item.REPLY_COMMENTS</td>
+
+                                        <td style="text-align:right;">@item.CREATE_DT.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3">No Data</td>
+                                </tr>
+                            }
+
+                        </table>
+                    </div>
+                </div>
+
+
+                <div>
+                    <div style="display:flex;">
+                        <div contenteditable="true" class="form-control" id="editor">
+
+                        </div>
+                        <button class="btn btn-primary" style="margin-left:10px;" onclick="BoardReply('CREATE')">Reply</button>
+                        @*<textarea class="form-control" style="max-width:100%;">#김상기</textarea>*@
+                    </div>
+                </div>
+
+
+            </fieldset>
+        </section>
+    </div>
+
+</main>
+@* Main Layer *@
+
+@* Script Layer *@
+@section scripts
+{
+    <script type="text/javascript">
+
+        var ID_CHECK_FLAG = false;
+
+        $(function () {
+        });
+
+
+        /*
+            BoardList : 게시판 목록 돌아가기
+        */
+        function BoardList(brd_category, brd_div)
+        {
+            location.href = "/Board/BoardList?BRD_CATEGORY=" + brd_category + "&BRD_DIV=" + brd_div;
+        }
+
+
+        /*
+            BoardModify : 게시판 수정 이동
+        */
+        function BoardModify()
+        {
+            location.href = "/Board/BoardSave?BRD_SEQ=" + "@Model.BoardEntity.BRD_SEQ" + "&BRD_CATEGORY=" + "@Model.BoardEntity.BRD_CATEGORY" + "&BRD_DIV=" + "@Model.BoardEntity.BRD_DIV";
+        }
+
+
+        /*
+            BoardReply : 게시판 댓글 저장
+        */
+        function BoardReply(flag, parentSeq)
+        {
+            var replyComments = $("#editor")[0].innerText.trim();
+            if (replyComments == "")
+            {
+                MsgBox.Inform("댓글을 입력하세요.");
+                return;
+            }
+
+            var replyObj = {
+                ReplyEntity: {}
+            };
+
+            replyObj.ReplyEntity.REPLY_PARENT_SEQ = parentSeq;
+            replyObj.ReplyEntity.BRD_SEQ = "@Model.BoardEntity.BRD_SEQ";
+            replyObj.ReplyEntity.BRD_CATEGORY = "@Model.BoardEntity.BRD_CATEGORY";
+            replyObj.ReplyEntity.BRD_DIV = "@Model.BoardEntity.BRD_DIV";
+            replyObj.ReplyEntity.REPLY_COMMENTS = replyComments;
+            replyObj.ReplyEntity.USE_YN = "Y";
+            replyObj.ReplyEntity.DEL_YN = "N";
+
+            $.ajax({
+                type: "post"
+                , url: "/Reply/SaveReply"
+                , data: {
+                    contract: replyObj,
+                    generalFlag: flag
+                    }
+                , success: function (data)
+                {
+                    if (data.RESULT) {
+                        MsgBox.Inform("댓글 작성이 완료되었습니다.", function () { window.location.reload(); });
+                    }
+                    else {
+                        MsgBox.Warning("댓글 작성에 실패하였습니다. 관리자에게 문의하세요." );
+                    }
+                }
+            });
+
+        }
+
+    </script>
+}
+@* Script Layer *@
+
+
+
+

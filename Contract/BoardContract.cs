@@ -54,6 +54,8 @@ namespace Contract
         /// </summary>
         public List<BoardEntity> BoardList { get; set; }
 
+        public List<ReplyEntity> ReplyList { get; set; }
+
 
     }
 }
