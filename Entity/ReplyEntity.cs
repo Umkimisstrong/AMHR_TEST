@@ -38,6 +38,12 @@
         /// REPLY_WRITE_NM : 댓글 작성자 명
         /// </summary>
         public string REPLY_WRITE_NM { get; set; }
+
+        /// <summary>
+        /// REPLY_LEVEL : 댓글 레벨
+        /// </summary>
+        public string REPLY_LEVEL { get; set; }
+
         /// <summary>
         /// USE_YN : 사용여부
         /// </summary>

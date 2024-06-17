@@ -44,7 +44,7 @@
                             <button type="button" class="btn bg-primary btn-sm text-white" onclick="BoardList('@Model.BoardEntity.BRD_CATEGORY', '@Model.BoardEntity.BRD_DIV')">Back to List</button>
                             @if(ISOWNER)
                             { 
-                                <button type="button" class="btn bg-primary btn-sm text-white" onclick="BoardModify()">Modity Board</button>
+                                <button type="button" class="btn bg-primary btn-sm text-white" onclick="BoardModify()">Modify Board</button>
                             }
                         </div>
 
@@ -88,6 +88,7 @@
                                     <th style="text-align:left; width:170px;">Date</th>
                                     <th style="text-align:center; width:100px;">Modify</th>
                                     <th style="text-align:center; width:100px;">Reply</th>
+                                    <th style="text-align:center; width:100px;">Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -96,30 +97,48 @@
                                     foreach (var item in Model.ReplyList)
                                     {
                                         string td_id = "td_" + item.REPLY_SEQ.ToString();
-
+                                        string replyBtnId = "btn_reply" + item.REPLY_SEQ + "_" + item.REPLY_PARENT_SEQ;
+                                        string hiddenReplyFieldTrId = "tr_reply_" + item.REPLY_SEQ + "_" + item.REPLY_PARENT_SEQ;
+                                        string hiddenReplyFieldTdId = "td_reply_" + item.REPLY_SEQ + "_" + item.REPLY_PARENT_SEQ;
+                                        string paddingLeftForLevel = "padding-left:" + (int.Parse(item.REPLY_LEVEL) * 30).ToString() + "px;";
                                         <tr style="vertical-align:middle;">
                                             <td style="width:15%;">@item.REPLY_WRITE_NM</td>
 
-                                            <td style="text-align:left;" contenteditable="@(USER_ID.Equals(item.REPLY_WRITE_ID) ? "true" : "false")" id="@td_id">@item.REPLY_COMMENTS</td>
+                                            <td style="text-align:left; @paddingLeftForLevel"  contenteditable="@(USER_ID.Equals(item.REPLY_WRITE_ID) ? "true" : "false")" id="@td_id">@item.REPLY_COMMENTS</td>
 
                                             <td style="text-align:right;">@item.CREATE_DT.ToString("yyyy-MM-dd HH:mm:ss")</td>
                                             <td style="text-align:right;">
                                                 @if (USER_ID.Equals(item.REPLY_WRITE_ID))
                                                 {
-                                                    <button type="button" class="btn btn-primary" onclick="BoardReply('UPDATE', '@item.REPLY_SEQ', '@item.REPLY_PARENT_SEQ')">Modify</button>
+                                                    <button type="button" class="btn btn-primary" onclick="BoardReply('UPDATE', '@item.REPLY_SEQ', '@item.REPLY_PARENT_SEQ', false)">Modify</button>
                                                 }
                                             </td>
                                             <td style="text-align:right;">
                                                 @if (!USER_ID.Equals(""))
                                                 {
-                                                    <button type="button" class="btn btn-success">Reply</button>
+                                                    <button type="button" class="btn btn-success" onclick="ToggleEditReplyArea('@item.REPLY_SEQ', '@item.REPLY_PARENT_SEQ')" id="@replyBtnId" name="btn_reply">Reply</button>
+                                                }
+                                            </td>
+                                            <td style="text-align:right;">
+                                                @if (USER_ID.Equals(item.REPLY_WRITE_ID))
+                                                {
+                                                    <button type="button" class="btn btn-danger" onclick="BoardReply('DELETE', '@item.REPLY_SEQ', '@item.REPLY_PARENT_SEQ', false)">Delete</button>
                                                 }
                                             </td>
                                         </tr>
 
-                                        string hiddenReplyFieldId = "tr_reply_" + item.REPLY_PARENT_SEQ;
-                                        <tr style="display:none;" id="@hiddenReplyFieldId">
-                                            <td>3</td>
+
+
+                                        <tr style="display: none; vertical-align: middle;" id="@hiddenReplyFieldTrId" name="tr_reply">
+                                            <td style="text-align:left;" colspan="4">
+                                                <div contenteditable="true" class="form-control" style="height: 35px;" id="@hiddenReplyFieldTdId"></div>
+                                            </td>
+                                            <td style="text-align:right;">
+                                                <button type="button" class="btn btn-success" onclick="BoardReply('CREATE', '@item.REPLY_SEQ', '@item.REPLY_PARENT_SEQ', true)">Reply</button>
+                                            </td>
+                                            <td style="text-align:right;">
+                                                <button type="button" class="btn btn-danger" onclick="CancelEditReplyArea('@item.REPLY_SEQ', '@item.REPLY_PARENT_SEQ')">Cancel</button>
+                                            </td>
                                         </tr>
                                     }
                                 }
@@ -187,26 +206,45 @@
         /*
             BoardReply : 게시판 댓글 저장
         */
-        function BoardReply(flag, replySeq, parentSeq)
+        function BoardReply(flag, replySeq, parentSeq, isReply)
         {
 
             var replyComments = "";
             var successMsg = "";
             var failMsg = "";
-            if ((replySeq == "0" && flag == "CREATE"))
+            var RealReplySeq = replySeq;
+            var RealReplyParentSeq = parentSeq;
+            if ((replySeq == "0" && flag == "CREATE") && !isReply)
             {
                 replyComments = $("#editor")[0].innerText.trim();
                 successMsg = "댓글 작성이 완료되었습니다.";
-                failMsg = "댓글 작성에 실패하였습니다. 관리자에게 문의하세요.";
+                failMsg = "댓글 작성을 실패하였습니다. 관리자에게 문의하세요.";
+            }
+            else if (isReply)
+            {
+                var replyTdId = "#td_reply_" + replySeq + "_" + parentSeq;
+                replyComments = $(replyTdId)[0].innerText.trim();
+
+                // 댓글인 경우 ReplySeq = 0 이 되고, ParentSeq 는 ReplySeq 이다.
+                RealReplySeq = "0";
+                RealReplyParentSeq = replySeq;
+
+                successMsg = "댓글 작성이 완료되었습니다.";
+                failMsg = "댓글 작성을 실패하였습니다. 관리자에게 문의하세요.";
+            }
+            else if (flag=="DELETE")
+            {
+                successMsg = "댓글 삭제가 완료되었습니다.";
+                failMsg = "댓글 삭제를 실패하였습니다. 관리자에게 문의하세요.";
             }
             else
             {
                 replyComments = $("#td_" + replySeq)[0].innerText.trim();
                 successMsg = "댓글 수정이 완료되었습니다.";
-                failMsg = "댓글 수정에 실패하였습니다. 관리자에게 문의하세요.";
+                failMsg = "댓글 수정을 실패하였습니다. 관리자에게 문의하세요.";
             }
 
-            if (replyComments == "")
+            if (replyComments == "" && flag != "DELETE")
             {
                 MsgBox.Inform("댓글을 입력하세요.");
                 return;
@@ -216,8 +254,8 @@
                 ReplyEntity: {}
             };
 
-            replyObj.ReplyEntity.REPLY_SEQ = replySeq;
-            replyObj.ReplyEntity.REPLY_PARENT_SEQ = parentSeq;
+            replyObj.ReplyEntity.REPLY_SEQ = RealReplySeq;
+            replyObj.ReplyEntity.REPLY_PARENT_SEQ = RealReplyParentSeq;
             replyObj.ReplyEntity.BRD_SEQ = "@Model.BoardEntity.BRD_SEQ";
             replyObj.ReplyEntity.BRD_CATEGORY = "@Model.BoardEntity.BRD_CATEGORY";
             replyObj.ReplyEntity.BRD_DIV = "@Model.BoardEntity.BRD_DIV";
@@ -245,20 +283,27 @@
 
         }
 
-        function addEditReplyDiv(selectedTdId, selectedTdParentId)
+        /* 
+            ToggleEditReplyArea : 댓글 수정 창 활성화
+        */
+        function ToggleEditReplyArea(replySeq, replyParentSeq)
         {
-            var strReplyAddedId = "td_" + selectedTdId + "_" + selectedTdParentId;
-            var str = "<tr style='vertical-align: middle;'>"
-                          + "<td style='text-align:left;' colspan='3'>"
-                            + "<div contenteditable='true' class='form-control' style='height: 35px;' id='" + strReplyAddedId + "'></div>"
-                          + "</td>"
-                          + "<td style='text-align:right;'>"
-                            + "<button type='button' class='btn btn-success'>Reply</button>"
-                          + "</td>"
-                          + "<td style='text-align:right;'>"
-                            + "<button type='button' class='btn btn-danger'>Cancel</button>"
-                          + "</td>" 
-                      + "</tr >";
+            var replyTrId = "#tr_reply_" + replySeq + "_" + replyParentSeq;
+            var replyBtnId = "#btn_reply_" + replySeq + "_" + replyParentSeq;
+            $("tr[name='tr_reply']").css("display", "none");
+            $("button[name='btn_reply']").removeAttr("disabled", "");
+
+            $(replyTrId).css("display", "");
+            $(replyBtnId).attr("disabled", "");
+        }
+
+        function CancelEditReplyArea(replySeq, replyParentSeq)
+        {
+            var replyTrId = "#tr_reply_" + replySeq + "_" + replyParentSeq;
+            var replyBtnId = "#btn_reply_" + replySeq + "_" + replyParentSeq;
+
+            $(replyTrId).css("display", "none");
+            $(replyBtnId).removeAttr("disabled", "");
         }
     </script>
 }
