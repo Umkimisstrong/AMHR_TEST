@@ -74,31 +74,63 @@
 
             <fieldset style="justify-content:center;">
                 <div>
-                    <label class="form-label mt-4">Comments</label>
+                    <label class="form-label mt-4" style="font-weight:bold;">Comments</label>
                 </div>
 
                 <div>
                     <div style="display:block;">
-                        <table class="table table-borderless">
-                            @if (Model.ReplyList != null && Model.ReplyList.Count > 0)
-                            {
-                                foreach (var item in Model.ReplyList)
+                        <table class="table table-borderless" id="tbl_reply">
+
+                            <thead>
+                                <tr>
+                                    <th>Writer</th>
+                                    <th>Comments</th>
+                                    <th style="text-align:left; width:170px;">Date</th>
+                                    <th style="text-align:center; width:100px;">Modify</th>
+                                    <th style="text-align:center; width:100px;">Reply</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.ReplyList != null && Model.ReplyList.Count > 0)
+                                {
+                                    foreach (var item in Model.ReplyList)
+                                    {
+                                        string td_id = "td_" + item.REPLY_SEQ.ToString();
+
+                                        <tr style="vertical-align:middle;">
+                                            <td style="width:15%;">@item.REPLY_WRITE_NM</td>
+
+                                            <td style="text-align:left;" contenteditable="@(USER_ID.Equals(item.REPLY_WRITE_ID) ? "true" : "false")" id="@td_id">@item.REPLY_COMMENTS</td>
+
+                                            <td style="text-align:right;">@item.CREATE_DT.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                            <td style="text-align:right;">
+                                                @if (USER_ID.Equals(item.REPLY_WRITE_ID))
+                                                {
+                                                    <button type="button" class="btn btn-primary" onclick="BoardReply('UPDATE', '@item.REPLY_SEQ', '@item.REPLY_PARENT_SEQ')">Modify</button>
+                                                }
+                                            </td>
+                                            <td style="text-align:right;">
+                                                @if (!USER_ID.Equals(""))
+                                                {
+                                                    <button type="button" class="btn btn-success">Reply</button>
+                                                }
+                                            </td>
+                                        </tr>
+
+                                        string hiddenReplyFieldId = "tr_reply_" + item.REPLY_PARENT_SEQ;
+                                        <tr style="display:none;" id="@hiddenReplyFieldId">
+                                            <td>3</td>
+                                        </tr>
+                                    }
+                                }
+                                else
                                 {
                                     <tr>
-                                        <td style="width:15%;">@item.REPLY_WRITE_NM</td>
-
-                                        <td style="text-align:left;" contenteditable="@(USER_ID.Equals(item.REPLY_WRITE_ID) ? "true" : "false")">@item.REPLY_COMMENTS</td>
-
-                                        <td style="text-align:right;">@item.CREATE_DT.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                        <td colspan="3">No Data</td>
                                     </tr>
                                 }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="3">No Data</td>
-                                </tr>
-                            }
+                            </tbody>
+
 
                         </table>
                     </div>
@@ -110,7 +142,7 @@
                         <div contenteditable="true" class="form-control" id="editor">
 
                         </div>
-                        <button class="btn btn-primary" style="margin-left:10px;" onclick="BoardReply('CREATE')">Reply</button>
+                        <button class="btn btn-primary" style="margin-left:10px;" onclick="BoardReply('CREATE', '0', '0')">Reply</button>
                         @*<textarea class="form-control" style="max-width:100%;">#김상기</textarea>*@
                     </div>
                 </div>
@@ -155,9 +187,25 @@
         /*
             BoardReply : 게시판 댓글 저장
         */
-        function BoardReply(flag, parentSeq)
+        function BoardReply(flag, replySeq, parentSeq)
         {
-            var replyComments = $("#editor")[0].innerText.trim();
+
+            var replyComments = "";
+            var successMsg = "";
+            var failMsg = "";
+            if ((replySeq == "0" && flag == "CREATE"))
+            {
+                replyComments = $("#editor")[0].innerText.trim();
+                successMsg = "댓글 작성이 완료되었습니다.";
+                failMsg = "댓글 작성에 실패하였습니다. 관리자에게 문의하세요.";
+            }
+            else
+            {
+                replyComments = $("#td_" + replySeq)[0].innerText.trim();
+                successMsg = "댓글 수정이 완료되었습니다.";
+                failMsg = "댓글 수정에 실패하였습니다. 관리자에게 문의하세요.";
+            }
+
             if (replyComments == "")
             {
                 MsgBox.Inform("댓글을 입력하세요.");
@@ -168,6 +216,7 @@
                 ReplyEntity: {}
             };
 
+            replyObj.ReplyEntity.REPLY_SEQ = replySeq;
             replyObj.ReplyEntity.REPLY_PARENT_SEQ = parentSeq;
             replyObj.ReplyEntity.BRD_SEQ = "@Model.BoardEntity.BRD_SEQ";
             replyObj.ReplyEntity.BRD_CATEGORY = "@Model.BoardEntity.BRD_CATEGORY";
@@ -186,16 +235,31 @@
                 , success: function (data)
                 {
                     if (data.RESULT) {
-                        MsgBox.Inform("댓글 작성이 완료되었습니다.", function () { window.location.reload(); });
+                        MsgBox.Inform(successMsg, function () { window.location.reload(); });
                     }
                     else {
-                        MsgBox.Warning("댓글 작성에 실패하였습니다. 관리자에게 문의하세요." );
+                        MsgBox.Warning(failMsg);
                     }
                 }
             });
 
         }
 
+        function addEditReplyDiv(selectedTdId, selectedTdParentId)
+        {
+            var strReplyAddedId = "td_" + selectedTdId + "_" + selectedTdParentId;
+            var str = "<tr style='vertical-align: middle;'>"
+                          + "<td style='text-align:left;' colspan='3'>"
+                            + "<div contenteditable='true' class='form-control' style='height: 35px;' id='" + strReplyAddedId + "'></div>"
+                          + "</td>"
+                          + "<td style='text-align:right;'>"
+                            + "<button type='button' class='btn btn-success'>Reply</button>"
+                          + "</td>"
+                          + "<td style='text-align:right;'>"
+                            + "<button type='button' class='btn btn-danger'>Cancel</button>"
+                          + "</td>" 
+                      + "</tr >";
+        }
     </script>
 }
 @* Script Layer *@
