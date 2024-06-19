@@ -23,21 +23,11 @@ namespace AMHR_WEB.Controllers
             contract.ReplyEntity.REPLY_WRITE_ID = UserSessionModel.USER_ID;
             contract.ReplyEntity.CREATE_ID = UserSessionModel.USER_ID;
             contract.ReplyEntity.UPDATE_ID = UserSessionModel.USER_ID;
+
+            // CREATE / UPDATE / DELETE 모두 수행
             bool result = repository.SaveReply(contract.ReplyEntity, generalFlag);
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// SelectReply : 댓글 조회
-        /// </summary>
-        /// <param name="contract">댓글 Contract</param>
-        /// <returns></returns>
-        public JsonResult SelectReply(ReplyContract contract)
-        {
-            ReplyRepository repository = new ReplyRepository();
-            ReplyContract response = new ReplyContract();
-            response.ReplyList = repository.SelectReplyList(contract.BRD_SEQ, contract.BRD_CATEGORY, contract.BRD_DIV);
-            return Json(new { RESULT = response }, JsonRequestBehavior.AllowGet);
-        }
     }
 }

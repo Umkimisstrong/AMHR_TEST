@@ -21,9 +21,12 @@
     string USER_ID = "";
     if (userInfo != null)
     {
-        if (userInfo.USER_ID != null && userInfo.USER_ID.Equals(Model.BoardEntity.BRD_WRITE_ID))
+        if (userInfo.USER_ID != null)
         {
-            ISOWNER = true;
+            if( userInfo.USER_ID.Equals(Model.BoardEntity.BRD_WRITE_ID))
+            {
+                ISOWNER = true;
+            }
             USER_ID = userInfo.USER_ID;
         }
     }
@@ -108,18 +111,21 @@
 
                                             <td style="text-align:right;">@item.CREATE_DT.ToString("yyyy-MM-dd HH:mm:ss")</td>
                                             <td style="text-align:right;">
+                                                @* 작성자가 로그인한 ID와 같아야 수정한다. *@
                                                 @if (USER_ID.Equals(item.REPLY_WRITE_ID))
                                                 {
                                                     <button type="button" class="btn btn-primary" onclick="BoardReply('UPDATE', '@item.REPLY_SEQ', '@item.REPLY_PARENT_SEQ', false)">Modify</button>
                                                 }
                                             </td>
                                             <td style="text-align:right;">
+                                                @* 로그인한 정보가 있어야 답글을 달 수 있다.(ID로판단) *@
                                                 @if (!USER_ID.Equals(""))
                                                 {
                                                     <button type="button" class="btn btn-success" onclick="ToggleEditReplyArea('@item.REPLY_SEQ', '@item.REPLY_PARENT_SEQ')" id="@replyBtnId" name="btn_reply">Reply</button>
                                                 }
                                             </td>
                                             <td style="text-align:right;">
+                                                @* 작성자가 로그인한 ID와 같아야 삭제한다.  *@
                                                 @if (USER_ID.Equals(item.REPLY_WRITE_ID))
                                                 {
                                                     <button type="button" class="btn btn-danger" onclick="BoardReply('DELETE', '@item.REPLY_SEQ', '@item.REPLY_PARENT_SEQ', false)">Delete</button>
@@ -134,7 +140,7 @@
                                                 <div contenteditable="true" class="form-control" style="height: 35px;" id="@hiddenReplyFieldTdId"></div>
                                             </td>
                                             <td style="text-align:right;">
-                                                <button type="button" class="btn btn-success" onclick="BoardReply('CREATE', '@item.REPLY_SEQ', '@item.REPLY_PARENT_SEQ', true)">Reply</button>
+                                                <button type="button" class="btn btn-success" onclick="BoardReply('REPLY', '@item.REPLY_SEQ', '@item.REPLY_PARENT_SEQ', true)">Reply</button>
                                             </td>
                                             <td style="text-align:right;">
                                                 <button type="button" class="btn btn-danger" onclick="CancelEditReplyArea('@item.REPLY_SEQ', '@item.REPLY_PARENT_SEQ')">Cancel</button>
@@ -157,13 +163,17 @@
 
 
                 <div>
-                    <div style="display:flex;">
-                        <div contenteditable="true" class="form-control" id="editor">
+                    @* 로그인한 정보가 있어야 댓글을 달 수 있다.(ID로판단) *@
+                    @if(!USER_ID.Equals(""))
+                    { 
+                        <div style="display:flex;">
+                            <div contenteditable="true" class="form-control" id="editor">
 
+                            </div>
+                            <button class="btn btn-primary" style="margin-left:10px;" onclick="BoardReply('CREATE', '0', '0')">Reply</button>
                         </div>
-                        <button class="btn btn-primary" style="margin-left:10px;" onclick="BoardReply('CREATE', '0', '0')">Reply</button>
-                        @*<textarea class="form-control" style="max-width:100%;">#김상기</textarea>*@
-                    </div>
+                    }
+                    
                 </div>
 
 
@@ -209,66 +219,80 @@
         function BoardReply(flag, replySeq, parentSeq, isReply)
         {
 
-            var replyComments = "";
-            var successMsg = "";
-            var failMsg = "";
-            var RealReplySeq = replySeq;
-            var RealReplyParentSeq = parentSeq;
-            if ((replySeq == "0" && flag == "CREATE") && !isReply)
+            var replyComments = "";             // 댓글 내용
+            var successMsg = "";                // 성공 메시지
+            var failMsg = "";                   // 실패 메시지
+            var RealReplySeq = replySeq;        // 댓글 SEQ
+            var RealReplyParentSeq = parentSeq; // 댓글 PARENT_SEQ
+            var RealFlag = flag;
+
+
+            // 01. 신규댓글저장
+            if (flag == "CREATE")
             {
                 replyComments = $("#editor")[0].innerText.trim();
                 successMsg = "댓글 작성이 완료되었습니다.";
                 failMsg = "댓글 작성을 실패하였습니다. 관리자에게 문의하세요.";
             }
-            else if (isReply)
+            // 02. 댓글의 댓글 저장
+            else if (flag == "REPLY")
             {
                 var replyTdId = "#td_reply_" + replySeq + "_" + parentSeq;
                 replyComments = $(replyTdId)[0].innerText.trim();
+                
 
                 // 댓글인 경우 ReplySeq = 0 이 되고, ParentSeq 는 ReplySeq 이다.
                 RealReplySeq = "0";
                 RealReplyParentSeq = replySeq;
+                RealFlag = "CREATE";
 
                 successMsg = "댓글 작성이 완료되었습니다.";
                 failMsg = "댓글 작성을 실패하였습니다. 관리자에게 문의하세요.";
             }
-            else if (flag=="DELETE")
-            {
-                successMsg = "댓글 삭제가 완료되었습니다.";
-                failMsg = "댓글 삭제를 실패하였습니다. 관리자에게 문의하세요.";
-            }
-            else
+            // 03. 댓글 수정
+            else if (flag == "UPDATE")
             {
                 replyComments = $("#td_" + replySeq)[0].innerText.trim();
                 successMsg = "댓글 수정이 완료되었습니다.";
                 failMsg = "댓글 수정을 실패하였습니다. 관리자에게 문의하세요.";
             }
-
+            // 04. 댓글 삭제
+            else if (flag=="DELETE")
+            {
+                successMsg = "댓글 삭제가 완료되었습니다.";
+                failMsg = "댓글 삭제를 실패하였습니다. 관리자에게 문의하세요.";
+            }
+            
+            
+            // 작성한 내용이 없을 시
             if (replyComments == "" && flag != "DELETE")
             {
                 MsgBox.Inform("댓글을 입력하세요.");
                 return;
             }
 
+            // 전송객체 "Contract/ReplyEntity"
             var replyObj = {
                 ReplyEntity: {}
             };
 
-            replyObj.ReplyEntity.REPLY_SEQ = RealReplySeq;
-            replyObj.ReplyEntity.REPLY_PARENT_SEQ = RealReplyParentSeq;
-            replyObj.ReplyEntity.BRD_SEQ = "@Model.BoardEntity.BRD_SEQ";
-            replyObj.ReplyEntity.BRD_CATEGORY = "@Model.BoardEntity.BRD_CATEGORY";
-            replyObj.ReplyEntity.BRD_DIV = "@Model.BoardEntity.BRD_DIV";
-            replyObj.ReplyEntity.REPLY_COMMENTS = replyComments;
-            replyObj.ReplyEntity.USE_YN = "Y";
-            replyObj.ReplyEntity.DEL_YN = "N";
+            // 값 입력
+            replyObj.ReplyEntity.REPLY_SEQ = RealReplySeq;                              /* REPLY_SEQ */
+            replyObj.ReplyEntity.REPLY_PARENT_SEQ = RealReplyParentSeq;                 /* REPLY_PARENT_SEQ */
+            replyObj.ReplyEntity.BRD_SEQ = "@Model.BoardEntity.BRD_SEQ";                /* BRD_SEQ */    
+            replyObj.ReplyEntity.BRD_CATEGORY = "@Model.BoardEntity.BRD_CATEGORY";      /* BRD_CATEGORY */
+            replyObj.ReplyEntity.BRD_DIV = "@Model.BoardEntity.BRD_DIV";                /* BRD_DIV */
+            replyObj.ReplyEntity.REPLY_COMMENTS = replyComments;                        /* REPLY_COMMENTS */
+            replyObj.ReplyEntity.USE_YN = "Y";                                          /* USE_YN */                
+            replyObj.ReplyEntity.DEL_YN = "N";                                          /* DEL_YN */
 
+            // 값 전달
             $.ajax({
                 type: "post"
                 , url: "/Reply/SaveReply"
                 , data: {
                     contract: replyObj,
-                    generalFlag: flag
+                    generalFlag: RealFlag
                     }
                 , success: function (data)
                 {
@@ -288,20 +312,29 @@
         */
         function ToggleEditReplyArea(replySeq, replyParentSeq)
         {
+
             var replyTrId = "#tr_reply_" + replySeq + "_" + replyParentSeq;
             var replyBtnId = "#btn_reply_" + replySeq + "_" + replyParentSeq;
+
+            // 01. 현재 열려있는 reply area 를 안보이게하고, ReplyButton 의 Disabled 를 해제
             $("tr[name='tr_reply']").css("display", "none");
             $("button[name='btn_reply']").removeAttr("disabled", "");
 
+            // 02. 선택한 reply area 를 보이게하고, 선택한 ReplyButton 의 Disabled 를 설정
             $(replyTrId).css("display", "");
             $(replyBtnId).attr("disabled", "");
         }
 
+        /*
+            CancelEditReplyArea : 댓글 수정 창 닫기
+        */
         function CancelEditReplyArea(replySeq, replyParentSeq)
         {
+
             var replyTrId = "#tr_reply_" + replySeq + "_" + replyParentSeq;
             var replyBtnId = "#btn_reply_" + replySeq + "_" + replyParentSeq;
 
+            // 01. 선택한 reply area 를 안보이게하고, ReplyButton 의 Disabled 를 해제
             $(replyTrId).css("display", "none");
             $(replyBtnId).removeAttr("disabled", "");
         }
