@@ -1,23 +1,15 @@
 ﻿using AMHR_WEB.GlobalAttribute;
-using Microsoft.Ajax.Utilities;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Repository;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Security.Policy;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
-using System.Xml;
-using static System.Net.WebRequestMethods;
 using Contract;
 using Contract.ENUM;
 using Entity;
-using System.Security.Cryptography;
 
 namespace AMHR_WEB.Controllers
 {

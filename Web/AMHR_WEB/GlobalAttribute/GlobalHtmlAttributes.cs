@@ -1,9 +1,4 @@
-﻿using AMHR_WEB.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
+﻿using System.Text;
 using System.Web.Mvc;
 
 namespace AMHR_WEB.GlobalAttribute
@@ -28,8 +23,8 @@ namespace AMHR_WEB.GlobalAttribute
             int displayPageCount = 10;
             int startNumber = 1;
             
-            int prevFirstNumber = 0;
-            int nextFirstNumber = 0;
+            int prevFirstNumber;
+            int nextFirstNumber;
 
             // 현재 페이지 번호를 확인한다.
             // 기본은 1 ~ 10이므로 displayPageCount(10으로 현재 페이지가 나누어 떨어지는지 확인한다.)
@@ -87,15 +82,15 @@ namespace AMHR_WEB.GlobalAttribute
             }
 
 
-            if (totalPageCount == 0)
+            if (totalPageCount == 0)    // 전체 페이지 갯수가 아예 없을 때
             {
                 strResults = "";
             }
-            else if (totalPageCount == 1)
+            else if (totalPageCount == 1) // 페이지 갯수가 1개일때
             {
                 strResults = "<li class='page-item active'> <a class='page-link' href='javascript:void(0);' onclick='ChangeConstPageNumber(" + '0' + ")'>1</a> </li>";
             }
-            else
+            else // 페이지 갯수가 2개 이상일때
             {
                 int displayPageNuber = startNumber;
                 int requestPageNumber = startNumber;

@@ -2,19 +2,15 @@
 using AMHR_WEB.Models;
 using Contract;
 using Contract.ENUM;
-using Entity;
 using Repository;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using SelectListItem = System.Web.Mvc.SelectListItem;
 
 namespace AMHR_WEB.Controllers
 {
-    
+
 
     /// <summary>
     /// UserController : User 관련 Buisness Logic 담당

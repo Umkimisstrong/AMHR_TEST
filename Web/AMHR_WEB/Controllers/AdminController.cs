@@ -3,14 +3,7 @@ using Contract;
 using Contract.ENUM;
 using Entity;
 using Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
-using System.Web;
 using System.Web.Mvc;
-using AuthorizeAttribute = AMHR_WEB.App_Filters.AuthorizeAttribute;
 
 namespace AMHR_WEB.Controllers
 {

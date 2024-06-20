@@ -68,6 +68,8 @@ namespace AMHR_WEB.Controllers
         /// <returns></returns>
         public ActionResult BoardSave(BoardContract contract)
         {
+            ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
+            ViewBag.SECOND_BREADCRUMB_NAME = "BoardSave";
             BoardContract response = new BoardContract();
 
             if (contract != null && !string.IsNullOrEmpty(contract.BRD_SEQ))
@@ -99,6 +101,8 @@ namespace AMHR_WEB.Controllers
         /// <returns></returns>
         public ActionResult BoardDetail(BoardContract contract)
         {
+            ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
+            ViewBag.SECOND_BREADCRUMB_NAME = "BoardDetail";
             BoardContract response = new BoardContract();
             BoardRepository repository = new BoardRepository();
 

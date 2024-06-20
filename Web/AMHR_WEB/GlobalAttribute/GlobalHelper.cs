@@ -1,13 +1,7 @@
-﻿using AMHR_WEB.Models;
-using Microsoft.Ajax.Utilities;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Repository;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Web;
 using System.Web.Mvc;
 
 namespace AMHR_WEB.GlobalAttribute

@@ -1,14 +1,13 @@
 ﻿using Contract;
 using Contract.ENUM;
 using Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace AMHR_WEB.Controllers
 {
+    /// <summary>
+    /// ReplyController : Reply 관련 Buisness Logic 담당
+    /// </summary>
     public class ReplyController : BaseController
     {
         /// <summary>

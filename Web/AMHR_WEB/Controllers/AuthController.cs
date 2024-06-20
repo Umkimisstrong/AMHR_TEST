@@ -1,20 +1,13 @@
 ﻿using AMHR_WEB.Authenticate;
 using AMHR_WEB.Models;
-using Contract;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Security.Authentication;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using AuthenticationException = AMHR_WEB.Authenticate.AuthenticationException;
-using Microsoft.Owin.Host.SystemWeb;
 using Repository;
-using System.Diagnostics.Contracts;
 using System.Text;
 using Entity;
 

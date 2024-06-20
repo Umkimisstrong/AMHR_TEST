@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Security.Claims;
-using System.Web;
+﻿using System.Security.Claims;
 using System.Web.Mvc;
-using AMHR_WEB.App_Filters;
 using AMHR_WEB.Models;
-using Contract;
-using Entity;
-using Repository;
 using AuthorizeAttribute = AMHR_WEB.App_Filters.AuthorizeAttribute;
 
 namespace AMHR_WEB.Controllers
