@@ -143,6 +143,7 @@
     <Compile Include="Authenticate\AuthenticationException.cs" />
     <Compile Include="Authenticate\AuthenticationHelper.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AttachFilesController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BoardController.cs" />
@@ -161,7 +162,9 @@
     <Compile Include="GlobalAttribute\GlobalKakao.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\CustomErrorModel.cs" />
+    <Compile Include="Models\JsonFiles.cs" />
     <Compile Include="Models\SignInViewModel.cs" />
+    <Compile Include="Models\UploadFilesResult.cs" />
     <Compile Include="Models\UserSessionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -183,7 +186,21 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\css\jquery.fileupload.css" />
+    <Content Include="Content\css\jquery.fileupload-ui.css" />
+    <Content Include="Content\css\jquery.fileupload-ui-noscript.css" />
+    <Content Include="Content\css\jquery.fileupload-noscript.css" />
     <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\js\jquery.iframe-transport.js" />
+    <Content Include="Content\js\jquery.fileupload.js" />
+    <Content Include="Content\js\jquery.fileupload-video.js" />
+    <Content Include="Content\js\jquery.fileupload-validate.js" />
+    <Content Include="Content\js\jquery.fileupload-ui.js" />
+    <Content Include="Content\js\jquery.fileupload-process.js" />
+    <Content Include="Content\js\jquery.fileupload-image.js" />
+    <Content Include="Content\js\jquery.fileupload-audio.js" />
+    <Content Include="Content\js\demo.js" />
+    <Content Include="Content\js\vendor\jquery.ui.widget.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -254,9 +271,11 @@
     <Content Include="Views\Board\BoardList.cshtml" />
     <Content Include="Views\Board\BoardSave.cshtml" />
     <Content Include="Views\Board\BoardDetail.cshtml" />
+    <Content Include="Views\Shared\FileUploadArea.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\AttachFiles\" />
     <Folder Include="Views\Auth\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Kakao\" />

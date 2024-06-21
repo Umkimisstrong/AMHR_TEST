@@ -24,6 +24,11 @@ namespace AMHR_WEB
             bundles.Add(new ScriptBundle("~/bundles/jquery_ui").Include(
                             "~/Scripts/jquery-ui.min.js"
                         ));
+            bundles.Add(new ScriptBundle("~/bundles/jquery_fileupload").Include(
+                            "~/Content/js/demo.js",
+                            "~/Content/js/jquery.*",
+                            "~/Content/js/vendor/jquery.ui.widget.js"
+                        ));
 
             /* Bundle */
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
@@ -41,6 +46,9 @@ namespace AMHR_WEB
                       "~/Content/bootstrap.min.css",
                       "~/Content/site.css"
                       ));
+            bundles.Add(new StyleBundle("~/Content/css/jquery").Include(
+                "~/Content/css/jquery.*"
+                ));
             bundles.Add(new StyleBundle("~/bundles/amhrCss").Include(
                      "~/StaticContents/css/amhr_*"));
         }
