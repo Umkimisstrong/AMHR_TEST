@@ -16,7 +16,7 @@
     display: inline-block;
 }
 
-    .fileinput-button input {
+    .fileinput-button input { 
         position: absolute;
         top: 0;
         right: 0;
