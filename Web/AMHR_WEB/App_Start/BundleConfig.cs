@@ -34,7 +34,7 @@ namespace AMHR_WEB
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
             bundles.Add(new Bundle("~/bundles/bootstrap_datepicker").Include(
-                      "~/Scripts/bootstrap-datepicker*"
+                      "~/Scripts/bootstrap-datepicker*"  
                       ));
 
             /* Style Bundle */
