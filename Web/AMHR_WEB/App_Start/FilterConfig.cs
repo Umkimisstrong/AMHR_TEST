@@ -12,7 +12,7 @@ namespace AMHR_WEB
         /// RegisterGlobalFilters : 전역 필터를 등록한다.
         /// </summary>
         /// <param name="filters"></param>
-        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        public static void RegisterGlobalFilters(GlobalFilterCollection filters)  
         {
             filters.Add(new HandleErrorAttribute());
         }
