@@ -1,4 +1,4 @@
-﻿using System.Web;
+﻿using System.Configuration;
 using System.Web.Optimization;
 
 namespace AMHR_WEB
@@ -12,6 +12,12 @@ namespace AMHR_WEB
         /// <param name="bundles"></param>
         public static void RegisterBundles(BundleCollection bundles)
         {
+            /* Web.Config 에서 테마를 확인한다. ON 인 테마를 prefix 문자열로 만들어 Bundle Load 시 적용 */
+            string LUX = ConfigurationManager.AppSettings["cssTheme_LUX"].ToString();
+            string JOURNAL = ConfigurationManager.AppSettings["cssTheme_JOURNAL"].ToString();
+            string prefixTHEME = LUX.Equals("ON") ? "LUX_" : (JOURNAL.Equals("ON") ? "JOURNAL_" : LUX);
+
+
             /* Script Bundle */
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
@@ -39,18 +45,22 @@ namespace AMHR_WEB
 
             /* Style Bundle */
             bundles.Add(new StyleBundle("~/bundles/bootstrap_datepicker_ui").Include(
-                      "~/Content/jquery-ui.css"
-                      ));
+                      "~/Content/" + prefixTHEME + "jquery-ui.css"
+                      ));   // DatePicker Style
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/bootstrap.min.css",
+                      "~/Content/"+ prefixTHEME+"bootstrap.css",
+                      "~/Content/"+ prefixTHEME+"bootstrap.min.css",
                       "~/Content/site.css"
-                      ));
+                      ));   // BootStrap All Style
+
             bundles.Add(new StyleBundle("~/Content/css/jquery").Include(
                 "~/Content/css/jquery.*"
                 ));
+
             bundles.Add(new StyleBundle("~/bundles/amhrCss").Include(
-                     "~/StaticContents/css/amhr_*"));
+                     "~/StaticContents/css/"+ prefixTHEME+"amhr_*"));
+                            // Amhr Custom Style
         }
     }
 }

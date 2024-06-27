@@ -190,6 +190,11 @@
     <Content Include="Content\css\jquery.fileupload-ui.css" />
     <Content Include="Content\css\jquery.fileupload-ui-noscript.css" />
     <Content Include="Content\css\jquery.fileupload-noscript.css" />
+    <Content Include="Content\JOURNAL_bootstrap.css" />
+    <Content Include="Content\JOURNAL_bootstrap.min.css" />
+    <Content Include="Content\JOURNAL_bootstrap.rtl.css" />
+    <Content Include="Content\JOURNAL_bootstrap.rtl.min.css" />
+    <Content Include="Content\JOURNAL_jquery-ui.css" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\js\jquery.iframe-transport.js" />
     <Content Include="Content\js\jquery.fileupload.js" />
@@ -201,6 +206,11 @@
     <Content Include="Content\js\jquery.fileupload-audio.js" />
     <Content Include="Content\js\demo.js" />
     <Content Include="Content\js\vendor\jquery.ui.widget.js" />
+    <Content Include="Content\LUX_bootstrap.css" />
+    <Content Include="Content\LUX_bootstrap.min.css" />
+    <Content Include="Content\LUX_bootstrap.rtl.css" />
+    <Content Include="Content\LUX_bootstrap.rtl.min.css" />
+    <Content Include="Content\LUX_jquery-ui.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -226,6 +236,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="StaticContents\css\amhr_cmm.css" />
+    <Content Include="StaticContents\css\JOURNAL_amhr_cmm.css" />
+    <Content Include="StaticContents\css\LUX_amhr_cmm.css" />
     <Content Include="StaticContents\images\arrow-button.png" />
     <Content Include="StaticContents\images\kakao_login_large_wide.png" />
     <Content Include="StaticContents\images\kakao_login_medium_wide.png" />
