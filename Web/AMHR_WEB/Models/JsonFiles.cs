@@ -5,6 +5,9 @@ using System.Web;
 
 namespace AMHR_WEB.Models
 {
+    /// <summary>
+    /// JsonFiles : (미사용) Json Return 용으로 만들었으나 미사용
+    /// </summary>
     public class JsonFiles
     {
         public UploadFilesResult[] files;
