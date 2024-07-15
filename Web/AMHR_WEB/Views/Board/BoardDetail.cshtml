@@ -84,7 +84,8 @@
                             <tbody class="files" id="downloadFilesArea">
                                 @foreach (Entity.FileEntity entity in Model.FileContract.FileList)
                                 {
-                                    string FILE_DOWNLOAD_URL = "D:\\AttachFiles\\Find\\" + entity.FILE_PATH + "\\" + entity.FILE_SERVER_NAME;
+                                    //[Route("AttachFiles/Find/{fileFolderPath}/{fileName}/{serverFileName}")]
+                                    string FILE_DOWNLOAD_URL = "/AttachFiles/Find?fileFolderPath=" + entity.FILE_PATH + "&fileName=" + entity.FILE_NAME+"&serverFileName=" + entity.FILE_SERVER_NAME;
 
                                     <tr class="template-download">
                                         <td>

@@ -64,6 +64,30 @@ namespace AMHR_WEB.Controllers
             return Json(resultList);
         }
 
+        [Route("AttachFiles/Find/{fileFolderPath}/{fileName}/{serverFileName}")]
+        public ActionResult Find(string fileFolderPath, string fileName, string serverFileName)
+        {
+            if (string.IsNullOrEmpty(fileFolderPath) || string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(serverFileName))
+            {
+                return HttpNotFound();
+            }
+
+
+            var filePath = Path.Combine(storageRoot, fileFolderPath, serverFileName);
+            if (System.IO.File.Exists(filePath))
+            {
+                string contentType = fileName.Substring(fileName.LastIndexOf('.'));
+                FileStreamResult result = new FileStreamResult(new System.IO.FileStream(filePath, System.IO.FileMode.Open, FileAccess.Read, FileShare.ReadWrite), contentType);
+                result.FileDownloadName = fileName;
+                return result;
+            }
+            else
+            {
+                return HttpNotFound();
+            }
+            
+        }
+
         /// <summary>
         /// Delete : 물리파일삭제
         /// </summary>
