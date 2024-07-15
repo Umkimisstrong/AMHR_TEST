@@ -76,9 +76,11 @@ namespace AMHR_WEB.Controllers
         /// SaveFile : 파일저장용 테스트 
         /// </summary>
         /// <param name="UploadFileString">Upload File 문자열</param>
-        public void SaveFile(string UploadFileString) 
+        /// /// <param name="DeleteFileString">Delete File 문자열</param>
+        public void SaveFile(string UploadFileString, string DeleteFileString) 
         {
             List<UploadFilesResult> obj =  JsonConvert.DeserializeObject<List<UploadFilesResult>>(UploadFileString);
+            List<UploadFilesResult> obj2 = JsonConvert.DeserializeObject<List<UploadFilesResult>>(DeleteFileString);
             // 하위에 반복문을 통해 Insert 할 수 있다.
         }
     }

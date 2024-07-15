@@ -1,13 +1,26 @@
-﻿@* 
+﻿@model Contract.FileContract
+@* 
     FileUploadArea
     - Partial View 로 활용되는 파일업로드 영역
     - 멀티파일 업로드 가능 (최대 10개)
     - Add : 로컬 디렉토리에서 첨부할 파일을 Upload
     - Delete : 선택된 Row 파일 제거
     - Cancel : 각 Row 별 제거
+    
 *@
 
 @{ Layout = null; }
+@{ 
+    var CONST_DOWNLOADFILELIST = new List<Entity.FileEntity> ();
+
+    if(Model != null)
+    {
+        if(Model.FileList != null && Model.FileList.Count >0)
+        {
+            CONST_DOWNLOADFILELIST = Model.FileList;
+        }
+    }
+}
 
 <!DOCTYPE html>
 <!--
@@ -75,7 +88,11 @@
                             <i class="glyphicon glyphicon-ban-circle"></i>
                             <span>Cancel upload</span>
                         </button>*@
-                    <button type="button" class="btn btn-danger" onclick="DeleteBtnClick()">
+                    <button type="button" class="btn btn-warning cancel" onclick="CancelAllBtnClick()">
+                        <i class="glyphicon glyphicon-ban-circle"></i>
+                        <span>Cancel selected</span>
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="DeleteAllBtnClick()">
                         <i class="glyphicon glyphicon-trash"></i>
                         <span>Delete selected</span>
                     </button>
@@ -107,6 +124,53 @@
                                 </button>
                             </td>
                         </tr>*@
+                </tbody>
+                <tbody class="files" id="downloadFilesArea">
+                    <tr class="template-download" id="trDown_101">
+                        <td>
+                            <input type="checkbox" class="form-check" id="fileDown_101" name="chkFileDownRow" />
+                        </td>
+                        <td>
+                            <p class="name">
+                                <a href="/AttachFiles/Find/2024/07/klhglksdlfdllsf" title="다운로드파일명" download="다운로드파일명">다운로드파일명</a>
+                            </p>
+                        </td>
+                        <td>
+                            <span class="size">1024 byte</span>
+                        </td>
+                        <td>
+                            <p class="name">txt</p>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger delete" type="button" onclick="DeleteBtnEachRowClick('101')">
+                                <i class="glyphicon glyphicon-ban-circle"></i>
+                                <span>Delete</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="template-download" id="trDown_123">
+                        <td>
+                            <input type="checkbox" class="form-check" id="fileDown_123" name="chkFileDownRow" />
+                        </td>
+                        <td>
+                            <p class="name">
+                                <a href="/AttachFiles/Find/2024/07/klhglksdlfdllsf" title="다운로드파일명2" download="다운로드파일명2">다운로드파일명2</a>
+                            </p>
+                        </td>
+                        <td>
+                            <span class="size">1024 byte</span>
+                        </td>
+                        <td>
+                            <p class="name">txt</p>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger delete" type="button"  onclick="DeleteBtnEachRowClick('123')">
+                                <i class="glyphicon glyphicon-ban-circle"></i>
+                                <span>Delete</span>
+                            </button>
+                        </td>
+                    </tr>
+
                 </tbody>
             </table>
             <!-- The main application script -->
@@ -198,9 +262,17 @@
         /* 전역변수 dataTransfer : File 정보를 동적으로 Control 하기 위한 객체 */
         const dataTransfer = new DataTransfer();
 
+        const dataTransfer2 = new DataTransfer();
+
+        
         /* 전역변수 strUploadObj : Upload 한 파일정보를 JSON.stringify 한 문자열 */
         var strUploadObj = "";
 
+        /* 전역변수 strDeleteObj : Delete 한 파일정보를 JSON.stringify 한 문자열 */
+        var strDeleteObj = "";
+
+        /* 전역변수 deleteFileObj : Delete 한 파일정보를 배열 객체로 관리하는 변수 */
+        var deleteFileObj = [];
 
         /*
             AddBtnClick : Add 버튼 클릭 후 File 선택하고 나면 발동하는 함수
@@ -231,9 +303,9 @@
         }
 
         /*
-            DeleteBtnClick : Upload 된 파일 중 선택된 파일들을 삭제한다.
+            CancelAllBtnClick : Upload 한 파일 중 선택된 파일들을 삭제한다.
         */
-        function DeleteBtnClick() {
+        function CancelAllBtnClick() {
             var chkObj = $("input[name='chkFileRow']:checked");
             if (chkObj != null && chkObj != undefined) {
                 if (chkObj.length > 0) {
@@ -249,6 +321,46 @@
             }
         }
 
+        /*
+            DeleteAllBtnClick : Upload 된 파일 중 선택된 파일들을 삭제한다.
+        */
+        function DeleteAllBtnClick() {
+            var chkObj = $("input[name='chkFileDownRow']:checked");
+            if (chkObj != null && chkObj != undefined) {
+                if (chkObj.length > 0) {
+                    for (var i = chkObj.length - 1; i >= 0; i--) {
+
+                        var deleteRowId = "#" + chkObj[i].id.replace('fileDown_', 'trDown_');
+                        SetDeleteObjAndString(chkObj[i].id.replace('fileDown_', ''));
+                        $(deleteRowId).remove();
+                    }
+                }
+            }
+        }
+
+        /*
+            DeleteBtnEachRowClick : 파일 목록에서 delete 버튼으로 하나씩 없애는 함수
+        */
+        function DeleteBtnEachRowClick(cancelRowId) {
+
+            SetDeleteObjAndString(cancelRowId);
+
+            var deleteTargetTrId = "#trDown_" + cancelRowId;
+            $(deleteTargetTrId).remove();
+            
+        }
+
+
+        function SetDeleteObjAndString(fileSeq)
+        {
+            var UploadFilesResult = {};
+            UploadFilesResult.FILE_SEQ = fileSeq;
+            deleteFileObj.push(UploadFilesResult);
+
+            if (deleteFileObj != null && deleteFileObj != undefined) {
+                strDeleteObj = JSON.stringify(deleteFileObj);
+            }
+        }
 
         /*
             SetUploadTemplate : 문자열로 파일목록을 만들어서 Return
@@ -337,7 +449,7 @@
         // 테스트
         function SaveFile() {
             $.ajax({
-                url: "/AttachFiles/SaveFile?UploadFileString=" + strUploadObj,
+                url: "/AttachFiles/SaveFile?UploadFileString=" + strUploadObj + "&DeleteFileString=" + strDeleteObj,
                 type: "GET",
                 contentType: false,
                 processData: false,
