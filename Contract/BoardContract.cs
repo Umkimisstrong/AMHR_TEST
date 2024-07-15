@@ -54,7 +54,15 @@ namespace Contract
         /// </summary>
         public List<BoardEntity> BoardList { get; set; }
 
+        /// <summary>
+        /// ReplyList : 댓글 엔티티의 집합
+        /// </summary>
         public List<ReplyEntity> ReplyList { get; set; }
+
+        /// <summary>
+        /// FileContract : 파일 Contract
+        /// </summary>
+        public FileContract FileContract { get; set; }
 
 
     }

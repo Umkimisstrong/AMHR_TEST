@@ -81,13 +81,13 @@
                         <input type="file" name="files" multiple id="attFileBtn" onchange="AddBtnClick()" />
                     </span>
                     @*<button type="submit" class="btn btn-primary start">
-                            <i class="glyphicon glyphicon-upload"></i>
-                            <span>Start upload</span>
-                        </button>*@
+                        <i class="glyphicon glyphicon-upload"></i>
+                        <span>Start upload</span>
+                    </button>*@
                     @*<button type="reset" class="btn btn-warning cancel">
-                            <i class="glyphicon glyphicon-ban-circle"></i>
-                            <span>Cancel upload</span>
-                        </button>*@
+                        <i class="glyphicon glyphicon-ban-circle"></i>
+                        <span>Cancel upload</span>
+                    </button>*@
                     <button type="button" class="btn btn-warning cancel" onclick="CancelAllBtnClick()">
                         <i class="glyphicon glyphicon-ban-circle"></i>
                         <span>Cancel selected</span>
@@ -101,32 +101,70 @@
 
             </div>
             <!-- The table listing the files available for upload/download -->
-            <table role="presentation" class="table table-striped">
+            @*<table role="presentation" class="table table-striped">      줄무늬  *@
+            <table role="presentation" class="table ">
+                @* 일반 테이블 *@
                 <tbody class="files" id="uploadFilesArea">
+                    @* Local에서 File을 Add 하는 영역 *@
+
                     @*<tr class="template-upload">
-                            <td>
-                                <input type="checkbox" class="form-check" id="file_0"/>
-                            </td>
-                            <td>
-                                <p class="name">ABCD.txt</p>
-                                <strong class="error text-danger">파일 확장자로 허용되지 않습니다.</strong>
-                            </td>
-                            <td>
-                                <p class="name">1024 bytes</p>
-                            </td>
-                            <td>
-                                <p class="name">txt</p>
-                            </td>
-                            <td>
-                                <button class="btn btn-warning cancel">
-                                    <i class="glyphicon glyphicon-ban-circle"></i>
-                                    <span>Cancel</span>
-                                </button>
-                            </td>
-                        </tr>*@
+                        <td>
+                            <input type="checkbox" class="form-check" id="file_0"/>
+                        </td>
+                        <td>
+                            <p class="name">ABCD.txt</p>
+                            <strong class="error text-danger">파일 확장자로 허용되지 않습니다.</strong>
+                        </td>
+                        <td>
+                            <p class="name">1024 bytes</p>
+                        </td>
+                        <td>
+                            <p class="name">txt</p>
+                        </td>
+                        <td>
+                            <button class="btn btn-warning cancel">
+                                <i class="glyphicon glyphicon-ban-circle"></i>
+                                <span>Cancel</span>
+                            </button>
+                        </td>
+                    </tr>*@
                 </tbody>
                 <tbody class="files" id="downloadFilesArea">
-                    <tr class="template-download" id="trDown_101">
+                    @* Upload 한 파일 존재하는 경우 반복문으로 바인딩 *@
+                    @if(Model.FileList != null && Model.FileList.Count>0)
+                    {
+                        foreach(Entity.FileEntity item in Model.FileList)
+                        {
+                            string trID = "trDown_" + item.FILE_SEQ.ToString();
+                            string chkID = "fileDown_" + item.FILE_SEQ.ToString();
+                            string fileName = item.FILE_NAME;
+                            string fileType = fileName.Substring(item.FILE_NAME.LastIndexOf('.'));
+                            <tr class="template-download" id="@trID">
+                                <td>
+                                    <input type="checkbox" class="form-check" id="@chkID" name="chkFileDownRow" />
+                                </td>
+                                <td>
+                                    <p class="name">
+                                        @fileName
+                                    </p>
+                                </td>
+                                <td>
+                                    <span class="size">@item.FILE_SIZE.ToString() byte</span>
+                                </td>
+                                <td>
+                                    <p class="name">@fileType</p>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger delete" type="button" onclick="DeleteBtnEachRowClick('@item.FILE_SEQ.ToString()')">
+                                        <i class="glyphicon glyphicon-ban-circle"></i>
+                                        <span>Delete</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                    @*<tr class="template-download" id="trDown_101">
                         <td>
                             <input type="checkbox" class="form-check" id="fileDown_101" name="chkFileDownRow" />
                         </td>
@@ -164,12 +202,12 @@
                             <p class="name">txt</p>
                         </td>
                         <td>
-                            <button class="btn btn-danger delete" type="button"  onclick="DeleteBtnEachRowClick('123')">
+                            <button class="btn btn-danger delete" type="button" onclick="DeleteBtnEachRowClick('123')">
                                 <i class="glyphicon glyphicon-ban-circle"></i>
                                 <span>Delete</span>
                             </button>
                         </td>
-                    </tr>
+                    </tr>*@
 
                 </tbody>
             </table>
@@ -177,7 +215,7 @@
         </form>
     </div>
     <!-- The template to display files available for upload -->
-    <script id="template-upload" type="text/x-tmpl">
+    <!--<script id="template-upload" type="text/x-tmpl">
         {% for (var i=0, file; file=o.files[i]; i++) { %}
             <tr class="template-upload fade{%=o.options.loadImageFileTypes.test(file.type)?' image':''%}">
                 <td>
@@ -213,9 +251,9 @@
                 </td>
             </tr>
         {% } %}
-    </script>
+    </script>-->
     <!-- The template to display files available for download -->
-    <script id="template-download" type="text/x-tmpl">
+    <!--<script id="template-download" type="text/x-tmpl">
         {% for (var i=0, file; file=o.files[i]; i++) { %}
             <tr class="template-download fade{%=file.thumbnailUrl?' image':''%}">
                 <td>
@@ -256,13 +294,11 @@
                 </td>
             </tr>
         {% } %}
-    </script>
+    </script>-->
     <script type="text/javascript">
 
         /* 전역변수 dataTransfer : File 정보를 동적으로 Control 하기 위한 객체 */
         const dataTransfer = new DataTransfer();
-
-        const dataTransfer2 = new DataTransfer();
 
         
         /* 전역변수 strUploadObj : Upload 한 파일정보를 JSON.stringify 한 문자열 */
@@ -342,15 +378,15 @@
             DeleteBtnEachRowClick : 파일 목록에서 delete 버튼으로 하나씩 없애는 함수
         */
         function DeleteBtnEachRowClick(cancelRowId) {
-
             SetDeleteObjAndString(cancelRowId);
-
             var deleteTargetTrId = "#trDown_" + cancelRowId;
             $(deleteTargetTrId).remove();
-            
         }
 
-
+        /*
+            SetDeleteObjAndString : 기존에 올라왔던 파일을 삭제하는 경우 해당 정보를 
+                                    객체화 -> 문자열 하여 삭제 문자열에 담는다.
+        */
         function SetDeleteObjAndString(fileSeq)
         {
             var UploadFilesResult = {};
@@ -360,6 +396,8 @@
             if (deleteFileObj != null && deleteFileObj != undefined) {
                 strDeleteObj = JSON.stringify(deleteFileObj);
             }
+
+            $("#DeleteFileString").val(strDeleteObj);
         }
 
         /*
@@ -415,8 +453,11 @@
             return TemplateUpload;
         }
 
-
+        /*
+            StartFileUpload : Added 된 파일 정보를 Ajax로 Upload 하고 bool 결과를 반환
+        */
         function StartFileUpload() {
+            var result = false;
             var fileListObj = $("#fileupload")[0].files.files;
 
             if (fileListObj.length > 0) {
@@ -433,10 +474,16 @@
                     type: "POST",
                     contentType: false,
                     processData: false,
+                    async: false,
                     data: formData,
                     success: function (data) {
                         console.log(data);
                         strUploadObj = JSON.stringify(data);
+                        $("#UploadFileString").val(strUploadObj);
+                        if (strUploadObj != "")
+                        {
+                            result = true;
+                        }
                     },
                     error: function (xhr, status, p3, p4) {
 
@@ -444,9 +491,10 @@
                 });
 
             }
+            return result;
         }
 
-        // 테스트
+        // 테스트 코드
         function SaveFile() {
             $.ajax({
                 url: "/AttachFiles/SaveFile?UploadFileString=" + strUploadObj + "&DeleteFileString=" + strDeleteObj,

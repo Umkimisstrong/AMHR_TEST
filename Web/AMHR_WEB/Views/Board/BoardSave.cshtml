@@ -16,6 +16,16 @@
             userInfo = AMHR_WEB.GlobalAttribute.GlobalHelper.stringToObject<AMHR_WEB.Models.UserSessionModel>(sessionClaim.Value);
         }
     }
+
+    @* 
+        Model 에 쓰일 fileContract 정보를 세팅한다.
+        fileContract 정보에 FileList 를 담게되는데 BoardContract 에서 담아온다.
+    *@
+    Contract.FileContract fileContract = new Contract.FileContract();
+    if(Model.FileContract.FileList != null && Model.FileContract.FileList.Count>0)
+    { 
+        fileContract.FileList = Model.FileContract.FileList;
+    }
 }
 
 @* Main Layer *@
@@ -61,29 +71,37 @@
                         @Html.HiddenFor(m => m.BoardEntity.BRD_CATEGORY, new { @id = "Brd_Category" })
                         @Html.HiddenFor(m => m.BoardEntity.BRD_DIV, new { @id = "Brd_Div" })
                         @Html.Hidden("GeneralFlag", "CREATE", new { @id = "Hidden_GeneralFlag" })
+
+                        @* File Info *@
+                        @Html.HiddenFor(m => m.FileContract.UploadFileString, new { @id = "UploadFileString" })
+                        @Html.HiddenFor(m => m.FileContract.DeleteFileString, new { @id = "DeleteFileString" })
                     </div>
                     <hr />
 
                 </fieldset>
             </section>
 
-            <div class="row" style="margin-top:10px;">
-                <section class="col-md-12" aria-labelledby="gettingStartedTitle" style="text-align:center;">
-                    <div>
-                        @if (
-                            (generalFlag.Equals(Contract.ENUM.EnumProperties.GeneralFlag.CREATE.ToString()) && userInfo != null)
-                            ||
-                            (generalFlag.Equals(Contract.ENUM.EnumProperties.GeneralFlag.UPDATE.ToString()) && userInfo.USER_ID != null && userInfo.USER_ID.Equals(Model.BoardEntity.BRD_WRITE_ID))
-
-                            )
-                        {
-                            <button type="button" class="btn btn-primary" onclick="requestSaveBoard()">Submit</button>
-                        }
-
-                    </div>
-                </section>
-            </div>
         </form>
+        <section>
+            @* FileUploadArea 를 RenderPartial 한다. *@
+            @{Html.RenderPartial("FileUploadArea", fileContract);}
+        </section>
+        <div class="row" style="margin-top:10px;">
+            <section class="col-md-12" aria-labelledby="gettingStartedTitle" style="text-align:center;">
+                <div>
+                    @if (
+                        (generalFlag.Equals(Contract.ENUM.EnumProperties.GeneralFlag.CREATE.ToString()) && userInfo != null)
+                        ||
+                        (generalFlag.Equals(Contract.ENUM.EnumProperties.GeneralFlag.UPDATE.ToString()) && userInfo.USER_ID != null && userInfo.USER_ID.Equals(Model.BoardEntity.BRD_WRITE_ID))
+
+                        )
+                    {
+                        <button type="button" class="btn btn-primary" onclick="requestSaveBoard()">Submit</button>
+                    }
+
+                </div>
+            </section>
+        </div>
     </div>
 </main>
 @* Main Layer *@
@@ -139,8 +157,26 @@
         {
 
             MsgBox.Confirm("저장하시겠습니까?", function resultFlag(flag) {
-                if (flag) {
-                    $("#CONST_SAVE_FORM").submit();
+                if (flag)
+                {
+                    // uploadFilesArea 의 tr 정보가 있다면
+                    // file을 add 한 것으로 판단하고
+                    // StartFileUpload()를 호출하여 ajax 로 물리파일업로드를 진행한다.
+                    // 결과를 반환받아서 전체 Form 을 Submit 한다.
+                    if ($("#uploadFilesArea").find("tr").length>0)
+                    {
+                        var fileSaveResult = StartFileUpload();
+                        if (fileSaveResult)
+                        {
+                            $("#CONST_SAVE_FORM").submit();
+                        }
+                    }
+                    // 파일 정보가 없는 경우 전체 Form 을 Submit 한다.
+                    else
+                    {
+                        $("#CONST_SAVE_FORM").submit();
+                    }
+                    
                 }
                 else {
                     return;

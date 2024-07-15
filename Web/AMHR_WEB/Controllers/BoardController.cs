@@ -7,6 +7,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Entity;
+using AMHR_WEB.Models;
+using Newtonsoft.Json;
 
 namespace AMHR_WEB.Controllers
 {
@@ -72,6 +74,9 @@ namespace AMHR_WEB.Controllers
             ViewBag.SECOND_BREADCRUMB_NAME = "BoardSave";
             BoardContract response = new BoardContract();
 
+            // 파일정보를 가져갈 FileContract 선언
+            FileContract fileContract = new FileContract();
+
             if (contract != null && !string.IsNullOrEmpty(contract.BRD_SEQ))
             {
                 // 수정
@@ -81,6 +86,10 @@ namespace AMHR_WEB.Controllers
                 BoardRepository repository = new BoardRepository();
                 response.BoardEntity = repository.SelectBoardEntity(contract.BRD_SEQ, contract.BRD_CATEGORY, contract.BRD_DIV);
 
+                // 파일 조회
+                FileRepository fileRepository = new FileRepository();
+                fileContract.FileList = fileRepository.SelectFileList(contract.BRD_CATEGORY, contract.BRD_DIV, contract.BRD_SEQ);
+
             }
             else
             {
@@ -88,8 +97,12 @@ namespace AMHR_WEB.Controllers
                 response.BoardEntity = new BoardEntity();
                 response.BoardEntity.BRD_CATEGORY = contract.BRD_CATEGORY;
                 response.BoardEntity.BRD_DIV = contract.BRD_DIV;
+
+                
             }
 
+            // View 에 가져갈 모델에 FileContract 를 담아서 return 되게 한다.
+            response.FileContract = fileContract;
 
             return View(response);
         }
@@ -106,9 +119,19 @@ namespace AMHR_WEB.Controllers
             BoardContract response = new BoardContract();
             BoardRepository repository = new BoardRepository();
 
+            // 파일정보를 가져갈 FileContract 선언
+            FileContract fileContract = new FileContract();
             ReplyRepository replyRepository = new ReplyRepository();
             response.ReplyList = replyRepository.SelectReplyList(contract.BRD_SEQ, contract.BRD_CATEGORY, contract.BRD_DIV);
             response.BoardEntity = repository.SelectBoardEntity(contract.BRD_SEQ, contract.BRD_CATEGORY, contract.BRD_DIV);
+
+            // 파일정보 조회
+            FileRepository fileRepository = new FileRepository();
+            fileContract.FileList = fileRepository.SelectFileList(contract.BRD_CATEGORY, contract.BRD_DIV, contract.BRD_SEQ);
+
+            // View 에 가져갈 모델에 FileContract 를 담아서 return 되게 한다.
+            response.FileContract = fileContract;
+
 
             return View(response);
         }
@@ -128,7 +151,31 @@ namespace AMHR_WEB.Controllers
             contract.BoardEntity.USE_YN = "Y";
             contract.BoardEntity.DEL_YN = "N";
 
-            repository.SaveBoard(contract.BoardEntity, generalFlag);
+            // 저장버튼 클릭 시 FileContract 정보가 있다면
+            if (contract.FileContract != null)
+            {
+                // Upload 된 파일이 있다면
+                if (!string.IsNullOrEmpty(contract.FileContract.UploadFileString))
+                {
+                    contract.FileContract.UploadFileList = JsonConvert.DeserializeObject<List<FileEntity>>(contract.FileContract.UploadFileString);
+                }
+                // Delete 된 파일이 있다면
+                if (!string.IsNullOrEmpty(contract.FileContract.DeleteFileString))
+                {
+                    contract.FileContract.DeleteFileList = JsonConvert.DeserializeObject<List<FileEntity>>(contract.FileContract.DeleteFileString);
+                }
+                // 수정이라면
+                if (generalFlag.Equals(EnumProperties.GeneralFlag.UPDATE))
+                {
+                    // 기존파일 조회
+                    FileRepository fileRepository = new FileRepository();
+                    contract.FileContract.ExistFileList = fileRepository.SelectFileList(contract.BoardEntity.BRD_CATEGORY, contract.BoardEntity.BRD_DIV, contract.BoardEntity.BRD_SEQ);
+                }
+
+            }
+
+
+            repository.SaveBoard(contract, generalFlag);
 
             return RedirectToAction("BoardDetail", new { 
                     contract.BoardEntity.BRD_SEQ,
@@ -146,7 +193,8 @@ namespace AMHR_WEB.Controllers
         {
             BoardRepository repository = new BoardRepository();
             contract.BoardEntity.BRD_WRITE_ID = UserSessionModel.USER_ID;
-            bool result = repository.SaveBoard(contract.BoardEntity, EnumProperties.GeneralFlag.DELETE);
+            
+            bool result = repository.SaveBoard(contract, EnumProperties.GeneralFlag.DELETE);
 
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }

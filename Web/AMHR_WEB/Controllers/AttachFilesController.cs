@@ -53,7 +53,11 @@ namespace AMHR_WEB.Controllers
                 uploadfiles.FILE_SERVER_NAME = serverFileNM;
                 uploadfiles.FILE_SIZE = files.ContentLength;
                 uploadfiles.FILE_PATH = MonthlyPath;
-                
+                uploadfiles.USE_YN = "Y";
+                uploadfiles.DEL_YN = "N";
+                uploadfiles.CREATE_ID = UserSessionModel.USER_ID;
+                uploadfiles.UPDATE_ID = UserSessionModel.USER_ID;
+
                 resultList.Add(uploadfiles);
             }
 

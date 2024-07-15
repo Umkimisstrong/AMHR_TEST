@@ -45,8 +45,8 @@
                     <div style="text-align:right; margin-top:10px;">
                         <div style="padding-right:0;">
                             <button type="button" class="btn bg-primary btn-sm text-white" onclick="BoardList('@Model.BoardEntity.BRD_CATEGORY', '@Model.BoardEntity.BRD_DIV')">Back to List</button>
-                            @if(ISOWNER)
-                            { 
+                            @if (ISOWNER)
+                            {
                                 <button type="button" class="btn bg-primary btn-sm text-white" onclick="BoardModify()">Modify Board</button>
                             }
                         </div>
@@ -70,6 +70,45 @@
             </fieldset>
         </section>
     </div>
+
+    <section class="col-md-12" aria-labelledby="gettingStartedTitle" style="justify-content:center; width:100%;">
+        <fieldset style="justify-content:center;">
+            <div>
+                <label for="Brd_Title" class="form-label mt-4" style="font-weight:bold;">Files</label>
+                <div style="display:flex; margin-left:15px; min-height:60px;">
+
+                    @* 파일 정보가 있다면 출력한다. *@
+                    @if (Model.FileContract != null && Model.FileContract.FileList != null && Model.FileContract.FileList.Count > 0)
+                    {
+                        <table role="presentation" class="table table-striped">
+                            <tbody class="files" id="downloadFilesArea">
+                                @foreach (Entity.FileEntity entity in Model.FileContract.FileList)
+                                {
+                                    string FILE_DOWNLOAD_URL = "D:\\AttachFiles\\Find\\" + entity.FILE_PATH + "\\" + entity.FILE_SERVER_NAME;
+
+                                    <tr class="template-download">
+                                        <td>
+                                            <p class="name">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down-fill" viewBox="0 0 16 16">
+                                                    <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m-1 4v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 11.293V7.5a.5.5 0 0 1 1 0" />
+                                                </svg>
+                                                <a href="@FILE_DOWNLOAD_URL" title="@entity.FILE_NAME" download="@entity.FILE_NAME">@entity.FILE_NAME</a>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+            <hr />
+
+        </fieldset>
+    </section>
+
+    
+    
 
     <div class="row" style="margin-top:30px;">
 
@@ -107,7 +146,7 @@
                                         <tr style="vertical-align:middle;">
                                             <td style="width:15%;">@item.REPLY_WRITE_NM</td>
 
-                                            <td style="text-align:left; @paddingLeftForLevel"  contenteditable="@(USER_ID.Equals(item.REPLY_WRITE_ID) ? "true" : "false")" id="@td_id">@item.REPLY_COMMENTS</td>
+                                            <td style="text-align:left; @paddingLeftForLevel" contenteditable="@(USER_ID.Equals(item.REPLY_WRITE_ID) ? "true" : "false")" id="@td_id">@item.REPLY_COMMENTS</td>
 
                                             <td style="text-align:right;">@item.CREATE_DT.ToString("yyyy-MM-dd HH:mm:ss")</td>
                                             <td style="text-align:right;">
@@ -164,8 +203,8 @@
 
                 <div>
                     @* 로그인한 정보가 있어야 댓글을 달 수 있다.(ID로판단) *@
-                    @if(!USER_ID.Equals(""))
-                    { 
+                    @if (!USER_ID.Equals(""))
+                    {
                         <div style="display:flex;">
                             <div contenteditable="true" class="form-control" id="editor">
 
@@ -173,7 +212,7 @@
                             <button class="btn btn-primary" style="margin-left:10px;" onclick="BoardReply('CREATE', '0', '0')">Reply</button>
                         </div>
                     }
-                    
+
                 </div>
 
 

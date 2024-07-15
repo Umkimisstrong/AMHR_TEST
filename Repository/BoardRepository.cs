@@ -97,20 +97,105 @@ namespace Repository
         /// <param name="entity">게시판 엔티티</param>
         /// <param name="generalFlag">일반 플래그</param>
         /// <returns></returns>
-        public bool SaveBoard(BoardEntity entity, EnumProperties.GeneralFlag generalFlag)
+        //public bool SaveBoard(BoardEntity entity, EnumProperties.GeneralFlag generalFlag)
+        public bool SaveBoard(BoardContract contract, EnumProperties.GeneralFlag generalFlag)
         {
             bool result = false;
+
+            // 파일 작업객체 생성
+            FileRepository fileRepository = new FileRepository();
+
             switch (generalFlag)
             {
-                case EnumProperties.GeneralFlag.CREATE:
-                    result = InsertBoard(entity);
+                // 신규
+                case EnumProperties.GeneralFlag.CREATE:             
+
+                    // 게시판 생성 후 BRD_SEQ 를 넘겨받는다.
+                    string BRD_SEQ = InsertBoard(contract.BoardEntity);
+                    if (!string.IsNullOrEmpty(BRD_SEQ))
+                    {
+                        result = true; // 결과는 true 이다.
+
+                        // 파일 정보가 있다면 파일을 생성한다.
+                        if (contract.FileContract != null && contract.FileContract.UploadFileList != null)
+                        {
+                            // 파일 정보를 게시판 정보로 담는다.
+                            foreach (FileEntity item in contract.FileContract.UploadFileList)
+                            {
+                                item.FILE_CATEGORY = contract.BoardEntity.BRD_CATEGORY;
+                                item.FILE_DIV = contract.BoardEntity.BRD_DIV;
+                                item.FILE_CATEGORY_SEQ = BRD_SEQ;
+                                item.CREATE_ID = contract.BoardEntity.CREATE_ID;
+                                item.UPDATE_ID = contract.BoardEntity.UPDATE_ID;
+                                item.USE_YN = "Y";
+                                item.DEL_YN = "N";
+
+                                // 파일 정보를 Insert 한다. (신규는 기존파일과 삭제파일 등 비교하는 로직이 없기 때문에 바로 Insert 한다.
+                                result = fileRepository.CreateFile(item);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        result = false;
+                    }
                     break;
+
+                // 수정
                 case EnumProperties.GeneralFlag.UPDATE:
-                    result = UpdateBoard(entity);
+                    
+                    result = UpdateBoard(contract.BoardEntity);
+                    if (result)
+                    {
+                        // 게시판 수정 후 파일 정보가 있다면 파일 관련 작업을 진행
+                        if (contract.FileContract != null)
+                        {
+                            // 신규파일 있다면 신규파일 정보를 게시판 정보로 세팅한다.
+                            if (contract.FileContract.UploadFileList != null)
+                            {
+                                foreach (FileEntity item in contract.FileContract.UploadFileList)
+                                {
+                                    item.FILE_CATEGORY = contract.BoardEntity.BRD_CATEGORY;
+                                    item.FILE_DIV = contract.BoardEntity.BRD_DIV;
+                                    item.FILE_CATEGORY_SEQ = contract.BoardEntity.BRD_SEQ;
+                                    item.CREATE_ID = contract.BoardEntity.CREATE_ID;
+                                    item.UPDATE_ID = contract.BoardEntity.UPDATE_ID;
+                                    item.USE_YN = "Y";
+                                    item.DEL_YN = "N";
+                                }
+                            }
+
+                            // 삭제파일 정보를 세팅한다.
+                            FileEntity deleteFileEntity = new FileEntity();
+                            deleteFileEntity.FILE_CATEGORY = contract.BoardEntity.BRD_CATEGORY;
+                            deleteFileEntity.FILE_DIV = contract.BoardEntity.BRD_DIV;
+                            deleteFileEntity.FILE_CATEGORY_SEQ = contract.BoardEntity.BRD_SEQ;
+                            deleteFileEntity.UPDATE_ID = contract.BoardEntity.UPDATE_ID;
+
+                            // 파일저장 진행
+                            result = fileRepository.SaveFile(contract.FileContract, deleteFileEntity);
+                        }
+                    }
                     break;
+
+                // 삭제
                 case EnumProperties.GeneralFlag.DELETE:
-                    result = DeleteBoard(entity);
+
+                    result = DeleteBoard(contract.BoardEntity);
+                    if (result)
+                    {
+                        // 삭제파일 정보를 세팅한다.
+                        FileEntity deleteFileEntity = new FileEntity();
+                        deleteFileEntity.FILE_CATEGORY = contract.BoardEntity.BRD_CATEGORY;
+                        deleteFileEntity.FILE_DIV = contract.BoardEntity.BRD_DIV;
+                        deleteFileEntity.FILE_CATEGORY_SEQ = contract.BoardEntity.BRD_SEQ;
+                        deleteFileEntity.UPDATE_ID = contract.BoardEntity.BRD_WRITE_ID;
+
+                        // 파일삭제 진행
+                        fileRepository.DeleteFile(deleteFileEntity);
+                    }
                     break;
+
                 default:
                     break;
             }
@@ -122,9 +207,9 @@ namespace Repository
         /// </summary>
         /// <param name="entity">게시판 엔티티</param>
         /// <returns></returns>
-        private bool InsertBoard(BoardEntity entity)
+        private string InsertBoard(BoardEntity entity)
         {
-            bool result = false;
+            string result = "";
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
             keyValuePairs.Add("I_BRD_CATEGORY   ", entity.BRD_CATEGORY);
             keyValuePairs.Add("I_BRD_DIV        ", entity.BRD_DIV);
@@ -139,8 +224,8 @@ namespace Repository
             string sResult = SqlHelper.GetReturnValue("SP_CMM_BOARD_C", keyValuePairs);
             if (!string.IsNullOrEmpty(sResult))
             {
+                result = sResult;
                 entity.BRD_SEQ = sResult;
-                result = true;
             }
             return result;
         }
