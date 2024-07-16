@@ -561,6 +561,11 @@
             });
         }
 
+        /*
+            TransByte : Byte를 넣어서 현재 Byte 정보와 새롭게 나타낼 Byte 정보 연산을 한다.
+                        (1024, byte, KB) -> return 1    (KB)
+                        (1, KB, byte)    -> return 1024 (byte)
+        */
         function TransByte(num, originType, newType)
         {
             var result = num;
