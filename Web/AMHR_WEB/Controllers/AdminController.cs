@@ -60,6 +60,40 @@ namespace AMHR_WEB.Controllers
         }
 
         /// <summary>
+        /// ProductManagement : 상품 관리 목록 뷰 담당
+        /// </summary>
+        /// <param name="contract">상품 Contract</param>
+        /// <returns></returns>
+        public ActionResult ProductManagement(ProductContract contract)
+        {
+            int REQUEST_PAGE_NUMBER = (contract.PAGE_NUMBER == 0 ? START_NUMBER - 1 : (contract.PAGE_NUMBER - 1) * ROW_COUNT);
+            int NOW_PAGE_NUMBER = contract.PAGE_NUMBER == 0 ? START_NUMBER : contract.PAGE_NUMBER;
+            ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
+            ViewBag.SECOND_BREADCRUMB_NAME = "ProductManagement";
+            ViewBag.ADMIN_VIEW = CONTROLLER_NAME;
+
+            ProductContract response = new ProductContract();
+            ProductRepository repository = new ProductRepository();
+
+            response = repository.SelectProductEntityList(contract.PRD_CODE, contract.PRD_CODE_NM, contract.PRD_TYPE_CODE, contract.PRD_TYPE_NM, REQUEST_PAGE_NUMBER, ROW_COUNT);
+
+            // 5       = 55 / 10
+            int PAGE_COUNT = response.TOTAL_COUNT / ROW_COUNT;
+            //         = 10 * 5 < 55 ? PAGE_COUNT+1
+            PAGE_COUNT = (ROW_COUNT * PAGE_COUNT < response.TOTAL_COUNT) ? PAGE_COUNT + 1 : PAGE_COUNT;
+            ViewBag.PAGE_COUNT = PAGE_COUNT;
+
+            // START = 0, ELSE = 1, 2, 3, ...
+            ViewBag.NOW_PAGE_NUMBER = NOW_PAGE_NUMBER;
+            ViewBag.TOTAL_COUNT = response.TOTAL_COUNT;
+
+            // 현재 액션명을 TempData 로 넘겨준다. Admin 사이드 Bar 에서 메뉴 Display 에 사용
+            TempData["ACTION_NAME"] = RouteData.Values["Action"].ToString();
+
+            return View(response);
+        }
+
+        /// <summary>
         /// CodeSave_P : 코드 저장 팝업 담당
         /// </summary>
         /// <param name="contract">코드 Contract</param>

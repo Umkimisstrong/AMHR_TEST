@@ -1,0 +1,151 @@
+﻿@model Contract.ProductContract
+@{
+    ViewBag.Title = "ProductManagement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    // PAGE 관련 소스 정의
+    int PAGE_COUNT = int.Parse(ViewBag.PAGE_COUNT.ToString());
+    int NOW_PAGE_NUMBER = int.Parse(ViewBag.NOW_PAGE_NUMBER.ToString());
+    int TOTAL_COUNT = int.Parse(ViewBag.TOTAL_COUNT.ToString());
+}
+
+@* Main Layer *@
+<main style="padding-left:50px; width:90%;">
+
+    <form method="post" action="/Admin/ProductManagement" id="CONST_SEARCH_FORM">
+        <div class="row border-bottom" style="margin-top:20px;padding-bottom:20px;" id="SearchBox">
+            <div style="margin-top: 10px; margin-bottom:10px;">
+                <span class="badge bg-primary">Search</span>
+            </div>
+            <div class="col-md-3">
+                <label for="Sys_Code_ID" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">상품 코드</label>
+                @Html.TextBoxFor(m => m.PRD_CODE, new { @class = "form-control", @tyle = "text", @placeholder = "상품 코드", @id = "Prd_Code" })
+                @*<input type="text" class="form-control" placeholder="text" id="Sys_Code_ID" name="SYS_CODE_ID">*@
+            </div>
+            <div class="col-md-3">
+                <label for="Div_Code_ID" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">상품 코드명</label>
+                @Html.TextBoxFor(m => m.PRD_CODE_NM, new { @class = "form-control", @tyle = "text", @placeholder = "상품 코드명", @id = "Prd_Code_NM" })
+                @*<input type="text" class="form-control" placeholder="text" id="Div_Code_ID" name="DIV_CODE_ID">*@
+            </div>
+            <div class="col-md-3">
+                <label for="Code_ID" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">상품 타입 코드</label>
+                @Html.TextBoxFor(m => m.PRD_TYPE_CODE, new { @class = "form-control", @tyle = "text", @placeholder = "상품 타입 코드", @id = "Prd_Type_Code" })
+                @*<input type="text" class="form-control" placeholder="text" id="Code_ID" name="CODE_ID">*@
+            </div>
+            <div class="col-md-3">
+                <label for="Code_NM" class="form-label" style="font-size:15px; font-weight:bold; color:dimgrey;">상품 타입 코드명</label>
+                @Html.TextBoxFor(m => m.PRD_TYPE_NM, new { @class = "form-control", @tyle = "text", @placeholder = "상품 타입 코드명", @id = "Prd_Type_NM" })
+                @*<input type="text" class="form-control" placeholder="text" id="Code_NM" name="CODE_NM">*@
+            </div>
+
+        </div>
+        <div class="row" style="text-align:right; margin-top:10px;">
+            <div style="padding-right:0;">
+                <button type="button" class="btn bg-primary btn-sm text-white" onclick="RequestCodeSavePopUp()">New Code</button>
+
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="SubmitForm('SEARCH')">Click for Search</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="RefreshCondition()">Refresh Condition</button>
+            </div>
+        </div>
+
+
+        @Html.HiddenFor(m => m.PAGE_NUMBER, new { @id = "CONST_PAGE_NUMBER" })
+    </form>
+
+
+
+
+    <div class="row" style="margin-top:30px;" id="SearchList">
+        <div style="margin-top: 10px; margin-bottom:10px; display:flex; justify-content:space-between;">
+            <div>
+                <span class="badge bg-primary">List</span>
+            </div>
+            <div style="text-align:right;">
+                <span class="text-secondary">Total : @TOTAL_COUNT</span>
+            </div>
+        </div>
+
+        <div style="padding-right:0;">
+            <table class="table table-hover">
+                <thead>
+                    <tr class="table-primary">
+                        <th scope="col">상품 코드</th>
+                        <th scope="col">상품 코드명</th>
+                        <th scope="col">상품 타입 코드</th>
+                        <th scope="col">상품 타입 명</th>
+                        <th scope="col">가격</th>
+                        <th scope="col">사용여부</th>
+                        <th scope="col">삭제여부</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.ProductList != null && Model.ProductList.Count > 0)
+                    {
+                        foreach (Entity.ProductEntity entity in Model.ProductList)
+                        {
+                            <tr>
+                                <td><a href="javascript:void(0);" onclick="RequestCodeSavePopUp('@entity.PRD_CODE');">@entity.PRD_CODE</a></td>
+                                <td>@entity.PRD_CODE_NM</td>
+                                <td>@entity.PRD_TYPE_CODE</td>
+                                <td>@entity.PRD_TYPE_NM</td>
+                                <td>@entity.PRD_PRICE</td>
+                                <td>@entity.USE_YN</td>
+                                <td>@entity.DEL_YN</td>
+                            </tr>
+
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7">No Data</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div style="margin-top:30px;">
+            <ul class="pagination" style="align-items:center; justify-content:center;">
+
+                @* Pagination *@
+                @AMHR_WEB.GlobalAttribute.GlobalHtmlAttributes.Pagination(Html, NOW_PAGE_NUMBER, PAGE_COUNT)
+
+            </ul>
+        </div>
+    </div>
+
+</main>
+@* Main Layer *@
+
+@* Script Layer *@
+@section scripts{
+
+    <script type="text/javascript">
+        /*
+            DOM 준비 시
+        */
+        $(function () {
+            InitEnterSubmitEvent();
+        });
+
+        function RequestCodeSavePopUp() {
+            ModalBox.Show("/Admin/ProductSave_P", null);
+        }
+
+        function RequestCodeSavePopUp(Prd_Code) {
+            var requestData = {};
+            requestData.PRD_CODE = Prd_Code;
+
+            ModalBox.Show("/Admin/ProductSave_P", requestData);
+        }
+    </script>
+
+}
+@* Script Layer *@
