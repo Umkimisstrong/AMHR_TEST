@@ -64,6 +64,13 @@ namespace AMHR_WEB.Controllers
             return Json(resultList);
         }
 
+        /// <summary>
+        /// Find : 개별 파일 다운로드
+        /// </summary>
+        /// <param name="fileFolderPath">루트 경로를 제외한 폴더경로</param>
+        /// <param name="fileName">파일명</param>
+        /// <param name="serverFileName">서버파일명</param>
+        /// <returns></returns>
         [Route("AttachFiles/Find/{fileFolderPath}/{fileName}/{serverFileName}")]
         public ActionResult Find(string fileFolderPath, string fileName, string serverFileName)
         {

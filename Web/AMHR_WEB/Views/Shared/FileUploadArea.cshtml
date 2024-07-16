@@ -297,10 +297,20 @@
     </script>-->
     <script type="text/javascript">
 
+        /* 전역변수 maxUploadFileNum : 최대 파일업로드 갯수 */
+        var maxUploadFileNum = '@System.Web.Configuration.WebConfigurationManager.AppSettings.Get("maxUploadFileNum")';
+
+        /* 전역변수 maxUploadFileContentLength : 개별파일 최대 크기 */
+        var maxUploadFileContentLength = '@System.Web.Configuration.WebConfigurationManager.AppSettings.Get("maxUploadFileContentLength")';
+        
+        var regExFileType = @System.Web.Configuration.WebConfigurationManager.AppSettings.Get("regExAllowFileType");
+
+        var infoAllowFileType = '@System.Web.Configuration.WebConfigurationManager.AppSettings.Get("infoAllowFileType")'
+
         /* 전역변수 dataTransfer : File 정보를 동적으로 Control 하기 위한 객체 */
         const dataTransfer = new DataTransfer();
 
-        
+
         /* 전역변수 strUploadObj : Upload 한 파일정보를 JSON.stringify 한 문자열 */
         var strUploadObj = "";
 
@@ -315,8 +325,49 @@
         */
         function AddBtnClick() {
             var fileListObj = $("#fileupload")[0].files.files;      // input type files 에 선택된 파일 정보를 가져온다.
+
+            var trUploadLength = $("#uploadFilesArea").find("tr").length;
+            var trDownloadLength = $("#downloadFilesArea").find("tr").length;
+
             if (fileListObj != null && fileListObj != undefined)    // 선택한 파일이 존재하는 경우 실행
             {
+
+                if ((trUploadLength + trDownloadLength + fileListObj.length) > maxUploadFileNum)
+                {
+                    MsgBox.Alert("파일 업로드 허용 갯수는 최대 10개입니다.");
+                    return;
+                }
+
+                var fileTypeMessage = "";
+                var fileSizeMessage = "";
+                for (var i = 0; i < fileListObj.length; i++)
+                {
+                    var fileName = fileListObj[i].name;
+                    var fileSize = fileListObj[i].size;
+
+                    if (!regExFileType.test(fileName))
+                    {
+                        fileTypeMessage += "대상 파일 : " + fileName + "</br>";
+                    }
+
+                    if (fileSize > maxUploadFileContentLength)
+                    {
+                        fileSizeMessage += "대상 파일 : " + fileName + ", 크기 : " + Math.round(TransByte(fileSize, 'byte', 'KB')) + " KB </br>";
+                    }
+                }
+
+                if (fileTypeMessage != "")
+                {
+                    MsgBox.Alert("업로드 허용된 확장자가 아닙니다. </br></br>" + fileTypeMessage + " </br> 허용된 확장자 : </br>" + infoAllowFileType);
+                    return;
+                }
+
+                if (fileSizeMessage != "")
+                {
+                    MsgBox.Alert("업로드 허용된 파일 크기를 초과했습니다. </br></br>" + fileSizeMessage + " </br> 허용된 최대 크기 : </br>" + TransByte(maxUploadFileContentLength, 'byte', 'KB') + "KB");
+                    return;
+                }
+
                 Array.from(fileListObj).forEach(file => {
                     dataTransfer.items.add(file);                   // 파일갯수만큼 dataTransfer 객체에 넣는다.
                 });
@@ -384,7 +435,7 @@
         }
 
         /*
-            SetDeleteObjAndString : 기존에 올라왔던 파일을 삭제하는 경우 해당 정보를 
+            SetDeleteObjAndString : 기존에 올라왔던 파일을 삭제하는 경우 해당 정보를
                                     객체화 -> 문자열 하여 삭제 문자열에 담는다.
         */
         function SetDeleteObjAndString(fileSeq)
@@ -508,6 +559,46 @@
 
                 }
             });
+        }
+
+        function TransByte(num, originType, newType)
+        {
+            var result = num;
+            var ByteArray = ["byte", "KB", "MB", "GB"];
+
+            var orginIdx = ByteArray.indexOf(originType);
+            var newIdx = ByteArray.indexOf(newType);
+
+            var roundLength = 0;
+            var calStandard = "";
+            if (orginIdx > newIdx)
+            {
+                roundLength = orginIdx - newIdx;
+                calStandard = "*";
+            }
+            else
+            {
+                roundLength = newIdx - orginIdx;
+                calStandard = "/";
+            }
+
+            if (roundLength > 0)
+            {
+                for (var i = 0; i < roundLength; i++)
+                {
+                    switch (calStandard)
+                    {
+                        case "*":
+                            result *= 1024;
+                            break;
+                        case "/":
+                            result /= 1024;
+                            break;
+                    }
+                }
+            }
+
+            return result;
         }
     </script>
 </body>
