@@ -123,6 +123,52 @@ namespace AMHR_WEB.Controllers
         }
 
         /// <summary>
+        /// ProductSave_P : 상품 저장 담당
+        /// </summary>
+        /// <param name="contract">상품 Contract</param>
+        /// <returns></returns>
+        public ActionResult ProductSave_P(ProductContract contract)
+        {
+            ProductContract productContract = new ProductContract();
+            productContract.ProductEntity = new ProductEntity();
+
+            if(
+                !string.IsNullOrEmpty(contract.PRD_CODE)
+                
+               )
+            {
+                ProductRepository repository = new ProductRepository();
+                productContract.ProductEntity = repository.SelectProductEntity(contract.PRD_CODE);
+                ViewBag.GENERAL_FLAG = EnumProperties.GeneralFlag.UPDATE;
+            }
+            else
+            {
+                productContract.ProductEntity.USE_YN = "Y";
+                ViewBag.GENERAL_FLAG = EnumProperties.GeneralFlag.CREATE;
+            }
+            return View(productContract);
+        }
+
+        /// <summary>
+        /// RequestSaveCode : 코드 저장 요청
+        /// </summary>
+        /// <param name="contract">코드 Contract</param>
+        /// <param name="generalFlag">일반 플래그</param>
+        /// <returns></returns>
+        public JsonResult RequestSaveProduct(ProductContract contract, EnumProperties.GeneralFlag generalFlag)
+        {
+            ProductRepository repository = new ProductRepository();
+            contract.ProductEntity.CREATE_ID = UserSessionModel.USER_ID;
+            contract.ProductEntity.UPDATE_ID = UserSessionModel.USER_ID;
+
+            string result = repository.SaveProductEntity(contract.ProductEntity, generalFlag);
+            return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
+        /// <summary>
         /// RequestSaveCode : 코드 저장 요청
         /// </summary>
         /// <param name="contract">코드 Contract</param>
@@ -163,6 +209,28 @@ namespace AMHR_WEB.Controllers
 
             CodeRepository repository = new CodeRepository();
             result = repository.CheckCodeID(contract.SYS_CODE_ID, contract.DIV_CODE_ID, contract.CODE_ID) ? "OK" : "NO";
+            return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// CheckProductCode : 상품 코드 중복체크
+        /// </summary>
+        /// <param name="contract">상품 Contract</param>
+        /// <returns></returns>
+        public JsonResult CheckProductCode(ProductContract contract)
+        {
+            string result = string.Empty;
+
+            if (string.IsNullOrEmpty(contract.PRD_CODE))
+            {
+                result = "EMPTY_PRD";
+                return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+            }
+            
+            
+
+            ProductRepository repository = new ProductRepository();
+            result = repository.CheckPrdCode(contract.PRD_CODE) ? "OK" : "NO";
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
 

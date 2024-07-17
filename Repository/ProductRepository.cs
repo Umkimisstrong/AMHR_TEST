@@ -9,6 +9,7 @@ using Contract;
 using Entity;
 using Repository;
 using System.Diagnostics.Contracts;
+using Contract.ENUM;
 
 namespace Repository
 {
@@ -44,9 +45,9 @@ namespace Repository
         /// </summary>
         /// <param name="entity">상품 엔티티</param>
         /// <returns></returns>
-        public bool CreateProduct(ProductEntity entity) 
+        public int CreateProduct(ProductEntity entity) 
         {
-            bool result = false;
+            int result = 0;
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
             keyValuePairs.Add("I_PRD_CODE", entity.PRD_CODE);
@@ -55,15 +56,12 @@ namespace Repository
             keyValuePairs.Add("I_PRD_TYPE_NM", entity.PRD_TYPE_NM);
             keyValuePairs.Add("I_PRD_PRICE", entity.PRD_PRICE);
             keyValuePairs.Add("I_USE_YN", entity.USE_YN);
-            keyValuePairs.Add("I_DEL_YN", entity.DEL_YN);
+            keyValuePairs.Add("I_DEL_YN", "N");
             keyValuePairs.Add("I_CREATE_ID", entity.CREATE_ID);
             keyValuePairs.Add("I_UPDATE_ID", entity.UPDATE_ID);
 
-            int iResult = SqlHelper.GetNonQuery("SP_PRD_PRODUCT_C", keyValuePairs);
-            if (iResult > 0)
-            { 
-                result = true;
-            }
+            result = SqlHelper.GetNonQuery("SP_PRD_PRODUCT_C", keyValuePairs);
+            
 
             return result;
         }
@@ -73,9 +71,9 @@ namespace Repository
         /// </summary>
         /// <param name="entity">상품 엔티티</param>
         /// <returns></returns>
-        public bool UpdateProduct(ProductEntity entity)
+        public int UpdateProduct(ProductEntity entity)
         {
-            bool result = false;
+            int result = 0;
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
             keyValuePairs.Add("I_PRD_CODE", entity.PRD_CODE);
@@ -84,17 +82,34 @@ namespace Repository
             keyValuePairs.Add("I_PRD_TYPE_NM", entity.PRD_TYPE_NM);
             keyValuePairs.Add("I_PRD_PRICE", entity.PRD_PRICE);
             keyValuePairs.Add("I_USE_YN", entity.USE_YN);
-            keyValuePairs.Add("I_DEL_YN", entity.DEL_YN);
+            keyValuePairs.Add("I_DEL_YN", "N");
             keyValuePairs.Add("I_UPDATE_ID", entity.UPDATE_ID);
 
-            int uResult = SqlHelper.GetNonQuery("SP_PRD_PRODUCT_U", keyValuePairs);
-            if (uResult > 0)
-            {
-                result = true;
-            }
+            result = SqlHelper.GetNonQuery("SP_PRD_PRODUCT_U", keyValuePairs);
+            
 
             return result;
         }
+
+        /// <summary>
+        /// 상품 마스터 삭제
+        /// </summary>
+        /// <param name="entity">상품 엔티티</param>
+        /// <returns></returns>
+        public int DeleteProduct(ProductEntity entity)
+        {
+            int result = 0;
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_PRD_CODE", entity.PRD_CODE);
+            keyValuePairs.Add("I_UPDATE_ID", entity.UPDATE_ID);
+
+            result = SqlHelper.GetNonQuery("SP_PRD_PRODUCT_D", keyValuePairs);
+
+
+            return result;
+        }
+
 
         /// <summary>
         /// 상품 마스터 조회
@@ -156,6 +171,34 @@ namespace Repository
 
             productContract.ProductList = entityList;
             return productContract;
+        }
+
+        /// <summary>
+        /// SaveCodeEntity : 코드 저장
+        /// </summary>
+        /// <param name="entity">코드 엔티티</param>
+        /// <param name="generalFlag">일반 플래그</param>
+        /// <returns></returns>
+        public string SaveProductEntity(ProductEntity entity, EnumProperties.GeneralFlag generalFlag)
+        {
+            string result = "N";
+
+            switch (generalFlag)
+            {
+                case EnumProperties.GeneralFlag.CREATE:
+                    result = CreateProduct(entity) > 0 ? "IY" : "IN";
+                    break;
+                case EnumProperties.GeneralFlag.UPDATE:
+                    result = UpdateProduct(entity) > 0 ? "UY" : "UN";
+                    break;
+                case EnumProperties.GeneralFlag.DELETE:
+                    result = DeleteProduct(entity) > 0 ? "DY" : "DN";
+                    break;
+
+                default: break;
+            }
+
+            return result;
         }
     }
 }

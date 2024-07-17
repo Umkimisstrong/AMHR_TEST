@@ -1,0 +1,263 @@
+﻿@model Contract.ProductContract
+@{
+    ViewBag.Title = "SetSystem";
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    string GENERAL_FLAG = ViewBag.GENERAL_FLAG.ToString();
+}
+
+@* Main Layer *@
+<div class="modal-header bg-primary text-white" id="amhr_modal_header">
+    <h5 class="modal-title amhr-modal-title-font" id="amhr_modal_title">상품 저장</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body" id="amhr_modal_body_text">
+    <div class="row">
+        <section class="col-md-12">
+            <fieldset>
+                <div>
+                    <label for="Prd_Code_P" class="form-label mt-4">상품 코드</label>
+                    <div style="display:flex; justify-content:center;">
+                        @Html.TextBoxFor(m => m.ProductEntity.PRD_CODE, new { @class = "form-control", @id = "Prd_Code_P", @style = "max-width:460px;" })
+                        <button type="button" class="btn btn-primary" style="margin-left:10px; max-width:600px;" onclick="requestCheckCodeId()" id="btnCheck">check</button>
+                    </div>
+
+                    <label for="Prd_Code_NM_P" class="form-label mt-4">상품 코드명</label>
+                    <div style="display:flex; justify-content:center;">
+                        @Html.TextBoxFor(m => m.ProductEntity.PRD_CODE_NM, new { @class = "form-control", @id = "Prd_Code_NM_P", @style = "max-width:460px;" })
+                    </div>
+
+
+                    <label for="Prd_Type_Code_P" class="form-label mt-4">상품 타입 코드</label>
+                    <div style="display:flex; justify-content:center;">
+                        @Html.TextBoxFor(m => m.ProductEntity.PRD_TYPE_CODE, new { @class = "form-control", @id = "Prd_Type_Code_P", @style = "max-width:460px;" })
+                    </div>
+
+                    <label for="Prd_Type_NM_P" class="form-label mt-4">상품 타입 코드명</label>
+                    <div style="display:flex; justify-content:center;">
+                        @Html.TextBoxFor(m => m.ProductEntity.PRD_TYPE_NM, new { @class = "form-control", @id = "Prd_Type_NM_P", @style = "max-width:460px;" })
+                    </div>
+
+                    <label for="Prd_Price_P" class="form-label mt-4">상품 가격</label>
+                    <div style="display:flex; justify-content:center;">
+                        @Html.TextBoxFor(m => m.ProductEntity.PRD_PRICE, new { @class = "form-control", @id = "Prd_Price_P", @style = "max-width:460px;" })
+                    </div>
+
+                    <label for="optionsRadios1_P" class="form-label mt-4">사용여부</label>
+                    <div class="form-check">
+
+                        @Html.RadioButtonFor(m => m.ProductEntity.USE_YN, "Y", new { @class = "form-check-input", @name = "optionsRadios_P", id = "optionsRadios1_P" })
+                        <label class="form-check-label" for="optionsRadios1_P">
+                            사용
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        @Html.RadioButtonFor(m => m.ProductEntity.USE_YN, "N", new { @class = "form-check-input", @name = "optionsRadios_P", id = "optionsRadios2_P" })
+                        <label class="form-check-label" for="optionsRadios2_P">
+                            미사용
+                        </label>
+                    </div>
+                </div>
+
+            </fieldset>
+        </section>
+    </div>
+</div>
+<div class="modal-footer" id="btn_save">
+    @if (GENERAL_FLAG.Equals("UPDATE"))
+    {
+        <button type="button" class="btn btn-danger" name="save_yes" id="save_del" onclick="requestDeleteCode()">DELETE</button>
+    }
+    <button type="button" class="btn btn-primary" name="save_yes" id="save_yes" onclick="requestSaveCode()">SAVE</button>
+    <button type="button" class="btn btn-secondary" name="save_no" id="save_no" data-bs-dismiss="modal">CANCEL</button>
+</div>
+@* Main Layer *@
+
+@* Script Layer *@
+@section scripts{
+
+    <script type="text/javascript">
+
+        /*
+            전역변수
+        */
+        var CODE_CHECK_FLAG = ('@GENERAL_FLAG' == "CREATE" ? false : true);
+
+        /*
+            DOM 준비 시
+        */
+        $(function () {
+            if ('@GENERAL_FLAG' == "CREATE") {
+
+            }
+            else
+            {
+                $("#Prd_Code_P").attr("disabled", true);
+            }
+        });
+
+        /*
+            requestCheckCodeId : 코드 중복여부 체크
+        */
+        function requestCheckCodeId()
+        {
+            var obj = {};
+            var prdCodeId = $("#Prd_Code_P").val();
+            obj.PRD_CODE = prdCodeId;
+
+            $.ajax({
+                url: "/Admin/CheckProductCode",
+                type: "post",
+                data: { contract: obj },
+                success: function (data)
+                {
+                    var result = data.RESULT;
+                    if (result == "OK") {
+                        CODE_CHECK_FLAG = true;
+                        MsgBox_Pop.Inform("사용가능한 코드 입니다.", function () { $("#Prd_Code_NM_P").focus(); });
+                    }
+                    else if (result == "NO") {
+                        CODE_CHECK_FLAG = false;
+                        MsgBox_Pop.Alert("중복된 코드 입니다.", function () { $("#Prd_Code_P").focus(); });
+                    }
+                    else if (result == "EMPTY_PRD")
+                    {
+                        CODE_CHECK_FLAG = false;
+                        MsgBox_Pop.Alert("코드를 입력하지 않았습니다.", function () { $("#Prd_Code_P").focus(); });
+                    }
+                }
+            });
+        }
+
+        /*
+            requestDeleteCode : 코드 삭제 요청
+        */
+        function requestDeleteCode() {
+
+            MsgBox_Pop.Confirm("삭제하시겠습니까?", function resultFlag(flag)
+            {
+                if (flag)
+                {
+                    saveData('DELETE');
+                }
+                else
+                {
+                    return;
+                }
+            });
+        }
+
+        /*
+            requestSaveCode : 코드 저장 요청
+        */
+        function requestSaveCode() {
+            if (validateData()) {
+                MsgBox_Pop.Confirm("저장하시겠습니까?", function resultFlag(flag) {
+                    if (flag) {
+                        saveData('@GENERAL_FLAG');
+                    }
+                    else {
+                        return;
+                    }
+                });
+            }
+            else {
+                return;
+            }
+
+        }
+
+        /*
+            validateData : 유효성 검사
+        */
+        function validateData() {
+            var Prd_Code = $("#Prd_Code_P").val();
+            if (Prd_Code.trim() == "") {
+                MsgBox_Pop.Alert("상품 코드를 입력하세요.", function () { $("#Prd_Code_P").focus(); });
+                return false;
+            }
+
+            if (!CODE_CHECK_FLAG) {
+                MsgBox_Pop.Alert("코드 중복여부를 확인해주세요.", function () { $("#Prd_Code_P").focus(); });
+                return false;
+            }
+
+            var Prd_Code_NM = $("#Prd_Code_NM_P").val();
+            if (Prd_Code_NM.trim() == "") {
+                MsgBox_Pop.Alert("상품 코드명을 입력하세요.", function () { $("#Prd_Code_NM_P").focus(); });
+                return false;
+            }
+
+            var Prd_Type_Code = $("#Prd_Type_Code_P").val();
+            if (Prd_Type_Code.trim() == "") {
+                MsgBox_Pop.Alert("상품 타입 코드를 입력하세요.", function () { $("#Prd_Type_Code_P").focus(); });
+                return false;
+            }
+
+            var Prd_Type_NM = $("#Prd_Type_NM_P").val();
+            if (Prd_Type_NM.trim() == "") {
+                MsgBox_Pop.Alert("코드명을 입력하세요.", function () { $("#Prd_Type_NM_P").focus(); });
+                return false;
+            }
+
+            var Prd_Price = $("#Prd_Price_P").val();
+            if (Prd_Price.trim() == "") {
+                MsgBox_Pop.Alert("가격을 입력하세요.", function () { $("#Prd_Price_P").focus(); });
+                return false;
+            }
+            return true;
+        }
+
+        /*
+            saveData : 사용자 Data 저장
+        */
+        function saveData(Flag) {
+            var obj = {
+                ProductEntity: {}
+            };
+
+            obj.ProductEntity.PRD_CODE = $("#Prd_Code_P").val();
+            obj.ProductEntity.PRD_CODE_NM = $("#Prd_Code_NM_P").val();
+            obj.ProductEntity.PRD_TYPE_CODE = $("#Prd_Type_Code_P").val();
+            obj.ProductEntity.PRD_TYPE_NM = $("#Prd_Type_NM_P").val();
+            obj.ProductEntity.PRD_PRICE = $("#Prd_Price_P").val();
+
+            obj.ProductEntity.USE_YN = $("input[name='ProductEntity.USE_YN']:checked").val();
+
+            $.ajax({
+                url: "/Admin/RequestSaveProduct"
+                , data: { contract: obj, generalFlag: Flag }
+                , type: "post"
+                , success: function (data) {
+
+                    if (data.RESULT == "IY" || data.RESULT == "UY") {
+                        MsgBox_Pop.Inform("코드 저장이 완료되었습니다.", function () { window.location.reload(); });
+                    }
+                    else if (data.RESULT == "IN" || data.RESULT == "UN")
+                    {
+                        MsgBox_Pop.Warning("코드 저장 중 오류가 발생하였습니다. 관리자에게 문의하십시오.");
+                    }
+                    else if (data.RESULT == "DY") {
+                        MsgBox_Pop.Inform("코드 삭제 처리가 완료되었습니다.", function () { window.location.reload(); });
+                    }
+                    else if (data.RESULT == "DN") {
+                        MsgBox_Pop.Warning("코드 삭제 중 오류가 발생하였습니다. 관리자에게 문의하십시오.");
+                    }
+                    else {
+                        MsgBox_Pop.Warning("예상치 못한 오류가 발생하였습니다. 관리자에게 문의하십시오.");
+                    }
+                }
+                , error: function (data) {
+                    MsgBox_Pop.Danger(
+                        setErrCustomContents(data)
+                    );
+
+                }
+            });
+        }
+
+    </script>
+
+}
+@* Script Layer *@

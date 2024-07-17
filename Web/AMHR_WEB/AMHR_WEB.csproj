@@ -275,6 +275,7 @@
     <Content Include="Views\Board\BoardDetail.cshtml" />
     <Content Include="Views\Shared\FileUploadArea.cshtml" />
     <Content Include="Views\Admin\ProductManagement.cshtml" />
+    <Content Include="Views\Admin\ProductSave_P.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

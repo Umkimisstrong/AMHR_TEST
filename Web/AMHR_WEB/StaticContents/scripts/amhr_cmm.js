@@ -342,6 +342,7 @@ function setModalDesign(message, status)
     var bgColorDesign = "";
     var btnBgColorDesign = "";
     var fontColorDesign = "";
+
     switch (status)
     {
         case modal_status.status_inform:
