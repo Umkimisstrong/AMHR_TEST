@@ -150,9 +150,9 @@ namespace AMHR_WEB.Controllers
         }
 
         /// <summary>
-        /// RequestSaveCode : 코드 저장 요청
+        /// RequestSaveProduct : 상품 저장 요청
         /// </summary>
-        /// <param name="contract">코드 Contract</param>
+        /// <param name="contract">상품 Contract</param>
         /// <param name="generalFlag">일반 플래그</param>
         /// <returns></returns>
         public JsonResult RequestSaveProduct(ProductContract contract, EnumProperties.GeneralFlag generalFlag)
