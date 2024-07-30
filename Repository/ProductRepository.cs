@@ -174,9 +174,9 @@ namespace Repository
         }
 
         /// <summary>
-        /// SaveCodeEntity : 코드 저장
+        /// SaveProductEntity : 상품 저장
         /// </summary>
-        /// <param name="entity">코드 엔티티</param>
+        /// <param name="entity">상품 엔티티</param>
         /// <param name="generalFlag">일반 플래그</param>
         /// <returns></returns>
         public string SaveProductEntity(ProductEntity entity, EnumProperties.GeneralFlag generalFlag)
