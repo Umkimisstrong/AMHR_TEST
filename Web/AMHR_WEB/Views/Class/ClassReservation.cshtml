@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+
+    DateTime date = DateTime.Now.AddMonths(6);
+    int Year = date.Year;
+    int Month = date.Month;
+    int Day = date.Day;
+    string DayOfWeek = date.DayOfWeek.ToString();
+    // Sunday
+    // Monday
+    // Wednesday
+    // Thursday
+    // Friday
+    // Saturday
+
+    int lastDay = DateTime.DaysInMonth(Year, Month);
+    string FirstDayOfWeek = date.AddDays((1 - Day)).DayOfWeek.ToString();
+    int startDifference = 7;
+    switch (FirstDayOfWeek)
+    {
+        case "Sunday": startDifference -= 7; break;
+
+        case "Monday": startDifference -= 6; break;
+        case "Tuesday": startDifference -= 5; break;
+        case "Wednesday": startDifference -= 4; break;
+        case "Thursday": startDifference -= 3; break;
+        case "Friday": startDifference -= 2; break;
+        case "Saturday": startDifference -= 1; break;
+    }
+
+    int weekRowCount = startDifference == 0 && lastDay == 28 ? 4 : 5;
+
+}
+
+@* Main Layer *@
+<main style="padding-left:0;">
+    <div class="row">
+        <section class="col-md-12" aria-labelledby="gettingStartedTitle">
+            <table class="table">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">Sun</th>
+                        <th scope="col">Mon</th>
+                        <th scope="col">Tue</th>
+                        <th scope="col">Wed</th>
+                        <th scope="col">Thu</th>
+                        <th scope="col">Fri</th>
+                        <th scope="col">Sat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ 
+                        int startNum = 1;
+                        bool isDraw = false;
+                    }
+                    @for(int i = 0; i<weekRowCount; i++)
+                    {
+                        <tr>
+                            @for (int j = 0; j < 7; j++)
+                            {
+                                if ((j == startDifference || isDraw) && startNum <= lastDay)
+                                {
+                                    // 그리기 시작
+                                    isDraw = true;
+                                    <td>
+                                        @startNum
+
+                                        <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                A Time
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                B Time
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                C Time
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                D Time
+                                            </li>
+                                        </ul>
+
+                                    </td>
+
+                                    startNum++;
+                                }
+                                else
+                                {
+                                    <td>&nbsp;</td>
+                                }
+                            }
+
+                        </tr>
+                    }
+                    @*<tr>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>7</td>
+                    </tr>*@
+
+                </tbody>
+            </table>
+
+
+        </section>
+
+      
+    </div>
+</main>
+@* Main Layer *@

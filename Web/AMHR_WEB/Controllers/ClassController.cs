@@ -23,7 +23,19 @@ namespace AMHR_WEB.Controllers
         public ActionResult ClassView()
         {
             ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
-            
+            ViewBag.SECOND_BREADCRUMB_NAME = "Class View";
+            return View();
+        }
+
+        /// <summary>
+        /// ClassReservation : Class 예약 뷰 담당
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(ClaimType = ClaimTypes.Role, ClaimValue = Constants.UserRoles.Admin + "," + Constants.UserRoles.General)]
+        public ActionResult ClassReservation()
+        {
+            ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
+            ViewBag.SECOND_BREADCRUMB_NAME = "Class Reservation";
             return View();
         }
     }
