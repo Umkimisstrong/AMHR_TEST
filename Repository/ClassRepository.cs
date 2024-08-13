@@ -11,6 +11,7 @@ using Repository;
 using System.Diagnostics.Contracts;
 using Contract.ENUM;
 using Org.BouncyCastle.Asn1.Mozilla;
+using MySqlX.XDevAPI.Common;
 
 namespace Repository
 {
@@ -42,6 +43,36 @@ namespace Repository
 
             return result;
         }
+
+        public DataTable SelectClassRsvList(string I_CLASS_YM)
+        {
+            DataTable dt = new DataTable();
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_CLASS_YM", I_CLASS_YM);
+            
+
+            DataSet ds = SqlHelper.GetDataSet("SP_CLS_RSV_LIST", keyValuePairs);
+
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                dt = ds.Tables[0];
+            }
+
+            return dt;
+        }
+
         
+        public DataSet GetTimeTextValueItem(int dayOfWeek)
+        {
+            DataSet ds = new DataSet();
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_DAY", dayOfWeek);
+
+            ds = SqlHelper.GetDataSet("SP_CLS_TIME_TEXTVALUE", keyValuePairs);
+
+            return ds;
+        }
+
     }
 }

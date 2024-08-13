@@ -42,12 +42,24 @@
     int lastMonth = 12;
     if (Year.ToString().Equals(YearCombo[0]))
     {
-        startMonth = Month;
+        startMonth = DateTime.Now.Month;
     }
 
-    for(int i = startMonth; i<=lastMonth; i++)
+    for (int i = startMonth; i <= lastMonth; i++)
     {
         MonthKeyValuePairs.Add((i < 10 ? "0" + i.ToString() : i.ToString()), i.ToString());
+    }
+
+    System.Data.DataTable rsvObj = new System.Data.DataTable();
+    if (ViewBag.RSV_DATATABLE != null)
+    {
+        rsvObj = ViewBag.RSV_DATATABLE as System.Data.DataTable;
+    }
+
+    List<SelectListItem> classTimeList = new List<SelectListItem>();
+    if (ViewBag.SELECT_CLASS_TIME != null)
+    {
+        classTimeList = ViewBag.SELECT_CLASS_TIME as List<SelectListItem>;
     }
 }
 
@@ -63,7 +75,7 @@
 
         <section class="col-md-12" style="margin-bottom:15px; justify-content:center;">
             <div style="text-align:center; justify-content:center; display:flex;">
-                <select class="form-select" id="exampleSelect1" style="width:200px;">
+                <select class="form-select" id="cboRsvYear" style="width:200px;" onchange="ChangeComboYearMonth();">
                     @for (int i = 0; i < YearCombo.Length; i++)
                     {
                         if (Year.ToString().Equals(YearCombo[i]))
@@ -71,13 +83,13 @@
                             <option value="@YearCombo[i]" selected="selected">@YearCombo[i]</option>
                         }
                         else
-                        { 
+                        {
                             <option value="@YearCombo[i]">@YearCombo[i]</option>
                         }
                     }
                 </select>
 
-                <select class="form-select" id="exampleSelect2" style="width:110px; margin-left:15px">
+                <select class="form-select" id="cboRsvMonth" style="width:110px; margin-left:15px" onchange="ChangeComboYearMonth()">
                     @foreach (var item in MonthKeyValuePairs)
                     {
                         if (Month.ToString().Equals(item.Value.ToString()))
@@ -86,14 +98,14 @@
                         }
                         else
                         {
-                            <option value="@item.Key" >@item.Value</option>
+                            <option value="@item.Key">@item.Value</option>
                         }
 
                     }
                 </select>
             </div>
         </section>
-        
+
         <section class="col-md-12" aria-labelledby="gettingStartedTitle">
             <table class="table">
                 <thead>
@@ -124,20 +136,79 @@
                                     <td>
                                         @startNum
 
-                                        <ul class="list-group">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                A Time
-                                            </li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                B Time
-                                            </li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                C Time
-                                            </li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                D Time
-                                            </li>
-                                        </ul>
+                                        @if (rsvObj.Rows.Count > 0)
+                                        {
+                                            string dayValue = startNum < 10 ? "0" + startNum.ToString() : startNum.ToString();
+                                            System.Data.DataRow[] dr = rsvObj.Select("RSV_DAY= '" + dayValue + "'");
+
+                                            if (dr.Length > 0)
+                                            {
+
+                                                <ul class="list-group">
+                                                    @foreach (var item in classTimeList)
+                                                    {
+                                                        bool hasTime = false;
+
+                                                        for (int k = 0; k < dr.Length; k++)
+                                                        {
+                                                            if (item.Value.ToString().Equals(dr[k]["CLASS_TIME"].ToString()))
+                                                            {
+                                                                <li class="justify-content-between align-items-center" style="margin-left:35px;">
+                                                                    <s>
+                                                                        @item.Value Time
+                                                                    </s>
+                                                                </li>
+
+                                                                hasTime = true;
+                                                            }
+                                                        }
+
+                                                        if(!hasTime)
+                                                        { 
+                                                            <li class="justify-content-between align-items-center" style="margin-left:35px;">
+                                                                @item.Value Time
+                                                            </li>
+                                                        }
+                                                    }
+                                                </ul>
+                                            }
+                                            else
+                                            {
+                                                <ul class="list-group">
+
+                                                    <li class="justify-content-between align-items-center" style="margin-left:35px;">
+                                                        A Time
+                                                    </li>
+                                                    <li class="justify-content-between align-items-center" style="margin-left:35px;">
+                                                        B Time
+                                                    </li>
+                                                    <li class="justify-content-between align-items-center" style="margin-left:35px;">
+                                                        C Time
+                                                    </li>
+                                                    <li class="justify-content-between align-items-center" style="margin-left:35px;">
+                                                        D Time
+                                                    </li>
+                                                </ul>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <ul class="list-group">
+                                                <li class="justify-content-between align-items-center" style="margin-left:35px;">
+                                                    A Time
+                                                </li>
+                                                <li class="justify-content-between align-items-center" style="margin-left:35px;">
+                                                    B Time
+                                                </li>
+                                                <li class="justify-content-between align-items-center" style="margin-left:35px;">
+                                                    C Time
+                                                </li>
+                                                <li class="justify-content-between align-items-center" style="margin-left:35px;">
+                                                    D Time
+                                                </li>
+                                            </ul>
+                                        }
+
 
                                     </td>
 
@@ -149,17 +220,24 @@
                                 }
                             }
 
+                            @if(i==weekRowCount-1)
+                            {
+                                if(startNum<=lastDay)
+                                {
+                                    weekRowCount += 1;
+                                }
+                            }
                         </tr>
                     }
                     @*<tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td>6</td>
-                        <td>7</td>
-                    </tr>*@
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td>7</td>
+                        </tr>*@
 
                 </tbody>
             </table>
@@ -171,3 +249,30 @@
     </div>
 </main>
 @* Main Layer *@
+
+@section scripts{
+
+    <script type="text/javascript">
+
+    $(function () {
+
+        
+
+    });
+
+    function ChangeComboYearMonth()
+    {
+        var searchYear = $("#cboRsvYear").val();
+        var searchMonth = $("#cboRsvMonth").val();
+        var day = "01";
+        var classYmd = searchYear + "-" + searchMonth + "-" + day;
+        var prd_code = '@Model.PRD_CODE';
+
+        var url = "/Class/ClassReservation?PRD_CODE=" + prd_code + "&CLASS_YMD=" + classYmd;
+        location.href = url;
+    }
+
+
+    </script>
+
+}

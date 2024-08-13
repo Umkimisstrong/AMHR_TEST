@@ -71,5 +71,27 @@ namespace AMHR_WEB.GlobalAttribute
             return list;
         }
 
+        
+        public static List<SelectListItem> GetTimeTextValueItem(int dayOfWeek)
+        {
+            ClassRepository repository = new ClassRepository();
+            DataSet ds = repository.GetTimeTextValueItem(dayOfWeek);
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow rowItem in ds.Tables[0].Rows)
+                {
+                    SelectListItem selectListItem = new SelectListItem();
+                    selectListItem.Text = rowItem["CD_NM"].ToString();
+                    selectListItem.Value = rowItem["CD"].ToString();
+                    list.Add(selectListItem);
+                }
+            }
+
+            return list;
+        }
+
     }
 }
