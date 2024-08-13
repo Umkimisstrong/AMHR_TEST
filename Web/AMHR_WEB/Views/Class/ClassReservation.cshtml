@@ -1,7 +1,8 @@
-﻿@{
+﻿@model Contract.ClassContract
+@{
     ViewBag.Title = "Home Page";
 
-    DateTime date = DateTime.Now.AddMonths(6);
+    DateTime date = DateTime.Parse(Model.CLASS_YMD);
     int Year = date.Year;
     int Month = date.Month;
     int Day = date.Day;
@@ -30,15 +31,73 @@
 
     int weekRowCount = startDifference == 0 && lastDay == 28 ? 4 : 5;
 
+
+
+    string[] YearCombo = new string[2];
+    YearCombo[0] = DateTime.Now.Year.ToString();
+    YearCombo[1] = DateTime.Now.AddYears(1).Year.ToString();
+
+    Dictionary<string, string> MonthKeyValuePairs = new Dictionary<string, string>();
+    int startMonth = 1;
+    int lastMonth = 12;
+    if (Year.ToString().Equals(YearCombo[0]))
+    {
+        startMonth = Month;
+    }
+
+    for(int i = startMonth; i<=lastMonth; i++)
+    {
+        MonthKeyValuePairs.Add((i < 10 ? "0" + i.ToString() : i.ToString()), i.ToString());
+    }
 }
 
 @* Main Layer *@
 <main style="padding-left:0;">
+
+
     <div class="row">
+        <h1 style="text-align:center;">
+            Reservation
+        </h1>
+        <hr />
+
+        <section class="col-md-12" style="margin-bottom:15px; justify-content:center;">
+            <div style="text-align:center; justify-content:center; display:flex;">
+                <select class="form-select" id="exampleSelect1" style="width:200px;">
+                    @for (int i = 0; i < YearCombo.Length; i++)
+                    {
+                        if (Year.ToString().Equals(YearCombo[i]))
+                        {
+                            <option value="@YearCombo[i]" selected="selected">@YearCombo[i]</option>
+                        }
+                        else
+                        { 
+                            <option value="@YearCombo[i]">@YearCombo[i]</option>
+                        }
+                    }
+                </select>
+
+                <select class="form-select" id="exampleSelect2" style="width:110px; margin-left:15px">
+                    @foreach (var item in MonthKeyValuePairs)
+                    {
+                        if (Month.ToString().Equals(item.Value.ToString()))
+                        {
+                            <option value="@item.Key" selected="selected">@item.Value</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Key" >@item.Value</option>
+                        }
+
+                    }
+                </select>
+            </div>
+        </section>
+        
         <section class="col-md-12" aria-labelledby="gettingStartedTitle">
             <table class="table">
                 <thead>
-                    <tr class="table-dark">
+                    <tr class="table-primary">
                         <th scope="col">Sun</th>
                         <th scope="col">Mon</th>
                         <th scope="col">Tue</th>
@@ -49,11 +108,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @{ 
+                    @{
                         int startNum = 1;
                         bool isDraw = false;
                     }
-                    @for(int i = 0; i<weekRowCount; i++)
+                    @for (int i = 0; i < weekRowCount; i++)
                     {
                         <tr>
                             @for (int j = 0; j < 7; j++)
@@ -108,7 +167,7 @@
 
         </section>
 
-      
+
     </div>
 </main>
 @* Main Layer *@

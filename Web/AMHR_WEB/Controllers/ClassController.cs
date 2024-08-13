@@ -1,6 +1,8 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Web.Mvc;
 using AMHR_WEB.Models;
+using Contract;
 using AuthorizeAttribute = AMHR_WEB.App_Filters.AuthorizeAttribute;
 
 namespace AMHR_WEB.Controllers
@@ -32,11 +34,19 @@ namespace AMHR_WEB.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize(ClaimType = ClaimTypes.Role, ClaimValue = Constants.UserRoles.Admin + "," + Constants.UserRoles.General)]
-        public ActionResult ClassReservation()
+        public ActionResult ClassReservation(ClassContract contract)
         {
             ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
             ViewBag.SECOND_BREADCRUMB_NAME = "Class Reservation";
-            return View();
+
+            ClassContract result = new ClassContract();
+            result.CLASS_YMD = (contract.CLASS_YMD == null || string.IsNullOrEmpty(contract.CLASS_YMD))
+                                ? DateTime.Now.ToString("yyyy-MM-dd")
+                                : contract.CLASS_YMD;
+
+            result.PRD_CODE = contract.PRD_CODE;
+
+            return View(result);
         }
     }
 }
