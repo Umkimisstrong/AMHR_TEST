@@ -44,6 +44,11 @@ namespace Repository
             return result;
         }
 
+        /// <summary>
+        /// SelectClassRsvList : 클래스 예약현황 조회
+        /// </summary>
+        /// <param name="I_CLASS_YM">연,월(202408)</param>
+        /// <returns></returns>
         public DataTable SelectClassRsvList(string I_CLASS_YM)
         {
             DataTable dt = new DataTable();
@@ -61,7 +66,11 @@ namespace Repository
             return dt;
         }
 
-        
+        /// <summary>
+        /// GetTimeTextValueItem : 시간코드를 TextValueItem 형식으로 가져온다.
+        /// </summary>
+        /// <param name="dayOfWeek">요일을 숫자로 나타낸 값(현재미사용)</param>
+        /// <returns></returns>
         public DataSet GetTimeTextValueItem(int dayOfWeek)
         {
             DataSet ds = new DataSet();
