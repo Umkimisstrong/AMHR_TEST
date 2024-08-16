@@ -28,3 +28,7 @@ div #amhr-nav-bar-dropdown { --bs-dropdown-link-hover-bg: #ba4d46; --bs-dropdown
 .amhr-modal-title-font {
     color: black;
 }
+
+.li-hover :hover {
+   text-decoration:underline;
+}

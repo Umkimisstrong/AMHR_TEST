@@ -26,7 +26,6 @@ namespace Repository
 
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
             keyValuePairs.Add("I_PRD_CODE", entity.PRD_CODE);
-            keyValuePairs.Add("I_PRD_TYPE_CODE", entity.PRD_TYPE_CODE);
             keyValuePairs.Add("I_CLASS_USER_ID", entity.CLASS_USER_ID);
             keyValuePairs.Add("I_CLASS_YMD", entity.CLASS_YMD);
             keyValuePairs.Add("I_CLASS_TIME", entity.CLASS_TIME);
@@ -81,6 +80,16 @@ namespace Repository
             ds = SqlHelper.GetDataSet("SP_CLS_TIME_TEXTVALUE", keyValuePairs);
 
             return ds;
+        }
+
+        public string SelectClassTimeNm(string I_TIME_CODE)
+        {
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_TIME_CODE", I_TIME_CODE);
+
+            string result = SqlHelper.GetReturnValue("SP_CLS_TIME_S", keyValuePairs);
+
+            return result;
         }
 
     }

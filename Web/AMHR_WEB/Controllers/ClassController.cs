@@ -5,6 +5,7 @@ using AMHR_WEB.GlobalAttribute;
 using AMHR_WEB.Models;
 using Contract;
 using Contract.ENUM;
+using Entity;
 using Repository;
 using AuthorizeAttribute = AMHR_WEB.App_Filters.AuthorizeAttribute;
 
@@ -43,6 +44,9 @@ namespace AMHR_WEB.Controllers
             ViewBag.SECOND_BREADCRUMB_NAME = "Class Reservation";
             ViewBag.SELECT_CLASS_TIME = GlobalHelper.GetTimeTextValueItem(0);
 
+            ProductRepository productRepository = new ProductRepository();
+            ProductEntity productEntity = productRepository.SelectProductEntity(contract.PRD_CODE);
+
             ClassRepository repository = new ClassRepository();
             
 
@@ -55,10 +59,70 @@ namespace AMHR_WEB.Controllers
                                         : contract.CLASS_YMD                    // 아닌 경우 넘어온 날짜를 기준으로 세팅한다.
                                    ) ;
             ViewBag.RSV_DATATABLE = repository.SelectClassRsvList(result.CLASS_YMD.Replace("-", "").Substring(0, 6));
+            ViewBag.CLASS_YM = result.CLASS_YMD.Replace("-", "").Substring(0, 6);
 
             result.PRD_CODE = contract.PRD_CODE;
+            result.PRD_TYPE_NM = productEntity.PRD_TYPE_NM;
+            result.PRD_PRICE = productEntity.PRD_PRICE;
 
             return View(result);
+        }
+
+        /// <summary>
+        /// ClassReservationSave_P : 클래스 예약 저장 팝업 담당 뷰
+        /// </summary>
+        /// <param name="contract">클래스 Contract</param>
+        /// <returns></returns>
+        public ActionResult ClassReservationSave_P(ClassContract contract)
+        {
+            ClassContract classContract = new ClassContract();
+            ClassRepository repository = new ClassRepository();
+
+            classContract.ClassEntity = new ClassEntity();
+            
+
+            if (
+                !string.IsNullOrEmpty(contract.CLASS_NO)
+
+               )
+            {
+                
+                //classContract.ClassEntity = repository.SelectProductEntity(contract.PRD_CODE);
+                ViewBag.GENERAL_FLAG = EnumProperties.GeneralFlag.UPDATE;
+            }
+            else
+            {
+                classContract.ClassEntity.USE_YN = "Y";
+                classContract.ClassEntity.PRD_CODE = contract.PRD_CODE;
+                classContract.ClassEntity.PRD_TYPE_NM = contract.PRD_TYPE_NM;
+                classContract.ClassEntity.PRD_PRICE = contract.PRD_PRICE;
+                classContract.ClassEntity.CLASS_YMD = contract.CLASS_YMD;
+                classContract.ClassEntity.CLASS_TIME = contract.CLASS_TIME;
+                classContract.ClassEntity.CLASS_TIME_NM = repository.SelectClassTimeNm(contract.CLASS_TIME);
+                ViewBag.GENERAL_FLAG = EnumProperties.GeneralFlag.CREATE;
+            }
+            return View(classContract);
+        }
+
+
+
+        /// <summary>
+        /// RequestSaveClass : 클래스 예약 저장 요청
+        /// </summary>
+        /// <param name="contract">클래스 Contract</param>
+        /// <param name="generalFlag">일반 플래그</param>
+        /// <returns></returns>
+        public JsonResult RequestSaveClass(ClassContract contract, EnumProperties.GeneralFlag generalFlag)
+        {
+            ClassRepository repository = new ClassRepository();
+            contract.ClassEntity.CLASS_USER_ID  = UserSessionModel.USER_ID;
+            contract.ClassEntity.CREATE_ID = UserSessionModel.USER_ID;
+            contract.ClassEntity.UPDATE_ID = UserSessionModel.USER_ID;
+            contract.ClassEntity.USE_YN = "Y";
+            contract.ClassEntity.DEL_YN = "N";
+
+            bool result = repository.CreateClassReservation(contract.ClassEntity);
+            return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
     }
 }

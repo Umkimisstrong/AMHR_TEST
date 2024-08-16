@@ -1,0 +1,153 @@
+﻿@model Contract.ClassContract
+@{
+    ViewBag.Title = "Class Reservation Save";
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    string GENERAL_FLAG = ViewBag.GENERAL_FLAG.ToString();
+}
+
+@* Main Layer *@
+<div class="modal-header bg-primary text-white" id="amhr_modal_header">
+    <h5 class="modal-title amhr-modal-title-font" id="amhr_modal_title">클래스 예약</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body" id="amhr_modal_body_text">
+    <div class="row">
+        <section class="col-md-12">
+            <fieldset>
+                <div>
+                    <label for="Prd_Code_P" class="form-label mt-4">클래스 명</label>
+                    <div style="display:flex; justify-content:center;">
+                        @* 상품 코드명 들어간다. *@
+                        @Html.TextBoxFor(m => m.ClassEntity.PRD_TYPE_NM, new { @class = "form-control", @id = "Prd_Type_NM_P", @style = "max-width:460px;", @disabled = "disabled"})
+                        @Html.HiddenFor(m => m.ClassEntity.PRD_CODE, new { @class = "form-control", @id = "Prd_Code_P", @style = "max-width:460px;" })
+                    </div>
+
+                    <label for="Prd_Code_NM_P" class="form-label mt-4">예약 일자</label>
+                    <div style="display:flex; justify-content:center;">
+                        @Html.TextBoxFor(m => m.ClassEntity.CLASS_YMD, new { @class = "form-control", @id = "Class_Ymd_P", @style = "max-width:460px;", @disabled = "disabled" })
+                    </div>
+
+
+                    <label for="Prd_Type_Code_P" class="form-label mt-4">예약 시간</label>
+                    <div style="display:flex; justify-content:center;">
+                        @Html.TextBoxFor(m => m.ClassEntity.CLASS_TIME_NM, new { @class = "form-control", @id = "Class_Time_NM_P", @style = "max-width:460px;", @disabled = "disabled" })
+                        @Html.HiddenFor(m => m.ClassEntity.CLASS_TIME, new { @class = "form-control", @id = "Class_Time_P", @style = "max-width:460px;" })
+                    </div>
+
+                    <label for="Prd_Price_P" class="form-label mt-4">상품 가격</label>
+                    <div style="display:flex; justify-content:center;">
+                        @Html.TextBoxFor(m => m.ClassEntity.PRD_PRICE, new { @class = "form-control", @id = "Prd_Price_P", @style = "max-width:460px;", @disabled = "disabled" })
+                    </div>
+                </div>
+
+            </fieldset>
+        </section>
+    </div>
+</div>
+<div class="modal-footer" id="btn_save">
+    @if (GENERAL_FLAG.Equals("UPDATE"))
+    {
+        <button type="button" class="btn btn-danger" name="save_yes" id="save_del" onclick="requestDeleteCode()">DELETE</button>
+    }
+    <button type="button" class="btn btn-primary" name="save_yes" id="save_yes" onclick="requestSaveClass()">SAVE</button>
+    <button type="button" class="btn btn-secondary" name="save_no" id="save_no" data-bs-dismiss="modal">CANCEL</button>
+</div>
+@* Main Layer *@
+
+@* Script Layer *@
+@section scripts{
+
+    <script type="text/javascript">
+
+    
+
+        /*
+            DOM 준비 시
+        */
+        $(function () {
+            if ('@GENERAL_FLAG' == "CREATE") {
+
+            }
+            else
+            {
+                $("#Prd_Code_P").attr("disabled", true);
+            }
+        });
+
+     
+        /*
+            requestDeleteCode : 코드 삭제 요청
+        */
+        function requestDeleteCode() {
+
+            MsgBox_Pop.Confirm("삭제하시겠습니까?", function resultFlag(flag)
+            {
+                if (flag)
+                {
+                    saveData('DELETE');
+                }
+                else
+                {
+                    return;
+                }
+            });
+        }
+
+        /*
+            requestSaveClass : 클래스 저장 요청
+        */
+        function requestSaveClass() {
+            MsgBox_Pop.Confirm("예약하시겠습니까?", function resultFlag(flag) {
+                if (flag) {
+                    saveData('@GENERAL_FLAG');
+                }
+                else {
+                    return;
+                }
+            });
+
+        }
+
+        
+
+        /*
+            saveData : 사용자 Data 저장
+        */
+        function saveData(Flag) {
+            var obj = {
+               ClassEntity: {}
+            };
+
+            obj.ClassEntity.PRD_CODE = $("#Prd_Code_P").val();
+            obj.ClassEntity.CLASS_YMD = $("#Class_Ymd_P").val();
+            obj.ClassEntity.CLASS_TIME = $("#Class_Time_P").val();
+
+
+            $.ajax({
+                url: "/Class/RequestSaveClass"
+                , data: { contract: obj, generalFlag: Flag }
+                , type: "post"
+                , success: function (data) {
+
+                    if (data.RESULT) {
+                        MsgBox_Pop.Inform("예약이 완료되었습니다.", function () { window.location.reload(); });
+                    }
+                    else {
+                        MsgBox_Pop.Warning("예상치 못한 오류가 발생하였습니다. 관리자에게 문의하십시오.");
+                    }
+                }
+                , error: function (data) {
+                    MsgBox_Pop.Danger(
+                        setErrCustomContents(data)
+                    );
+
+                }
+            });
+        }
+
+    </script>
+
+}
+@* Script Layer *@

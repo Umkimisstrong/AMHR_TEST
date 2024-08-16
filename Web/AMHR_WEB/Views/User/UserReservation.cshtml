@@ -1,0 +1,124 @@
+﻿@model Contract.UserContract
+
+
+@{
+    ViewBag.Title = "UserReservation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@* Main Layer *@
+<main style="padding-left:50px; width:90%;">
+    <div class="row" style="justify-content:center;">
+        <section class="col-md-12" aria-labelledby="gettingStartedTitle" style="justify-content:center; width:30%;">
+            <fieldset style="justify-content:center; max-width:282px; margin-top:30px;">
+                <div style="text-align:center;">
+                    <h1>
+                        Reservation
+                    </h1>
+                    <hr />
+                </div>
+                <div>
+                    <label for="exampleInputPassword1" class="form-label mt-4">New Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" autocomplete="off">
+                </div>
+                <div>
+                    <label for="exampleInputPassword2" class="form-label mt-4">New Password Check</label>
+                    <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password Check" autocomplete="off">
+                </div>
+            
+                <hr />
+                <div style="text-align:center;">
+                    <button type="button" class="btn btn-primary" onclick="requestChangePwd()">Submit</button>
+                </div>
+                
+            </fieldset>
+        </section>
+    </div>
+</main>
+@* Main Layer *@
+
+@* Script Layer *@
+@section scripts
+{
+    <script type="text/javascript">
+
+
+
+        /*
+            requestChangePwd : 비밀번호 변경
+        */
+        function requestChangePwd() {
+            if (validateData()) {
+                MsgBox.Confirm("저장하시겠습니까?", function resultFlag(flag) {
+                    if (flag) {
+                        saveData();
+                    }
+                    else {
+                        return;
+                    }
+                });
+            }
+            else {
+                return;
+            }
+
+        }
+
+        /*
+            validateData : 유효성 검사
+        */
+        function validateData() {
+            var userPassword1 = $("#exampleInputPassword1").val();
+            var userPassword2 = $("#exampleInputPassword2").val();
+            if (userPassword1.trim() == "") {
+                MsgBox.Alert("새 비밀번호를 입력하세요.", function () { $("#exampleInputPassword1").focus(); });
+                return false;
+            }
+            if (userPassword2.trim() == "") {
+                MsgBox.Alert("새 비밀번호 확인을 입력하세요.", function () { $("#exampleInputPassword2").focus(); });
+                return false;
+            }
+            if (userPassword1 != userPassword2) {
+                MsgBox.Alert("새 비밀번호와 새 비밀번호 확인 값이 다릅니다. 동일하게 입력하세요.", function () { $("#exampleInputPassword1").focus(); });
+                return false;
+            }
+            return true;
+        }
+
+        /*
+            saveData : 사용자 Data 저장
+        */
+        function saveData() {
+
+            $.ajax({
+                url: "/User/ChangePassword"
+                , data: {
+                    userId: '@ViewBag.USER_ID',
+                    userPwd: $("#exampleInputPassword1").val()
+                }
+                , type: "post"
+                , success: function (data) {
+
+                    if (data.RESULT) {
+                        MsgBox.Inform("비밀번호 변경이 완료되었습니다. 다시 로그인 후 이용하여 주십시오.", function () { location.href = "/User/LogoutNoMessage" });
+                    }
+                    else {
+                        MsgBox.Warning("예상치 못한 오류가 발생하였습니다. 관리자에게 문의하십시오.");
+                    }
+                }
+                , error: function (data) {
+                    MsgBox.Danger(
+                        setErrCustomContents(data)
+                    );
+
+                }
+            });
+
+        }
+    </script>
+}
+@* Script Layer *@
+
+
+
+

@@ -215,6 +215,32 @@ namespace AMHR_WEB.Controllers
         }
 
         /// <summary>
+        /// UserReservation : 사용자 예약현황
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult UserReservation()
+        {
+            if (UserSessionModel != null && !string.IsNullOrEmpty(UserSessionModel.USER_ID))
+            {
+                ViewBag.MY_PAGE_VIEW = "MY_PAGE_VIEW";
+                ViewBag.USER_ID = UserSessionModel.USER_ID;
+
+                ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
+                ViewBag.SECOND_BREADCRUMB_NAME = "Reservation";
+
+                // 현재 액션명을 TempData 로 넘겨준다. User 사이드 Bar 에서 메뉴 Display 에 사용
+                TempData["ACTION_NAME"] = RouteData.Values["Action"].ToString();
+                return View();
+            }
+            else
+            {
+                TempData.Add("MESSAGE", "예약 현황 조회는 로그인 후 이용 가능합니다.");
+                return RedirectToAction("UserLogin", "User");
+            }
+
+        }
+
+        /// <summary>
         /// ChangePassword : 비밀번호 변경 요청
         /// </summary>
         /// <param name="userId">사용자 ID</param>
