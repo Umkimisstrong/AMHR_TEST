@@ -6,6 +6,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{ 
+
+    List<Entity.ClassEntity> ClassList = ViewBag.USER_RESVATION_LIST != null ? ViewBag.USER_RESVATION_LIST as List<Entity.ClassEntity> : null;
+
+}
+
 @* Main Layer *@
 <main style="padding-left:50px; width:90%;">
     <div class="row" style="justify-content:center;">
@@ -17,18 +23,47 @@
                     </h1>
                     <hr />
                 </div>
-                <div>
-                    <label for="exampleInputPassword1" class="form-label mt-4">New Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" autocomplete="off">
+                <div class="list-group" id="rsv_list_div">
+                    @if(ClassList != null && ClassList.Count>0)
+                    {
+                        for(int i = 0; i<ClassList.Count; i++)
+                        {
+                            string tagId = "rsv_" + i.ToString();
+                            string Ymd = ClassList[i].CLASS_YMD.Substring(0, 4) + "-" + ClassList[i].CLASS_YMD.Substring(4, 2) + "-" + ClassList[i].CLASS_YMD.Substring(6, 2);
+
+
+                            TimeSpan dateDiff = DateTime.Parse(Ymd) - DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd"));
+                            string dDay = "D" + (dateDiff.Days > 0  ? "-" : ( dateDiff.Days == 0 ? " Day" : "+")) + (dateDiff.Days != 0 ? Math.Abs(dateDiff.Days).ToString() : " ");
+                            string bgCssClass = dateDiff.Days > 0 ? "" : (dateDiff.Days == 0 ? "bg-success" : "bg-warning");
+                            <a id="@tagId" class="list-group-item list-group-item-action flex-column align-items-start  @bgCssClass" onclick="ToggleRsvCard('@i.ToString()')" style="cursor:pointer;">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1"> @Ymd </h5>
+                                    <small>@dDay</small>
+                                </div>
+                                <p class="mb-1">시그니처 클래스 - @ClassList[i].PRD_TYPE_NM</p>
+                                @*<small>Donec id elit non mi porta.</small>*@
+                            </a>
+                        }
+                        
+                    }
+                    @*<a href="#" id="rsv_1" class="list-group-item list-group-item-action flex-column align-items-start" onclick="ToggleRsvCard('1')">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">2024-09-05</h5>
+                            <small>D-20</small>
+                        </div>
+                        <p class="mb-1">시그니처 클래스 - 증류식</p>
+                    </a>
+                    <a href="#" id="rsv_2" class="list-group-item list-group-item-action flex-column align-items-start" onclick="ToggleRsvCard('2')">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">2024-09-06</h5>
+                            <small>D-21</small>
+                        </div>
+                        <p class="mb-1">시그니처 클래스 - 희석식</p>
+                    </a>*@
                 </div>
-                <div>
-                    <label for="exampleInputPassword2" class="form-label mt-4">New Password Check</label>
-                    <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password Check" autocomplete="off">
-                </div>
-            
                 <hr />
                 <div style="text-align:center;">
-                    <button type="button" class="btn btn-primary" onclick="requestChangePwd()">Submit</button>
+                    <button type="button" class="btn btn-primary" onclick="requestChangePwd()">Cancel</button>
                 </div>
                 
             </fieldset>
@@ -114,6 +149,33 @@
                 }
             });
 
+        }
+
+        function ToggleRsvCard(id)
+        {
+            var selectedCardId = "#rsv_" + id;
+
+            var length = $($("#rsv_list_div").find('a')).length;
+            if (length > 0)
+            {
+                var rsvCardObj = $("#rsv_list_div").find('a');
+                for (var i = 0; i < length; i++)
+                {
+                    var rsvCardId = "#" + rsvCardObj[i].id;
+                    $(rsvCardId).removeClass('active');
+                    if (selectedCardId == rsvCardId)
+                    {
+                        $(rsvCardId).addClass('active');
+                    }
+                }
+                //$(cardId).removeClass("active");
+
+
+                //$(cardId).removeClass("active");
+            }
+
+            return;
+            
         }
     </script>
 }

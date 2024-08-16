@@ -124,5 +124,13 @@ namespace AMHR_WEB.Controllers
             bool result = repository.CreateClassReservation(contract.ClassEntity);
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
+
+
+        public JsonResult CheckClassRsvOk(ClassContract contract) 
+        {
+            ClassRepository repository = new ClassRepository();
+            string result = repository.CheckClassRsvOK(contract.CLASS_YMD, contract.CLASS_TIME);
+            return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

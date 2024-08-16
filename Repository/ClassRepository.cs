@@ -92,5 +92,34 @@ namespace Repository
             return result;
         }
 
+        public List<ClassEntity> SelectUserReservationList(string I_CLASS_USER_ID)
+        {
+            List<ClassEntity> classList = new List<ClassEntity>();
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_CLASS_USER_ID", I_CLASS_USER_ID);
+
+            DataSet ds = SqlHelper.GetDataSet("SP_CLS_USER_RSV_LIST", keyValuePairs);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                classList = ds.Tables[0].ConverToEntityList<ClassEntity>();
+            }
+
+
+            return classList;
+        }
+
+        public string CheckClassRsvOK(string I_CLASS_YMD, string I_CLASS_TIME)
+        {
+            string result = "";
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_CLASS_YMD", I_CLASS_YMD);
+            keyValuePairs.Add("I_CLASS_TIME", I_CLASS_TIME);
+
+            result = SqlHelper.GetReturnValue("SP_CLS_CHECK_RSV_OK", keyValuePairs);
+
+            return result;
+        }
     }
 }

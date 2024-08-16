@@ -228,6 +228,9 @@ namespace AMHR_WEB.Controllers
                 ViewBag.FIRST_BREADCRUMB_NAME = CONTROLLER_NAME;
                 ViewBag.SECOND_BREADCRUMB_NAME = "Reservation";
 
+                ClassRepository classRepository = new ClassRepository();
+                ViewBag.USER_RESVATION_LIST = classRepository.SelectUserReservationList(UserSessionModel.USER_ID);
+
                 // 현재 액션명을 TempData 로 넘겨준다. User 사이드 Bar 에서 메뉴 Display 에 사용
                 TempData["ACTION_NAME"] = RouteData.Values["Action"].ToString();
                 return View();

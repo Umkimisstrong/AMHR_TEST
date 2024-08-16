@@ -148,55 +148,75 @@
                                 {
                                     // 그리기 시작
                                     isDraw = true;
-                                    <td>
+                                    <td style="height:169px;">
                                         @* 날짜 출력 *@
                                         @startNum
 
                                         @*  예약 데이터가 있으면 해당 날짜 (ex 1일) 데이터를 DataRow [] 로 출력해서 Time 코드와 비교한다. *@
-                                        @if (rsvObj.Rows.Count > 0)
+                                        @if (( Year == DateTime.Now.Year && Month == DateTime.Now.Month && startNum > Day) || (Year != DateTime.Now.Year || Month != DateTime.Now.Month))
                                         {
-                                            string dayValue = startNum < 10 ? "0" + startNum.ToString() : startNum.ToString();
-                                            string classYmd = ViewBag.CLASS_YM.ToString() + dayValue;
-                                            System.Data.DataRow[] dr = rsvObj.Select("RSV_DAY= '" + dayValue + "'");
-                                            // DataRow[] 가 있다면 (해당 일자에 예약된 정보가 있다면)
-                                            if (dr.Length > 0)
+
+
+                                            if (rsvObj.Rows.Count > 0)
                                             {
+                                                string dayValue = startNum < 10 ? "0" + startNum.ToString() : startNum.ToString();
+                                                string classYmd = ViewBag.CLASS_YM.ToString() + dayValue;
+                                                System.Data.DataRow[] dr = rsvObj.Select("RSV_DAY= '" + dayValue + "'");
+                                                // DataRow[] 가 있다면 (해당 일자에 예약된 정보가 있다면)
+                                                if (dr.Length > 0)
+                                                {
 
-                                                <ul class="list-group">
-                                                    @* 클래스 Time 코드와 비교한다. *@
-                                                    @foreach (var item in classTimeList)
-                                                    {
-                                                        bool hasTime = false;
-
-                                                        for (int k = 0; k < dr.Length; k++)
+                                                    <ul class="list-group">
+                                                        @* 클래스 Time 코드와 비교한다. *@
+                                                        @foreach (var item in classTimeList)
                                                         {
-                                                            // 겹치는 경우 삭선처리 <s> 태그 안에 넣는다.
-                                                            if (item.Value.ToString().Equals(dr[k]["CLASS_TIME"].ToString()))
-                                                            {
-                                                                <li class="justify-content-between align-items-center" style="margin-left:35px;">
-                                                                    <s>
-                                                                        @item.Value (@item.Text)
-                                                                    </s>
-                                                                </li>
+                                                            bool hasTime = false;
 
-                                                                hasTime = true;
+                                                            for (int k = 0; k < dr.Length; k++)
+                                                            {
+                                                                // 겹치는 경우 삭선처리 <s> 태그 안에 넣는다.
+                                                                if (item.Value.ToString().Equals(dr[k]["CLASS_TIME"].ToString()))
+                                                                {
+                                                                    <li class="justify-content-between align-items-center" style="margin-left:35px;">
+                                                                        <s>
+                                                                            @item.Value (@item.Text)
+                                                                        </s>
+                                                                    </li>
+
+                                                                    hasTime = true;
+                                                                }
+                                                            }
+
+                                                            // 아닌 경우 그냥 그린다.
+                                                            if (!hasTime)
+                                                            {
+
+                                                                <li class="justify-content-between align-items-center li-link" style="margin-left:35px;" onclick="ReservationSavePopUp('@classYmd', '@item.Value');">
+                                                                    @item.Value (@item.Text)
+                                                                </li>
                                                             }
                                                         }
+                                                    </ul>
+                                                }
+                                                // DataRow[] 가 없다면(해당 일자에 예약된 정보가 없다면) 모든 정보를 그냥 출력한다.
+                                                else
+                                                {
 
-                                                        // 아닌 경우 그냥 그린다.
-                                                        if (!hasTime)
-                                                        {
-                                                            
+                                                    foreach (var item in classTimeList)
+                                                    {
+                                                        <ul class="list-group">
                                                             <li class="justify-content-between align-items-center li-link" style="margin-left:35px;" onclick="ReservationSavePopUp('@classYmd', '@item.Value');">
                                                                 @item.Value (@item.Text)
                                                             </li>
-                                                        }
+                                                        </ul>
                                                     }
-                                                </ul>
+                                                }
                                             }
-                                            // DataRow[] 가 없다면(해당 일자에 예약된 정보가 없다면) 모든 정보를 그냥 출력한다.
+                                            // 예약데이터 전체가 없다면 모든 날짜를 그냥 출력한다.
                                             else
                                             {
+                                                string dayValue = startNum < 10 ? "0" + startNum.ToString() : startNum.ToString();
+                                                string classYmd = ViewBag.CLASS_YM.ToString() + dayValue;
                                                 foreach (var item in classTimeList)
                                                 {
                                                     <ul class="list-group">
@@ -207,29 +227,21 @@
                                                 }
                                             }
                                         }
-                                        // 예약데이터 전체가 없다면 모든 날짜를 그냥 출력한다.
                                         else
-                                        {
-                                            string dayValue = startNum < 10 ? "0" + startNum.ToString() : startNum.ToString();
-                                            string classYmd = ViewBag.CLASS_YM.ToString() + dayValue;
-                                            foreach (var item in classTimeList)
-                                            {
-                                                <ul class="list-group">
-                                                    <li class="justify-content-between align-items-center li-link" style="margin-left:35px;" onclick="ReservationSavePopUp('@classYmd', '@item.Value');">
-                                                        @item.Value (@item.Text)
-                                                    </li>
-                                                </ul>
-                                            }
-                                        }
-
-
+                                        { 
+                                            <p>
+                                                <br />
+                                                No Available
+                                            </p>
+                                        }   
                                     </td>
-
                                     startNum++;
                                 }
                                 else
                                 {
-                                    <td>&nbsp;</td>
+                                    <td style="height:169px;">
+                                        
+                                    </td>
                                 }
                             }
 
@@ -258,7 +270,7 @@
 
     $(function () {
 
-        
+
 
     });
 
@@ -279,14 +291,40 @@
 
     function ReservationSavePopUp(Class_Ymd, Class_Time)
     {
-        var requestData = {};
-        requestData.PRD_CODE = '@Model.PRD_CODE';
-        requestData.PRD_TYPE_NM = '@Model.PRD_TYPE_NM';
-        requestData.PRD_PRICE = '@Model.PRD_PRICE';
-        requestData.CLASS_YMD = Class_Ymd;
-        requestData.CLASS_TIME = Class_Time;
+        var obj = {};
 
-        ModalBox.Show("/Class/ClassReservationSave_P", requestData);
+        obj.CLASS_YMD = Class_Ymd;
+        obj.CLASS_TIME = Class_Time;
+
+        $.ajax({
+            url: "/Class/CheckClassRsvOk"
+            , data: { contract: obj }
+            , type: "post"
+            , success: function (data) {
+                if (data.RESULT == "OK") {
+                    var requestData = {};
+                    requestData.PRD_CODE = '@Model.PRD_CODE';
+                    requestData.PRD_TYPE_NM = '@Model.PRD_TYPE_NM';
+                    requestData.PRD_PRICE = '@Model.PRD_PRICE';
+                    requestData.CLASS_YMD = Class_Ymd;
+                    requestData.CLASS_TIME = Class_Time;
+
+                    ModalBox.Show("/Class/ClassReservationSave_P", requestData);
+                }
+                else {
+                    MsgBox.Warning("해당 일자와 시간에 이미 예약정보가 존재합니다. 다른 일자 또는 다른 시간을 선택해주세요.", function () { window.location.reload(); });
+                    
+                }
+            }
+            , error: function (data) {
+                MsgBox.Danger(
+                    setErrCustomContents(data)
+                );
+            }
+        });
+
+
+
     }
 
 
