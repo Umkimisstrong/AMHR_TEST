@@ -289,8 +289,12 @@
         location.href = url;
     }
 
+    /*
+        ReservationSavePopUp : 예약 저장 팝업호출
+    */
     function ReservationSavePopUp(Class_Ymd, Class_Time)
     {
+        // 01. 예약가능한지 우선확인
         var obj = {};
 
         obj.CLASS_YMD = Class_Ymd;
@@ -302,6 +306,8 @@
             , type: "post"
             , success: function (data) {
                 if (data.RESULT == "OK") {
+
+                    // 예약가능한 경우 팝업호출
                     var requestData = {};
                     requestData.PRD_CODE = '@Model.PRD_CODE';
                     requestData.PRD_TYPE_NM = '@Model.PRD_TYPE_NM';
@@ -312,6 +318,7 @@
                     ModalBox.Show("/Class/ClassReservationSave_P", requestData);
                 }
                 else {
+                    // 예약 불가한 경우 안내 및 새로고침
                     MsgBox.Warning("해당 일자와 시간에 이미 예약정보가 존재합니다. 다른 일자 또는 다른 시간을 선택해주세요.", function () { window.location.reload(); });
                     
                 }

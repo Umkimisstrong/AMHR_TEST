@@ -25,7 +25,9 @@
         /// CLASS_TIME : 클래스 시간(코드)
         /// </summary>
         public string CLASS_TIME { get; set; }
-
+        /// <summary>
+        /// CLASS_TIME_NM : 클래스 시간(명)
+        /// </summary>
         public string CLASS_TIME_NM { get; set; }
         /// <summary>
         /// CLASS_RSV_DT : 클래스 예약 일자

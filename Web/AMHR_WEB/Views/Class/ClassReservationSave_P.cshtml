@@ -47,10 +47,6 @@
     </div>
 </div>
 <div class="modal-footer" id="btn_save">
-    @if (GENERAL_FLAG.Equals("UPDATE"))
-    {
-        <button type="button" class="btn btn-danger" name="save_yes" id="save_del" onclick="requestDeleteCode()">DELETE</button>
-    }
     <button type="button" class="btn btn-primary" name="save_yes" id="save_yes" onclick="requestSaveClass()">SAVE</button>
     <button type="button" class="btn btn-secondary" name="save_no" id="save_no" data-bs-dismiss="modal">CANCEL</button>
 </div>
@@ -67,33 +63,8 @@
             DOM 준비 시
         */
         $(function () {
-            if ('@GENERAL_FLAG' == "CREATE") {
-
-            }
-            else
-            {
-                $("#Prd_Code_P").attr("disabled", true);
-            }
+          
         });
-
-     
-        /*
-            requestDeleteCode : 코드 삭제 요청
-        */
-        function requestDeleteCode() {
-
-            MsgBox_Pop.Confirm("삭제하시겠습니까?", function resultFlag(flag)
-            {
-                if (flag)
-                {
-                    saveData('DELETE');
-                }
-                else
-                {
-                    return;
-                }
-            });
-        }
 
         /*
             requestSaveClass : 클래스 저장 요청
@@ -110,7 +81,6 @@
 
         }
 
-        
 
         /*
             saveData : 사용자 Data 저장

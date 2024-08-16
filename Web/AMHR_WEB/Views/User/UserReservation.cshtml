@@ -7,7 +7,7 @@
 }
 
 @{ 
-
+    // 사용자 예약 목록을 ViewBag 에 담아 온다.
     List<Entity.ClassEntity> ClassList = ViewBag.USER_RESVATION_LIST != null ? ViewBag.USER_RESVATION_LIST as List<Entity.ClassEntity> : null;
 
 }
@@ -41,29 +41,16 @@
                                     <small>@dDay</small>
                                 </div>
                                 <p class="mb-1">시그니처 클래스 - @ClassList[i].PRD_TYPE_NM</p>
-                                @*<small>Donec id elit non mi porta.</small>*@
+
                             </a>
                         }
                         
                     }
-                    @*<a href="#" id="rsv_1" class="list-group-item list-group-item-action flex-column align-items-start" onclick="ToggleRsvCard('1')">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">2024-09-05</h5>
-                            <small>D-20</small>
-                        </div>
-                        <p class="mb-1">시그니처 클래스 - 증류식</p>
-                    </a>
-                    <a href="#" id="rsv_2" class="list-group-item list-group-item-action flex-column align-items-start" onclick="ToggleRsvCard('2')">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">2024-09-06</h5>
-                            <small>D-21</small>
-                        </div>
-                        <p class="mb-1">시그니처 클래스 - 희석식</p>
-                    </a>*@
+                    
                 </div>
                 <hr />
                 <div style="text-align:center;">
-                    <button type="button" class="btn btn-primary" onclick="requestChangePwd()">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="">Cancel</button>
                 </div>
                 
             </fieldset>
@@ -80,77 +67,8 @@
 
 
         /*
-            requestChangePwd : 비밀번호 변경
+            ToggleRsvCard : 예약목록 카드 별 클릭 시 css 변경
         */
-        function requestChangePwd() {
-            if (validateData()) {
-                MsgBox.Confirm("저장하시겠습니까?", function resultFlag(flag) {
-                    if (flag) {
-                        saveData();
-                    }
-                    else {
-                        return;
-                    }
-                });
-            }
-            else {
-                return;
-            }
-
-        }
-
-        /*
-            validateData : 유효성 검사
-        */
-        function validateData() {
-            var userPassword1 = $("#exampleInputPassword1").val();
-            var userPassword2 = $("#exampleInputPassword2").val();
-            if (userPassword1.trim() == "") {
-                MsgBox.Alert("새 비밀번호를 입력하세요.", function () { $("#exampleInputPassword1").focus(); });
-                return false;
-            }
-            if (userPassword2.trim() == "") {
-                MsgBox.Alert("새 비밀번호 확인을 입력하세요.", function () { $("#exampleInputPassword2").focus(); });
-                return false;
-            }
-            if (userPassword1 != userPassword2) {
-                MsgBox.Alert("새 비밀번호와 새 비밀번호 확인 값이 다릅니다. 동일하게 입력하세요.", function () { $("#exampleInputPassword1").focus(); });
-                return false;
-            }
-            return true;
-        }
-
-        /*
-            saveData : 사용자 Data 저장
-        */
-        function saveData() {
-
-            $.ajax({
-                url: "/User/ChangePassword"
-                , data: {
-                    userId: '@ViewBag.USER_ID',
-                    userPwd: $("#exampleInputPassword1").val()
-                }
-                , type: "post"
-                , success: function (data) {
-
-                    if (data.RESULT) {
-                        MsgBox.Inform("비밀번호 변경이 완료되었습니다. 다시 로그인 후 이용하여 주십시오.", function () { location.href = "/User/LogoutNoMessage" });
-                    }
-                    else {
-                        MsgBox.Warning("예상치 못한 오류가 발생하였습니다. 관리자에게 문의하십시오.");
-                    }
-                }
-                , error: function (data) {
-                    MsgBox.Danger(
-                        setErrCustomContents(data)
-                    );
-
-                }
-            });
-
-        }
-
         function ToggleRsvCard(id)
         {
             var selectedCardId = "#rsv_" + id;
@@ -168,14 +86,8 @@
                         $(rsvCardId).addClass('active');
                     }
                 }
-                //$(cardId).removeClass("active");
-
-
-                //$(cardId).removeClass("active");
             }
-
             return;
-            
         }
     </script>
 }

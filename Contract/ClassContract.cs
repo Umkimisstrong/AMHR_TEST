@@ -16,8 +16,13 @@ namespace Contract
         /// PRD_CODE : 상품 코드
         /// </summary>
         public string PRD_CODE { get; set; }
+        /// <summary>
+        /// PRD_TYPE_NM : 상품 타입 명
+        /// </summary>
         public string PRD_TYPE_NM { get; set; }
-
+        /// <summary>
+        /// PRD_PRICE : 상품 가격
+        /// </summary>
         public string PRD_PRICE { get; set; }
         /// <summary>
         /// CLASS_USER_ID : 클래스 사용자 ID
@@ -27,6 +32,9 @@ namespace Contract
         /// CLASS_YMD : 클래스 수강 연월일
         /// </summary>
         public string CLASS_YMD { get; set; }
+        /// <summary>
+        /// CLASS_TIME : 클래스 시간(코드)
+        /// </summary>
         public string CLASS_TIME { get; set; }
         /// <summary>
         /// ClassEntity : 클래스 엔티티

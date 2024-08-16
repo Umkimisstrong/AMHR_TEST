@@ -126,6 +126,11 @@ namespace AMHR_WEB.Controllers
         }
 
 
+        /// <summary>
+        /// CheckClassRsvOk : 예약 가능한지 확인
+        /// </summary>
+        /// <param name="contract">클래스 Contract</param>
+        /// <returns></returns>
         public JsonResult CheckClassRsvOk(ClassContract contract) 
         {
             ClassRepository repository = new ClassRepository();

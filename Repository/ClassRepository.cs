@@ -20,6 +20,11 @@ namespace Repository
     /// </summary>
     public class ClassRepository
     {
+        /// <summary>
+        /// CreateClassReservation : 클래스 예약 입력
+        /// </summary>
+        /// <param name="entity">클래스 엔티티</param>
+        /// <returns></returns>
         public bool CreateClassReservation(ClassEntity entity)
         {
             bool result = false;
@@ -82,6 +87,11 @@ namespace Repository
             return ds;
         }
 
+        /// <summary>
+        /// SelectClassTimeNm : 클래스 시간 명칭 조회
+        /// </summary>
+        /// <param name="I_TIME_CODE">클래스 시간 코드</param>
+        /// <returns></returns>
         public string SelectClassTimeNm(string I_TIME_CODE)
         {
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
@@ -92,6 +102,11 @@ namespace Repository
             return result;
         }
 
+        /// <summary>
+        /// SelectUserReservationList : 사용자 개별 예약현황 조회
+        /// </summary>
+        /// <param name="I_CLASS_USER_ID">사용자 ID</param>
+        /// <returns></returns>
         public List<ClassEntity> SelectUserReservationList(string I_CLASS_USER_ID)
         {
             List<ClassEntity> classList = new List<ClassEntity>();
@@ -109,6 +124,12 @@ namespace Repository
             return classList;
         }
 
+        /// <summary>
+        /// CheckClassRsvOK : 예약 가능한지 조회
+        /// </summary>
+        /// <param name="I_CLASS_YMD">클래스 예약 연월일</param>
+        /// <param name="I_CLASS_TIME">클래스 예약 시간</param>
+        /// <returns></returns>
         public string CheckClassRsvOK(string I_CLASS_YMD, string I_CLASS_TIME)
         {
             string result = "";
