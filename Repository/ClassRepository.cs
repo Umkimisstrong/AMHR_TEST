@@ -142,5 +142,45 @@ namespace Repository
 
             return result;
         }
+
+        /// <summary>
+        /// CheckClassRsvCancelOk : 예약 취소 가능한지 확인
+        /// </summary>
+        /// <param name="I_CLASS_NO">클래스 번호</param>
+        /// <returns></returns>
+        public string CheckClassRsvCancelOK(string I_CLASS_NO)
+        {
+            string result = "";
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_CLASS_NO", I_CLASS_NO);
+
+            result = SqlHelper.GetReturnValue("SP_CLS_CHECK_RSV_CANCEL_OK", keyValuePairs);
+
+            return result;
+        }
+
+        /// <summary>
+        /// CancelClassRsv : 클래스 예약 취소
+        /// </summary>
+        /// <param name="I_CLASS_NO">클래스 번호</param>
+        /// <param name="I_UPDATE_ID">수정자 ID</param>
+        /// <returns></returns>
+        public bool CancelClassRsv(string I_CLASS_NO, string I_UPDATE_ID)
+        { 
+            bool result = false;
+
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+            keyValuePairs.Add("I_CLASS_NO", I_CLASS_NO);
+            keyValuePairs.Add("I_UPDATE_ID", I_UPDATE_ID);
+
+            int uResult = SqlHelper.GetNonQuery("SP_CLS_RSV_CANCEL", keyValuePairs);
+            if (uResult > 0)
+            {
+                result = true;
+            }
+
+            return result;
+        }
     }
 }
