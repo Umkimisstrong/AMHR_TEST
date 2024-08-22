@@ -137,5 +137,29 @@ namespace AMHR_WEB.Controllers
             string result = repository.CheckClassRsvOK(contract.CLASS_YMD, contract.CLASS_TIME);
             return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// CheckClassRsvCancelOk : 예약 취소 가능한지 확인
+        /// </summary>
+        /// <param name="contract">클래스 Contract</param>
+        /// <returns></returns>
+        public JsonResult CheckClassRsvCancelOk(ClassContract contract)
+        {
+            ClassRepository repository = new ClassRepository();
+            string result = repository.CheckClassRsvCancelOK(contract.CLASS_NO);
+            return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// CancelClassRsv : 예약 취소
+        /// </summary>
+        /// <param name="contract">클래스 Contract</param>
+        /// <returns></returns>
+        public JsonResult CancelClassRsv(ClassContract contract)
+        {
+            ClassRepository repository = new ClassRepository();
+            bool result = repository.CancelClassRsv(contract.CLASS_NO, UserSessionModel.USER_ID);
+            return Json(new { RESULT = result }, JsonRequestBehavior.AllowGet);
+        }
     }
 }
