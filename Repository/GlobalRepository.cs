@@ -20,7 +20,7 @@ namespace Repository
         /// <summary>
         /// Connection 문자열
         /// </summary>
-        private string AMHR = string.Empty;
+        private static string AMHR = string.Empty;
 
         /// <summary>
         /// 생성자
@@ -28,7 +28,7 @@ namespace Repository
         public GlobalRepository()
         {
             GlobalConst.Global_DB_Connect();
-            this.AMHR = GlobalConst.AMHR; // 로컬 경로
+            AMHR = GlobalConst.AMHR; // 로컬 경로
         }
 
         /// <summary>
@@ -37,14 +37,14 @@ namespace Repository
         /// <param name="ConnectionStrings">Connection 문자열</param>
         public GlobalRepository(string ConnectionStrings)
         {
-            this.AMHR = ConnectionStrings;
+            AMHR = ConnectionStrings;
         }
 
         /// <summary>
         /// SqlConnection 인스턴스 반환
         /// </summary>
         /// <returns></returns>
-        public MySqlConnection getGlobalDBConnection()
+        public static MySqlConnection getGlobalDBConnection()
         {
             MySqlConnection conn = new MySqlConnection();
             conn.ConnectionString = AMHR;

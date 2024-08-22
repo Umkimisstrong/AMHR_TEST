@@ -35,7 +35,7 @@
                             TimeSpan dateDiff = DateTime.Parse(Ymd) - DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd"));
                             string dDay = "D" + (dateDiff.Days > 0  ? "-" : ( dateDiff.Days == 0 ? " Day" : "+")) + (dateDiff.Days != 0 ? Math.Abs(dateDiff.Days).ToString() : " ");
                             string bgCssClass = dateDiff.Days > 0 ? "" : (dateDiff.Days == 0 ? "bg-success" : "bg-warning");
-                            <a id="@tagId" class="list-group-item list-group-item-action flex-column align-items-start  @bgCssClass" onclick="ToggleRsvCard('@i.ToString()')" style="cursor:pointer;">
+                            <a id="@tagId" class="list-group-item list-group-item-action flex-column align-items-start  @bgCssClass" onclick="ToggleRsvCard('@i.ToString()')" name="@ClassList[i].CLASS_NO" style="cursor:pointer;">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1"> @Ymd </h5>
                                     <small>@dDay</small>
@@ -50,7 +50,7 @@
                 </div>
                 <hr />
                 <div style="text-align:center;">
-                    <button type="button" class="btn btn-primary" onclick="">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="CheckRsvCancelOk()">Cancel</button>
                 </div>
                 
             </fieldset>
@@ -88,6 +88,82 @@
                 }
             }
             return;
+        }
+
+        function CheckRsvCancelOk()
+        {
+            var length = $($("#rsv_list_div").find('a')).length;
+            if (length > 0) {
+                var rsvCardObj = $("#rsv_list_div").find('a');
+                var checkFlag = false;
+                var Target_NO = "";
+                for (var i = 0; i < length; i++) {
+                    var rsvCardId = "#" + rsvCardObj[i].id;
+                    if ($(rsvCardId).hasClass('active'))
+                    {
+                        Target_NO = $(rsvCardId)[0].name;
+                        checkFlag = true;
+                        break;
+                    }
+
+                }
+
+                if (checkFlag && Target_NO != "")
+                {
+                    var obj = {};
+                    obj.CLASS_NO = Target_NO;
+                    // 삭제
+                    $.ajax({
+                        url: '/Class/CheckClassRsvCancelOk',
+                        data: { contract: obj },
+                        type: 'post',
+                        success: function (data) {
+                            if (data.RESULT == 'YES') {
+
+
+                                $.ajax({
+                                    url: '/Class/CancelClassRsv',
+                                    data: { contract: obj },
+                                    type: 'post',
+                                    success: function (data)
+                                    {
+                                        if (data.RESULT) {
+                                            MsgBox.Inform("예약 취소되었습니다.", function () { window.location.reload(); });
+                                        }
+                                        else
+                                        {
+                                            MsgBox.Warning("예약 취소에 실패했습니다. 관리자에게 문의하세요.");
+                                        }
+
+
+                                    }, error: function (data) {
+                                        setErrCustomContents(data);
+                                    }
+
+                                });
+
+                            }
+                            else {
+                                MsgBox.Warning("취소할 수 없는 예약입니다.");
+                            }
+                        },
+                         error: function (data) {
+                            MsgBox.Danger(
+                                setErrCustomContents(data)
+                            );
+
+                        }
+
+                        
+                    });
+                }
+                else
+                {
+                    MsgBox.Warning("선택된 항목이 없습니다.");
+                }
+
+            }
+
         }
     </script>
 }

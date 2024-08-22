@@ -49,8 +49,8 @@ namespace Repository
                                          ? new GlobalRepository()
                                          : new GlobalRepository(ConnectionStrings);
 
-            MySqlConnection mySqlConnection = repository.getGlobalDBConnection();
-            return mySqlConnection;
+            
+            return GlobalRepository.getGlobalDBConnection();
         }
 
         /// <summary>
