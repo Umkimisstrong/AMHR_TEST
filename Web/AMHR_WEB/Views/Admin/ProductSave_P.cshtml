@@ -67,9 +67,9 @@
 <div class="modal-footer" id="btn_save">
     @if (GENERAL_FLAG.Equals("UPDATE"))
     {
-        <button type="button" class="btn btn-danger" name="save_yes" id="save_del" onclick="requestDeleteCode()">DELETE</button>
+        <button type="button" class="btn btn-danger" name="save_yes" id="save_del" onclick="requestDeleteProduct()">DELETE</button>
     }
-    <button type="button" class="btn btn-primary" name="save_yes" id="save_yes" onclick="requestSaveCode()">SAVE</button>
+    <button type="button" class="btn btn-primary" name="save_yes" id="save_yes" onclick="requestSaveProduct()">SAVE</button>
     <button type="button" class="btn btn-secondary" name="save_no" id="save_no" data-bs-dismiss="modal">CANCEL</button>
 </div>
 @* Main Layer *@
@@ -115,25 +115,25 @@
                     var result = data.RESULT;
                     if (result == "OK") {
                         CODE_CHECK_FLAG = true;
-                        MsgBox_Pop.Inform("사용가능한 코드 입니다.", function () { $("#Prd_Code_NM_P").focus(); });
+                        MsgBox_Pop.Inform("사용가능한 상품 입니다.", function () { $("#Prd_Code_NM_P").focus(); });
                     }
                     else if (result == "NO") {
                         CODE_CHECK_FLAG = false;
-                        MsgBox_Pop.Alert("중복된 코드 입니다.", function () { $("#Prd_Code_P").focus(); });
+                        MsgBox_Pop.Alert("중복된 상품 입니다.", function () { $("#Prd_Code_P").focus(); });
                     }
                     else if (result == "EMPTY_PRD")
                     {
                         CODE_CHECK_FLAG = false;
-                        MsgBox_Pop.Alert("코드를 입력하지 않았습니다.", function () { $("#Prd_Code_P").focus(); });
+                        MsgBox_Pop.Alert("상품을 입력하지 않았습니다.", function () { $("#Prd_Code_P").focus(); });
                     }
                 }
             });
         }
 
         /*
-            requestDeleteCode : 코드 삭제 요청
+            requestDeleteProduct : 상품 삭제 요청
         */
-        function requestDeleteCode() {
+        function requestDeleteProduct() {
 
             MsgBox_Pop.Confirm("삭제하시겠습니까?", function resultFlag(flag)
             {
@@ -149,9 +149,9 @@
         }
 
         /*
-            requestSaveCode : 코드 저장 요청
+            requestSaveProduct : 상품 저장 요청
         */
-        function requestSaveCode() {
+        function requestSaveProduct() {
             if (validateData()) {
                 MsgBox_Pop.Confirm("저장하시겠습니까?", function resultFlag(flag) {
                     if (flag) {
@@ -232,17 +232,17 @@
                 , success: function (data) {
 
                     if (data.RESULT == "IY" || data.RESULT == "UY") {
-                        MsgBox_Pop.Inform("코드 저장이 완료되었습니다.", function () { window.location.reload(); });
+                        MsgBox_Pop.Inform("상품 저장이 완료되었습니다.", function () { window.location.reload(); });
                     }
                     else if (data.RESULT == "IN" || data.RESULT == "UN")
                     {
-                        MsgBox_Pop.Warning("코드 저장 중 오류가 발생하였습니다. 관리자에게 문의하십시오.");
+                        MsgBox_Pop.Warning("상품 저장 중 오류가 발생하였습니다. 관리자에게 문의하십시오.");
                     }
                     else if (data.RESULT == "DY") {
-                        MsgBox_Pop.Inform("코드 삭제 처리가 완료되었습니다.", function () { window.location.reload(); });
+                        MsgBox_Pop.Inform("상품 삭제 처리가 완료되었습니다.", function () { window.location.reload(); });
                     }
                     else if (data.RESULT == "DN") {
-                        MsgBox_Pop.Warning("코드 삭제 중 오류가 발생하였습니다. 관리자에게 문의하십시오.");
+                        MsgBox_Pop.Warning("상품 삭제 중 오류가 발생하였습니다. 관리자에게 문의하십시오.");
                     }
                     else {
                         MsgBox_Pop.Warning("예상치 못한 오류가 발생하였습니다. 관리자에게 문의하십시오.");

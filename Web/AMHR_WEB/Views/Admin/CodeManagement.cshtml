@@ -135,10 +135,16 @@
             InitEnterSubmitEvent();
         });
 
+        /*
+            RequestCodeSavePopUp : 코드 저장 팝업 호출 - 신규
+        */
         function RequestCodeSavePopUp() {
             ModalBox.Show("/Admin/CodeSave_P", null);
         }
 
+        /*
+            RequestCodeSavePopUp : 코드 저장 팝업 호출 - 수정
+        */
         function RequestCodeSavePopUp(Sys_Code_ID, Div_Code_ID, Code_ID) {
             var requestData = {};
             requestData.SYS_CODE_ID = Sys_Code_ID;

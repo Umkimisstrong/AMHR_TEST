@@ -90,6 +90,9 @@
             return;
         }
 
+        /*
+            CheckRsvCancelOk : 예약 취소 가능한지 확인        
+        */
         function CheckRsvCancelOk()
         {
             var length = $($("#rsv_list_div").find('a')).length;
@@ -118,6 +121,8 @@
                         data: { contract: obj },
                         type: 'post',
                         success: function (data) {
+
+                            // success 시 취소
                             if (data.RESULT == 'YES') {
 
 
@@ -134,14 +139,10 @@
                                         {
                                             MsgBox.Warning("예약 취소에 실패했습니다. 관리자에게 문의하세요.");
                                         }
-
-
                                     }, error: function (data) {
                                         setErrCustomContents(data);
                                     }
-
                                 });
-
                             }
                             else {
                                 MsgBox.Warning("취소할 수 없는 예약입니다.");
@@ -151,19 +152,14 @@
                             MsgBox.Danger(
                                 setErrCustomContents(data)
                             );
-
                         }
-
-                        
                     });
                 }
                 else
                 {
                     MsgBox.Warning("선택된 항목이 없습니다.");
                 }
-
             }
-
         }
     </script>
 }
