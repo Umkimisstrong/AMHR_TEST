@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,9 @@ namespace Repository
         public static void Global_DB_Connect()
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load("D:\\AMHR\\Settings\\applicationSettings.xml");
+            //xmlDoc.Load("C:\\Users\\KIMSANGKI\\Desktop\\KSK\\998. SOURCE\\Settings\\applicationSettings.xml");
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings", "ApplicationSettings.xml");
+            xmlDoc.Load(path);
             XmlNode xmlKeyNode = xmlDoc.SelectSingleNode("AppSettings/DBConnection/ConnectionStrings");
             AMHR = xmlKeyNode.Attributes["id"].Value;
         }

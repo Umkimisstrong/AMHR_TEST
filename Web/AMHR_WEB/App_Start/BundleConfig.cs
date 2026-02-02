@@ -12,6 +12,7 @@ namespace AMHR_WEB
         /// <param name="bundles"></param>
         public static void RegisterBundles(BundleCollection bundles)
         {
+            
             /* Web.Config 에서 테마를 확인한다. ON 인 테마를 prefix 문자열로 만들어 Bundle Load 시 적용 */
             string LUX = ConfigurationManager.AppSettings["cssTheme_LUX"].ToString();
             string JOURNAL = ConfigurationManager.AppSettings["cssTheme_JOURNAL"].ToString();
@@ -57,7 +58,9 @@ namespace AMHR_WEB
 
             bundles.Add(new StyleBundle("~/bundles/amhrCss").Include(
                      "~/StaticContents/css/"+ prefixTHEME+"amhr_*"));
-                            // Amhr Custom Style
+            // Amhr Custom Style
+
+            BundleTable.EnableOptimizations = false;
         }
     }
 }
